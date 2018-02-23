@@ -1,10 +1,18 @@
 package xyz.robertsen.androidoblig;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewAnimationUtils;
 
 /**
  * Hovedklassen til AndroidOblig
@@ -13,7 +21,9 @@ import android.view.MenuItem;
  * Endret ...
  * -----------------
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UserFragment.OnFragmentInteractionListener {
+
+    private final int DEFAULT_PLAYERS = 2;
 
 
 
@@ -22,45 +32,60 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
-    /**
-     * Overstyrer metoden ansvarlig for aktivitetens ActionBar
-     *
-     * ----------------- Dev info, fjernes før levering
-     * Begynt 22. Feb - Kristian
-     * Endret ...
-     * Endret ...
-     * -----------------
-     * @param menu
-     * @return
-     */
+    public void spawnLoginFragment(View view) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment previous = getFragmentManager().findFragmentByTag("userLoginFragment");
+        if (previous != null)
+            ft.remove(previous);
+        ft.addToBackStack(null);
+
+        UserFragment uf = UserFragment.newInstance(DEFAULT_PLAYERS);
+        uf.show(ft, "userLoginFragment");
+    }
+
+
+    public void rollDice(View view) {
+
+    }
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_menu_main, menu);
+    public void onFragmentInteraction(Uri uri) {
 
-        return super.onCreateOptionsMenu(menu);
     }
 
     /**
-     * Ment å starte en aktivitet fra menyen øverst
-     * todo- meningsfullt navn; må så endre ref i action_menu_main.xml
-     * @param item
+     * Animerer visningen og fjerningen av app-handling knappene.
+     * todo- endre bakgrunnen til FAB ved visning
+     * @param view
      */
-    public void spawnActivity1(MenuItem item) {
-        Intent intent = new Intent(this, CardActivity.class);
+    public void spawnActionView(final View view) {
+        final View v = findViewById(R.id.main_actionView);
+        int cx = v.getWidth();
+        int cy = v.getHeight();
+        float radius = (float)Math.hypot(cx, cy);
 
-        startActivity(intent);
-    }
+        if (v.getVisibility() == View.INVISIBLE) {
+            Animator animator = ViewAnimationUtils.createCircularReveal(v, cx/2, cy/2, 0, radius);
 
-    /**
-     * Starter SearchActivity, sender ved relevant data
-     * Ment å starte et fragment fra menyen øverst
-     * todo- meningsfullt navn; må så endre ref i action_menu_main.xml
-     * @param item
-     */
-    public void spawnFragment1(MenuItem item) {
-        Intent intent = new Intent(this, SearchActivity.class);
-        startActivity(intent);
+            animator.setDuration(400);
+            v.setVisibility(View.VISIBLE);
+            animator.start();
+        } else {
+            Animator animator = ViewAnimationUtils.createCircularReveal(v, cx/2, cy/2, radius/2, 0);
+            animator.setDuration(400);
+            view.setClickable(false);
+            animator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                    v.setVisibility(View.INVISIBLE);
+                    view.setClickable(true);
+                }
+            });
+            animator.start();
+        }
     }
 }

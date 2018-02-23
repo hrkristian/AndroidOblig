@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="userlogin_title">Innlogging</string>
+    <string name="userlogin_name_placeholder">Brukernavn</string>
+    <string name="userlogin_password_placeholder">Passord</string>
+    <string name="userlogin_button_login">Logg inn</string>
+    <string name="userlogin_button_cancel">Avbryt</string>
+
+    <string name="userauth_title">Velkommen, %1s</string>
+    <string name="userauth_antSpillere">Velg antall spillere</string>
+    <string name="userauth_close">Lukk</string>
+</resources>

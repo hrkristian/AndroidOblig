@@ -2,4 +2,5 @@
 <resources>
     <color name="main_lifeCounterBackground">#4ddd</color>
     <color name="main_lifeCounterBorder">#4f66</color>
+    <color name="main_action_background">#ddd</color>
 </resources>

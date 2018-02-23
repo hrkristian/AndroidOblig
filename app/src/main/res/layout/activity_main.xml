@@ -7,14 +7,26 @@
     tools:context="xyz.robertsen.androidoblig.MainActivity">
 
     <android.support.constraint.Guideline
-        android:id="@+id/guide_horizontal"
+        android:id="@+id/guide_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.5" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="5dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/colorPrimary" />
+
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/text_lifeCounter1"
         style="@style/main_LifeCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,13 +35,13 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/main_lifecounter_default"
-        app:layout_constraintBottom_toTopOf="@+id/guide_horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/guide_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/text_lifeCounter2"
         style="@style/main_LifeCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,5 +53,32 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guide_horizontal" />
+        app:layout_constraintTop_toTopOf="@+id/guide_vertical" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/main_fab_settings"
+        android:onClick="spawnActionView"
+        android:elevation="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/shape_card_background" />
+
+    <include
+        android:id="@+id/main_actionView"
+        android:visibility="invisible"
+        layout="@layout/view_main_settings"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"/>
+
 </android.support.constraint.ConstraintLayout>
