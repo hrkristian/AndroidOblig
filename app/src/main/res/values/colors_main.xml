@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="main_lifeCounterBackground">#4666</color>
+    <color name="main_lifeCounterBackground">#4ddd</color>
     <color name="main_lifeCounterBorder">#4f66</color>
 </resources>
