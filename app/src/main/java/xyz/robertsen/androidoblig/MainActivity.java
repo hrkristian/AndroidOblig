@@ -15,12 +15,13 @@ import android.view.MenuItem;
  */
 public class MainActivity extends AppCompatActivity {
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
     }
 
     /**
@@ -48,10 +49,12 @@ public class MainActivity extends AppCompatActivity {
      */
     public void spawnActivity1(MenuItem item) {
         Intent intent = new Intent(this, CardActivity.class);
+
         startActivity(intent);
     }
 
     /**
+     * Starter SearchActivity, sender ved relevant data
      * Ment å starte et fragment fra menyen øverst
      * todo- meningsfullt navn; må så endre ref i action_menu_main.xml
      * @param item

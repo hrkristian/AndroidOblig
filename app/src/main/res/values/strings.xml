@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">AndroidOblig</string>
+
+    <string-array name="recent_seaches">
+        <item>Nissa</item>
+        <item>Magus</item>
+        <item>Goblin Guide</item>
+        <item>Goblin Warchief</item>
+        <item>Lightning Bolt</item>
+        <item>Nissa</item>
+        <item>Magus</item>
+        <item>Goblin Guide</item>
+    </string-array>
+    <string-array name="pinned_searches">
+        <item>Goblin Guide</item>
+        <item>Goblin Warchief</item>
+        <item>Lightning Bolt</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
