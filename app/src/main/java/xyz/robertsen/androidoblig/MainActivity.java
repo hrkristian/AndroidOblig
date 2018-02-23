@@ -1,5 +1,6 @@
 package xyz.robertsen.androidoblig;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
      * @param item
      */
     public void spawnActivity1(MenuItem item) {
+        Intent intent = new Intent(this, CardActivity.class);
+        startActivity(intent);
     }
 
     /**
@@ -54,5 +57,7 @@ public class MainActivity extends AppCompatActivity {
      * @param item
      */
     public void spawnFragment1(MenuItem item) {
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
     }
 }
