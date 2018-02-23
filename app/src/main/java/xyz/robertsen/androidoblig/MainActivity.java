@@ -88,4 +88,15 @@ public class MainActivity extends AppCompatActivity implements UserFragment.OnFr
             animator.start();
         }
     }
+
+    public void spawnSearchActivity(View view) {
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void spawnCardActivity(View view) {
+        Intent intent = new Intent(this, CardActivity.class);
+        startActivity(intent);
+    }
 }
