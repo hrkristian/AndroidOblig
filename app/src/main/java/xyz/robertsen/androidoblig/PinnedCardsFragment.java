@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -28,8 +30,11 @@ public class PinnedCardsFragment extends Fragment {
     ArrayList<Card> pinnedCards;
 
     private RecyclerView recyclerPinned;
-    private RecyclerView recyclerSearches;
     private SearchCardAdapter cardAdapter;
+
+    private ItemTouchHelper itemTouchHelper;
+    int dragDirections = ItemTouchHelper.UP |  ItemTouchHelper.DOWN;
+    int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -71,6 +76,9 @@ public class PinnedCardsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setSampleCards();
+        cardAdapter = new SearchCardAdapter(this.getContext(), pinnedCards);
+        itemTouchHelper = getItemTouchHelper();
     }
 
     @Override
@@ -78,12 +86,10 @@ public class PinnedCardsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pinned_cards, container, false);
-        setSampleCards();
-        cardAdapter = new SearchCardAdapter(this.getContext(), pinnedCards);
-        recyclerSearches = view.findViewById(R.id.recycler_pinned_cards);
-        recyclerSearches.setAdapter(cardAdapter);
-        recyclerSearches.setLayoutManager(new LinearLayoutManager(this.getContext()));
-
+        recyclerPinned = view.findViewById(R.id.recycler_pinned_cards);
+        recyclerPinned.setAdapter(cardAdapter);
+        recyclerPinned.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        itemTouchHelper.attachToRecyclerView(recyclerPinned);
         return view;
     }
 
@@ -109,6 +115,31 @@ public class PinnedCardsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public ItemTouchHelper getItemTouchHelper() {
+
+        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(dragDirections, swipeDirections) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                int from = viewHolder.getAdapterPosition();
+                int to = target.getAdapterPosition();
+                Collections.swap(pinnedCards, from, to);
+                cardAdapter.notifyItemMoved(from, to);
+
+                // TODO: Query database, change card indexes
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int pos = viewHolder.getAdapterPosition();
+                pinnedCards.remove(pos);
+                cardAdapter.notifyItemRemoved(pos);
+            }
+        });
+
+        return itemTouchHelper;
     }
 
     /**

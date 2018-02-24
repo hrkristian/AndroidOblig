@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -29,6 +32,11 @@ public class RecentCardsFragment extends Fragment {
 
     private RecyclerView recyclerRecent;
     private SearchCardAdapter cardAdapter;
+
+    int dragDirections =  ItemTouchHelper.UP |  ItemTouchHelper.DOWN;
+    int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
+    ItemTouchHelper itemTouchHelper;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,6 +78,9 @@ public class RecentCardsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setSampleCards();
+        cardAdapter = new SearchCardAdapter(this.getContext(), recentCards);
+        itemTouchHelper = getItemTouchHelper();
     }
 
     @Override
@@ -77,11 +88,10 @@ public class RecentCardsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recent_cards, container, false);
-        setSampleCards();
-        cardAdapter = new SearchCardAdapter(this.getContext(), recentCards);
         recyclerRecent = view.findViewById(R.id.recycler_recent_cards);
         recyclerRecent.setAdapter(cardAdapter);
         recyclerRecent.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        itemTouchHelper.attachToRecyclerView(recyclerRecent);
         return view;
     }
 
@@ -107,6 +117,31 @@ public class RecentCardsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public ItemTouchHelper getItemTouchHelper() {
+
+        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(dragDirections, swipeDirections) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                int from = viewHolder.getAdapterPosition();
+                int to = target.getAdapterPosition();
+                Collections.swap(recentCards, from, to);
+                cardAdapter.notifyItemMoved(from, to);
+
+                // TODO: Query database, change card indexes
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int pos = viewHolder.getAdapterPosition();
+                recentCards.remove(pos);
+                cardAdapter.notifyItemRemoved(pos);
+            }
+        });
+
+        return itemTouchHelper;
     }
 
     /**
