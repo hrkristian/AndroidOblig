@@ -44,7 +44,7 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
         Card card = cardArrayList.get(position);
         holder.title.setText(card.title);
         holder.cmc.setText(String.valueOf(card.convertedManaCost));
-        holder.cardImage.setImageDrawable(card.image);
+        holder.cardCropImage.setImageDrawable(card.cropImage);
         holder.text.setText(card.text);
 
     }
@@ -59,7 +59,7 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
         private final String TAG = CardViewHolder.class.getSimpleName();
 
         private final TextView title, cmc, text;
-        private final ImageView cardImage;
+        private final ImageView cardCropImage;
         final SearchCardAdapter cardAdapter;
 
         public CardViewHolder(View itemView, SearchCardAdapter adapter) {
@@ -67,7 +67,7 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
             Log.d(TAG, "Instantiate CardViewHolder");
             title = itemView.findViewById(R.id.search_carditem_title);
             cmc = itemView.findViewById(R.id.search_carditem_cmc);
-            cardImage = itemView.findViewById(R.id.search_carditem_image);
+            cardCropImage = itemView.findViewById(R.id.search_carditem_cropImage);
             text = itemView.findViewById(R.id.search_carditem_text);
             cardAdapter = adapter;
             itemView.setOnClickListener(this);
