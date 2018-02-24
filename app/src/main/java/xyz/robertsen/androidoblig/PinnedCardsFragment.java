@@ -118,7 +118,6 @@ public class PinnedCardsFragment extends Fragment {
     }
 
     public ItemTouchHelper getItemTouchHelper() {
-
         itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(dragDirections, swipeDirections) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {

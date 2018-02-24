@@ -1,6 +1,7 @@
 package xyz.robertsen.androidoblig;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
 
     private ArrayList<Card> cardArrayList;
     private LayoutInflater inflater;
+    private Context context;
 
     public SearchCardAdapter(Context context, ArrayList<Card> cardList) {
         Log.d(TAG, "Instantiate SearchCardAdapter");
@@ -50,7 +52,7 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
         return cardArrayList.size();
     }
 
-    public class CardViewHolder extends RecyclerView.ViewHolder {
+    public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private final String TAG = CardViewHolder.class.getSimpleName();
 
@@ -65,6 +67,18 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
             cmc = itemView.findViewById(R.id.search_carditem_cmc);
             cardImage = itemView.findViewById(R.id.search_carditem_image);
             cardAdapter = adapter;
+            itemView.setOnClickListener(this);
+        }
+
+        /**
+         * Start CardActivity, new search for the card that is clicked.
+         * @param view
+         */
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(context, CardActivity.class);
+            intent.putExtra("searched_item", cardArrayList.get(getAdapterPosition()).title);
+            context.startActivity(intent);
         }
     }
 }

@@ -22,13 +22,6 @@ public class SearchActivity extends AppCompatActivity implements PinnedCardsFrag
     private Fragment recentCardsFragment;
     private Fragment pinnedCardsFragment;
 
-
-//
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
