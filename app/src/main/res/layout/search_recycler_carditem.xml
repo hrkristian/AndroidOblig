@@ -16,6 +16,7 @@
             android:id="@+id/search_carditem_cropImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="1dp"
             android:background="@drawable/shape_card_background"
             android:scaleType="fitXY"/>
 
