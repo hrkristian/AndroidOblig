@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * create an instance of this fragment.
  */
 public class RecentCardsFragment extends Fragment {
+
+    private static final String TAG = RecentCardsFragment.class.getSimpleName();
 
     Card[] cardlist;
     ArrayList<Card> recentCards;
@@ -74,6 +77,9 @@ public class RecentCardsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "onCreate");
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);

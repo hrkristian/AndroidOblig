@@ -27,6 +27,7 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
     public SearchCardAdapter(Context context, ArrayList<Card> cardList) {
         Log.d(TAG, "Instantiate SearchCardAdapter");
         cardArrayList = cardList;
+        this.context = context;
         inflater = LayoutInflater.from(context);
     }
 
@@ -42,8 +43,9 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
         Log.d(TAG, "onBindViewHolder");
         Card card = cardArrayList.get(position);
         holder.title.setText(card.title);
-        holder.cmc.setText(card.convertedManaCost+"");
+        holder.cmc.setText(String.valueOf(card.convertedManaCost));
         holder.cardImage.setImageDrawable(card.image);
+        holder.text.setText(card.text);
 
     }
 
@@ -56,22 +58,23 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
 
         private final String TAG = CardViewHolder.class.getSimpleName();
 
-        private final TextView title, cmc;
+        private final TextView title, cmc, text;
         private final ImageView cardImage;
         final SearchCardAdapter cardAdapter;
 
         public CardViewHolder(View itemView, SearchCardAdapter adapter) {
             super(itemView);
-            Log.d(TAG, "Instantiate SearchCardAdapter");
+            Log.d(TAG, "Instantiate CardViewHolder");
             title = itemView.findViewById(R.id.search_carditem_title);
             cmc = itemView.findViewById(R.id.search_carditem_cmc);
             cardImage = itemView.findViewById(R.id.search_carditem_image);
+            text = itemView.findViewById(R.id.search_carditem_text);
             cardAdapter = adapter;
             itemView.setOnClickListener(this);
         }
 
         /**
-         * Start CardActivity, new search for the card that is clicked.
+         * Start CardActivity and adds the cardname title to the intent as a stringextra
          * @param view
          */
         @Override
