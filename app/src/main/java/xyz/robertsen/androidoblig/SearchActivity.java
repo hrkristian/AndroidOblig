@@ -30,10 +30,8 @@ public class SearchActivity extends AppCompatActivity implements PinnedCardsFrag
     private TabLayout tabRecentPinnedLayout;
     private TabLayout.Tab recentTab, pinnedTab;
 
-    private RecentCardsFragment recentCardsFragment;
-    private PinnedCardsFragment pinnedCardsFragment;
-    private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
+    private Fragment recentCardsFragment;
+    private Fragment pinnedCardsFragment;
 
 
 //
@@ -72,38 +70,39 @@ public class SearchActivity extends AppCompatActivity implements PinnedCardsFrag
         // Set fragments;
         recentCardsFragment = new RecentCardsFragment();
         pinnedCardsFragment = new PinnedCardsFragment();
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.pinned_fragment_container, pinnedCardsFragment);
-        fragmentTransaction.commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, pinnedCardsFragment).commit();
 
         tabRecentPinnedLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+                System.out.println("onTabSelected pos" + tab.getPosition());
                 swapFragments(tab);
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                System.out.println("onTabUnselected");
+                System.out.println("onTabUnselected pos" + tab.getPosition());
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                System.out.println("onTabReselected");
+                System.out.println("onTabReselected pos" + tab.getPosition());
             }
         });
     }
 
     private void swapFragments(TabLayout.Tab tab) {
         int pos = tab.getPosition();
+        Fragment fragment = null;
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-        fragmentTransaction = fragmentManager.beginTransaction();
         if (pos == 0) {
-            fragmentTransaction.replace(R.id.pinned_fragment_container, pinnedCardsFragment);
+            fragment = pinnedCardsFragment;
         } else {
-            fragmentTransaction.replace(R.id.pinned_fragment_container, recentCardsFragment);
+            fragment = recentCardsFragment;
         }
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
     }

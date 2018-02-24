@@ -25,12 +25,15 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <fragment
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_below="@id/tabBarLayout"
-        android:id="@+id/pinned_fragment_container"
-        android:name="xyz.robertsen.androidoblig.PinnedCardsFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+    
+
 
 
 </RelativeLayout>
