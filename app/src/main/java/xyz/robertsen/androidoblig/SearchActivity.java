@@ -77,7 +77,6 @@ public class SearchActivity extends AppCompatActivity implements PinnedCardsFrag
             fragment = recentCardsFragment;
         }
         fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
 
     }
