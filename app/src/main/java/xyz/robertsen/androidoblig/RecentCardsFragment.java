@@ -84,7 +84,7 @@ public class RecentCardsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         setSampleCards();
-        cardAdapter = new SearchCardAdapter(this.getContext(), recentCards);
+        cardAdapter = new SearchCardAdapter(this.getContext(), recentCards, true);
         itemTouchHelper = getItemTouchHelper();
     }
 
