@@ -5,5 +5,7 @@
     <string name="main_menu_fragment1">Fragment1</string>
 
     <string name="main_lifecounter_default">20</string>
+    <string name="main_lifecounter_plus">+</string>
+    <string name="main_lifecounter_minus">-</string>
 
 </resources>

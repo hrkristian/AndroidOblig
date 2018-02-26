@@ -2,6 +2,7 @@ package xyz.robertsen.androidoblig;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -57,9 +58,15 @@ public class UserFragment extends DialogFragment {
     @Override
     public void onResume() {
         if (getDialog().getWindow() != null) {
-            int width = (int)(getResources().getDisplayMetrics().widthPixels * 0.8);
-            int height = (int)(getResources().getDisplayMetrics().heightPixels * 0.6);
-            getDialog().getWindow().setLayout(width, height);
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                int width = (int)(getResources().getDisplayMetrics().widthPixels * 0.8);
+                int height = (int)(getResources().getDisplayMetrics().heightPixels * 0.6);
+                getDialog().getWindow().setLayout(width, height);
+            } else {
+                int width = (int)(getResources().getDisplayMetrics().widthPixels * 0.6);
+                int height = (int)(getResources().getDisplayMetrics().heightPixels * 0.8);
+                getDialog().getWindow().setLayout(width, height);
+            }
         }
         super.onResume();
     }
