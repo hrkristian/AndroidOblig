@@ -1,6 +1,7 @@
 package xyz.robertsen.androidoblig;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -96,6 +97,19 @@ public class PinnedCardsFragment extends Fragment {
         recyclerPinned.setAdapter(cardAdapter);
         recyclerPinned.setLayoutManager(new LinearLayoutManager(this.getContext()));
         itemTouchHelper.attachToRecyclerView(recyclerPinned);
+
+        recyclerPinned.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                int totalWidth = parent.getWidth();
+                int cardWidth = getResources().getDimensionPixelOffset(R.dimen.land_card_width);
+                int sidePad = (totalWidth - cardWidth)/ 2;
+                sidePad = Math.max(0, sidePad);
+                outRect.set(sidePad, 0, sidePad, 0);
+            }
+        });
+
         return view;
     }
 

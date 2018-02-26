@@ -1,5 +1,6 @@
 package xyz.robertsen.androidoblig;
 
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -26,6 +27,7 @@ public class SearchActivity extends AppCompatActivity implements PinnedCardsFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
 
         // TabLayout
         tabRecentPinnedLayout = findViewById(R.id.search_recent_pinned_layout);
@@ -57,6 +59,7 @@ public class SearchActivity extends AppCompatActivity implements PinnedCardsFrag
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+
     }
 
     /**

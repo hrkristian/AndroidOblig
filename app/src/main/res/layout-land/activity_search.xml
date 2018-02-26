@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context="xyz.robertsen.androidoblig.SearchActivity">
 
-    
     <android.support.design.widget.AppBarLayout
         android:id="@+id/tabBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <android.support.design.widget.TabLayout
             android:layout_gravity="end"
             android:id="@+id/search_recent_pinned_layout"
@@ -33,7 +33,7 @@
         android:layout_height="match_parent">
 
     </FrameLayout>
-    
+
 
 
 
