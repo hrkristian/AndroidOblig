@@ -29,6 +29,7 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
     private Context context;
 
     /**
+     * Instantiates the SearchCardAdapter
      * @param context
      * @param cardList
      * @param isRecentSearches - If fragment containing this adapter is RecentCardsFragment.(shitty)
@@ -41,6 +42,12 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
         this.isRecentSearches = isRecentSearches;
     }
 
+    /**
+     * 
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.d(TAG, "onCreateViewHolder");
@@ -113,8 +120,6 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
                 intent.putExtra("searched_item", thisCard.title);
                 context.startActivity(intent);
             }
-
-
         }
     }
 }
