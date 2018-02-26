@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.widget.Toast;
 
 /**
  * Hovedklassen til AndroidOblig
@@ -22,8 +24,12 @@ public class MainActivity extends AppCompatActivity implements UserFragment.OnFr
 
     private final int DEFAULT_PLAYERS = 2;
 
-
-
+    // todo- Map istedenfor Array; implementer Comparable
+    public static User[] logins = {
+            new User("kristian", "pwd"),
+            new User("nikolai", "pwd"),
+            new User("atle", "pwd")
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,26 +38,10 @@ public class MainActivity extends AppCompatActivity implements UserFragment.OnFr
 
     }
 
-    public void spawnLoginFragment(View view) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment previous = getFragmentManager().findFragmentByTag("userLoginFragment");
-        if (previous != null)
-            ft.remove(previous);
-        ft.addToBackStack(null);
-
-        UserFragment uf = UserFragment.newInstance(DEFAULT_PLAYERS);
-        uf.show(ft, "userLoginFragment");
-    }
-
 
     public void rollDice(View view) {
-
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 
     /**
      * Animerer visningen og fjerningen av app-handling knappene.
@@ -86,14 +76,60 @@ public class MainActivity extends AppCompatActivity implements UserFragment.OnFr
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if ( findViewById(R.id.main_actionView).getVisibility() == View.VISIBLE )
+            spawnActionView(findViewById(R.id.main_fab_settings));
+        else
+            super.onBackPressed();
+    }
+
+    /* Activities and fragments */
     public void spawnSearchActivity(View view) {
         Intent intent = new Intent(this, SearchActivity.class);
-        startActivity(intent);
-
+        startActivityWithFABClose(intent);
     }
 
     public void spawnCardActivity(View view) {
         Intent intent = new Intent(this, CardActivity.class);
+        startActivityWithFABClose(intent);
+    }
+    private void startActivityWithFABClose(Intent intent) {
+        spawnActionView(findViewById(R.id.main_fab_settings));
         startActivity(intent);
+    }
+
+    public void spawnLoginFragment(View view) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment previous = getFragmentManager().findFragmentByTag("userLoginFragment");
+        if (previous != null)
+            ft.remove(previous);
+        ft.addToBackStack(null);
+
+        UserFragment uf = UserFragment.newInstance(DEFAULT_PLAYERS, R.layout.fragment_user);
+        uf.show(ft, "userLoginFragment");
+        spawnActionView(findViewById(R.id.main_fab_settings));
+    }
+
+    /* Callbacks */
+    @Override
+    public void onLoginButtonPressed(String usr, String pwd) {
+
+        for (User u : logins) {
+            if (u.isMatch(usr, pwd)) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+                Fragment oldFragment = getFragmentManager().findFragmentByTag("userLoginFragment");
+                UserFragment newFragment = UserFragment.newInstance(DEFAULT_PLAYERS, R.layout.fragment_user_authenticated);
+
+                ft.addToBackStack(null);
+
+//                uf.show(ft, "userAuthenticatedFragment");
+
+                Toast.makeText(this, "Login correct.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        Toast.makeText(this, "Login incorrect.", Toast.LENGTH_SHORT).show();
     }
 }

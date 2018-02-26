@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 
 /**
@@ -18,14 +19,14 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class UserFragment extends DialogFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PLAYER_NUMBER = "number_of_players";
 
-    // TODO: Rename and change types of parameters
+    private static final String ARG_PLAYER_NUMBER = "number_of_players";
+    private static final String ARG_LAYOUT_ID = "layout";
     private int players;
+    private int layoutId;
 
     private OnFragmentInteractionListener mListener;
+
 
     public UserFragment() {
         // Required empty public constructor
@@ -35,11 +36,11 @@ public class UserFragment extends DialogFragment {
      * @param players The current number of players
      * @return A new instance of fragment UserFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static UserFragment newInstance(int players) {
+    public static UserFragment newInstance(int players, int layoutId) {
         UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PLAYER_NUMBER, players);
+        args.putInt(ARG_LAYOUT_ID, layoutId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,6 +50,7 @@ public class UserFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             players = getArguments().getInt(ARG_PLAYER_NUMBER);
+            layoutId = getArguments().getInt(ARG_LAYOUT_ID);
         }
     }
 
@@ -65,13 +67,33 @@ public class UserFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_user, container, false);
+        final View v = inflater.inflate(layoutId, container, false);
+
+        if (layoutId == R.layout.fragment_user) {
+            v.findViewById(R.id.button_user_login).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onLoginButtonPressed(
+                            ((EditText)v.findViewById(R.id.text_user_name)).getText().toString(),
+                            ((EditText)v.findViewById(R.id.text_user_pwd)).getText().toString()
+                    );
+                }
+            });
+            v.findViewById(R.id.button_user_cancel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getActivity().onBackPressed();
+                }
+            });
+        }
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onLoginButtonPressed(String usr, String pwd) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onLoginButtonPressed(usr, pwd);
         }
     }
 
@@ -103,7 +125,6 @@ public class UserFragment extends DialogFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onLoginButtonPressed(String usr, String pwd);
     }
 }
