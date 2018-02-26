@@ -83,7 +83,7 @@ public class PinnedCardsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         setSampleCards();
-        cardAdapter = new SearchCardAdapter(this.getContext(), pinnedCards);
+        cardAdapter = new SearchCardAdapter(this.getContext(), pinnedCards, false);
         itemTouchHelper = getItemTouchHelper();
     }
 

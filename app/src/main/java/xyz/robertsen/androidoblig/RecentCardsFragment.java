@@ -39,6 +39,11 @@ public class RecentCardsFragment extends Fragment {
     int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
     ItemTouchHelper itemTouchHelper;
 
+    public interface OnCardPinnedListener {
+        public void onCardPinned(String cardTitle);
+    }
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -84,7 +89,7 @@ public class RecentCardsFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         setSampleCards();
-        cardAdapter = new SearchCardAdapter(this.getContext(), recentCards);
+        cardAdapter = new SearchCardAdapter(this.getContext(), recentCards, true);
         itemTouchHelper = getItemTouchHelper();
     }
 
