@@ -7,4 +7,7 @@
         <item name="android:background">@drawable/shape_main_lifebackground</item>
         <item name="android:gravity">center</item>
     </style>
+    <style name="main_lifeButton">
+        <!--<item name="android:background">@android:color/transparent</item>-->
+    </style>
 </resources>

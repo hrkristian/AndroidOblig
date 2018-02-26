@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -23,6 +24,8 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements UserFragment.OnFragmentInteractionListener {
 
     private final int DEFAULT_PLAYERS = 2;
+    private final int DEFAULT_LIFE = 20;
+    private int player1_life = DEFAULT_LIFE, player2_life = DEFAULT_LIFE;
 
     // todo- Map istedenfor Array; implementer Comparable
     public static User[] logins = {
@@ -109,6 +112,27 @@ public class MainActivity extends AppCompatActivity implements UserFragment.OnFr
         UserFragment uf = UserFragment.newInstance(DEFAULT_PLAYERS, R.layout.fragment_user);
         uf.show(ft, "userLoginFragment");
         spawnActionView(findViewById(R.id.main_fab_settings));
+    }
+    public void changeLifeRemaining(View view) {
+        TextView v;
+        switch (view.getId()) {
+            case R.id.button_main_p1_plus:
+                v = findViewById(R.id.text_lifeCounter1);
+                v.setText(Integer.toString(player1_life++));
+                break;
+            case R.id.button_main_p1_minus:
+                v = findViewById(R.id.text_lifeCounter1);
+                v.setText(Integer.toString(player1_life--));
+                break;
+            case R.id.button_main_p2_plus:
+                v = findViewById(R.id.text_lifeCounter2);
+                v.setText(Integer.toString(player1_life++));
+                break;
+            case R.id.button_main_p2_minus:
+                v = findViewById(R.id.text_lifeCounter2);
+                v.setText(Integer.toString(player1_life--));
+                break;
+        }
     }
 
     /* Callbacks */
