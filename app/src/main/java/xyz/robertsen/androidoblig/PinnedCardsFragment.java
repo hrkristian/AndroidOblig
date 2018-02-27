@@ -87,6 +87,7 @@ public class PinnedCardsFragment extends Fragment {
         }
         cardAdapter = new SearchCardAdapter(this.getContext(), pinnedCards, false);
         itemTouchHelper = getItemTouchHelper();
+        setRetainInstance(true);
     }
 
     @Override

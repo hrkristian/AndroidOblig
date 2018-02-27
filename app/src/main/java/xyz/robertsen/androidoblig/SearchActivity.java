@@ -1,18 +1,16 @@
 package xyz.robertsen.androidoblig;
 
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MotionEvent;
+import android.util.Log;
+import android.widget.TableLayout;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -21,17 +19,20 @@ public class SearchActivity extends AppCompatActivity implements
         RecentCardsFragment.OnFragmentInteractionListener {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
+    private static final String TAB_POSTITION = "xyz.robertsen.androidoblig.SearchActivity";
 
     private ArrayList<Card> recentCards, pinnedCards, sampleCards;
 
-    private TabLayout tabRecentPinnedLayout;
+    private TabLayout tabLayout;
     private TabLayout.Tab recentTab, pinnedTab;
 
-    private Fragment recentCardsFragment;
-    private Fragment pinnedCardsFragment;
+    private Fragment recentFragment;
+    private Fragment pinnedFragment;
 
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
+
+    private int tabPosSelected = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,34 +40,42 @@ public class SearchActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_search);
 
 
+
         viewPager = findViewById(R.id.fragment_container);
         sampleCards = new ArrayList<>(Arrays.asList(Card.getExampleData(this)));
 
         // TabLayout
-        tabRecentPinnedLayout = findViewById(R.id.search_recent_pinned_layout);
-        recentTab = tabRecentPinnedLayout.newTab();
+        tabLayout = findViewById(R.id.search_recent_pinned_layout);
+        recentTab = tabLayout.newTab();
         recentTab.setCustomView(R.layout.search_tab_pinned);
-        tabRecentPinnedLayout.addTab(recentTab);
+        tabLayout.addTab(recentTab);
 
-        pinnedTab = tabRecentPinnedLayout.newTab();
+        pinnedTab = tabLayout.newTab();
         pinnedTab.setCustomView(R.layout.search_tab_recent);
-        tabRecentPinnedLayout.addTab(pinnedTab);
+        tabLayout.addTab(pinnedTab);
+
+
+        if (savedInstanceState != null) {
+            tabPosSelected = savedInstanceState.getInt(TAB_POSTITION);
+            TabLayout.Tab tab = tabLayout.getTabAt(tabPosSelected);
+            tab.select();
+            Log.d(TAG, "Selected tab is " + tabPosSelected);
+        }
 
         // Set fragments;
-        recentCardsFragment = new RecentCardsFragment();
-        pinnedCardsFragment = new PinnedCardsFragment();
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), pinnedCardsFragment, recentCardsFragment);
+        recentFragment = new RecentCardsFragment();
+        pinnedFragment = new PinnedCardsFragment();
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), pinnedFragment, recentFragment);
         viewPager.setAdapter(pagerAdapter);
-        //        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, pinnedCardsFragment).commit();
+        //        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, pinnedFragment).commit();
 
 
         // listener placed on the TabLayout for pinned and recent cards
-        tabRecentPinnedLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 System.out.println("onTabSelected pos" + tab.getPosition());
                 viewPager.setCurrentItem(tab.getPosition());
-//     swapFragments(tab);
             }
 
             @Override
@@ -80,31 +89,11 @@ public class SearchActivity extends AppCompatActivity implements
 
     }
 
-    /**
-     * Changes the fragments displayed based on the position of the tab that is clicked.
-     * <p>
-     * Swaps the fragments containing recycler views for pinned and recent card data. The data are
-     * generated randomly from a set of 3 cards provided by the Card- class.
-     *
-     * @param tab
-     */
-    private void swapFragments(TabLayout.Tab tab) {
-        int pos = tab.getPosition();
-        Fragment fragment = null;
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-
-        if (pos == 0) {
-            // Save fragment data for recentCardsFragment here
-            fragment = pinnedCardsFragment;
-        } else {
-            // Save fragment data for pinnedCardsFragment here
-            fragment = recentCardsFragment;
-        }
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(TAB_POSTITION, tabLayout.getSelectedTabPosition());
+        super.onSaveInstanceState(outState);
     }
-
 
     @Override
     public void onFragmentInteraction(Uri uri) {
@@ -120,7 +109,7 @@ public class SearchActivity extends AppCompatActivity implements
                 break;
             }
         }
-        ((PinnedCardsFragment)pinnedCardsFragment).addCard(card);
+        ((PinnedCardsFragment) pinnedFragment).addCard(card);
     }
 
     /**

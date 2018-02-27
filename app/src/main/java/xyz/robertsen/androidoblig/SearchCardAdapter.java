@@ -21,18 +21,19 @@ import java.util.ArrayList;
 
 class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewHolder> {
 
+    // Tag for logging
     private static String TAG = SearchCardAdapter.class.getSimpleName();
-    private final boolean isRecentSearches;
 
+    private final boolean isRecentSearches;
     private ArrayList<Card> cardArrayList;
     private LayoutInflater inflater;
     private Context context;
 
     /**
      * Instantiates the SearchCardAdapter
-     * @param context
-     * @param cardList
-     * @param isRecentSearches - If fragment containing this adapter is RecentCardsFragment.(shitty)
+     * @param context - The activity/context this adapter is created within
+     * @param cardList - ArrayList of Cards to use with this adapter
+     * @param isRecentSearches - If this adapter is contained within RecentCardsFragment of PinnedCardsFragment
      */
     public SearchCardAdapter(Context context, ArrayList<Card> cardList, boolean isRecentSearches) {
         Log.d(TAG, "Instantiate SearchCardAdapter");
@@ -43,27 +44,31 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
     }
 
     /**
-     * 
-     * @param parent
-     * @param viewType
-     * @return
+     * Inflates the card_item layout and creates a CardViewHolder
+     * @param parent - The parent container, the RecyclerView which has this adapter I guess.
+     * @param viewType -
+     * @return CardViewHolder
      */
     @Override
     public CardViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(TAG, "onCreateViewHolder");
         View itemView = inflater.inflate(R.layout.search_recycler_carditem, parent, false);
         return new CardViewHolder(itemView, this);
     }
 
+    /**
+     * Sets/binds data to the ViewHolder
+     * @param holder - The CardViewHolder
+     * @param position - This adapters position
+     */
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder");
         Card card = cardArrayList.get(position);
         holder.title.setText(card.title);
         holder.cmc.setText(String.valueOf(card.convertedManaCost));
         holder.cardCropImage.setImageDrawable(card.cropImage);
         holder.text.setText(card.text);
-        // Not ideal
+
+        // Not ideal, sets visibility for the pin icon.
         if (!isRecentSearches) {
             holder.searchPin.setVisibility(View.GONE);
         }
@@ -79,6 +84,7 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
 
         private final String TAG = CardViewHolder.class.getSimpleName();
 
+        private boolean pinned;
         private final TextView title, cmc, text;
         private final ImageView cardCropImage;
         private final ImageButton searchPin;
@@ -86,7 +92,6 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
 
         public CardViewHolder(View itemView, SearchCardAdapter adapter) {
             super(itemView);
-            Log.d(TAG, "Instantiate CardViewHolder");
             title = itemView.findViewById(R.id.search_carditem_title);
             cmc = itemView.findViewById(R.id.search_carditem_cmc);
             cardCropImage = itemView.findViewById(R.id.search_carditem_cropImage);
@@ -98,9 +103,9 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
         }
 
         /**
-         * Start CardActivity and adds the cardname title to the intent as a stringextra
-         *
-         * @param view
+         * If search_pin view is clicked, save card to PinnedCardsFragment.
+         * If The holder is clicked, open CardActivity and search for the given card title.
+         * @param view - The view that is clicked (either pin button or ViewHolder.
          */
         @Override
         public void onClick(final View view) {
@@ -108,7 +113,7 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
             int adapterPos = getAdapterPosition();
             Card thisCard = cardArrayList.get(adapterPos);
             if (viewID == R.id.search_pin_btn) {
-                Log.d(TAG, "Pin is clicked: " + thisCard.title + " pos " + adapterPos);
+                pinned = true;
                 view.animate().alpha(0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {

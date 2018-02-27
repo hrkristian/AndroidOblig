@@ -87,6 +87,8 @@ public class RecentCardsFragment extends Fragment {
         setSampleCards();
         cardAdapter = new SearchCardAdapter(this.getContext(), recentCards, true);
         itemTouchHelper = getItemTouchHelper();
+
+        setRetainInstance(true);
     }
 
     @Override
