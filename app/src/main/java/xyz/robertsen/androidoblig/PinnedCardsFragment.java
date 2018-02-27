@@ -79,11 +79,12 @@ public class PinnedCardsFragment extends Fragment {
 
         Log.d(TAG, "onCreate");
 
+        pinnedCards = new ArrayList<>();
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        setSampleCards();
         cardAdapter = new SearchCardAdapter(this.getContext(), pinnedCards, false);
         itemTouchHelper = getItemTouchHelper();
     }
@@ -98,6 +99,7 @@ public class PinnedCardsFragment extends Fragment {
         recyclerPinned.setLayoutManager(new LinearLayoutManager(this.getContext()));
         itemTouchHelper.attachToRecyclerView(recyclerPinned);
 
+        // Ensures that the CardViews in the recycler view is centered when the layout is horizontal
         recyclerPinned.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -129,6 +131,18 @@ public class PinnedCardsFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
     }
 
     @Override
@@ -184,5 +198,10 @@ public class PinnedCardsFragment extends Fragment {
             randInt = ThreadLocalRandom.current().nextInt(0, cardlist.length);
             pinnedCards.add(cardlist[randInt]);
         }
+    }
+
+    public void addCard(Card card) {
+        pinnedCards.add(card);
+        cardAdapter.notifyItemInserted(pinnedCards.size());
     }
 }

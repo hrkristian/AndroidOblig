@@ -5,17 +5,24 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class SearchActivity extends AppCompatActivity implements PinnedCardsFragment.OnFragmentInteractionListener, RecentCardsFragment.OnFragmentInteractionListener {
+public class SearchActivity extends AppCompatActivity implements
+        PinnedCardsFragment.OnFragmentInteractionListener,
+        RecentCardsFragment.OnFragmentInteractionListener {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
 
-    private Card[] cardlist;
-    private ArrayList<Card> recentCards, pinnedCards;
+    private ArrayList<Card> recentCards, pinnedCards, sampleCards;
 
     private TabLayout tabRecentPinnedLayout;
     private TabLayout.Tab recentTab, pinnedTab;
@@ -23,11 +30,17 @@ public class SearchActivity extends AppCompatActivity implements PinnedCardsFrag
     private Fragment recentCardsFragment;
     private Fragment pinnedCardsFragment;
 
+    private ViewPager viewPager;
+    private PagerAdapter pagerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+
+        viewPager = findViewById(R.id.fragment_container);
+        sampleCards = new ArrayList<>(Arrays.asList(Card.getExampleData(this)));
 
         // TabLayout
         tabRecentPinnedLayout = findViewById(R.id.search_recent_pinned_layout);
@@ -42,7 +55,9 @@ public class SearchActivity extends AppCompatActivity implements PinnedCardsFrag
         // Set fragments;
         recentCardsFragment = new RecentCardsFragment();
         pinnedCardsFragment = new PinnedCardsFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, pinnedCardsFragment).commit();
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), pinnedCardsFragment, recentCardsFragment);
+        viewPager.setAdapter(pagerAdapter);
+        //        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, pinnedCardsFragment).commit();
 
 
         // listener placed on the TabLayout for pinned and recent cards
@@ -50,23 +65,27 @@ public class SearchActivity extends AppCompatActivity implements PinnedCardsFrag
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 System.out.println("onTabSelected pos" + tab.getPosition());
-                swapFragments(tab);
+                viewPager.setCurrentItem(tab.getPosition());
+//     swapFragments(tab);
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
         });
 
     }
 
     /**
      * Changes the fragments displayed based on the position of the tab that is clicked.
-     *
+     * <p>
      * Swaps the fragments containing recycler views for pinned and recent card data. The data are
      * generated randomly from a set of 3 cards provided by the Card- class.
+     *
      * @param tab
      */
     private void swapFragments(TabLayout.Tab tab) {
@@ -75,8 +94,10 @@ public class SearchActivity extends AppCompatActivity implements PinnedCardsFrag
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         if (pos == 0) {
+            // Save fragment data for recentCardsFragment here
             fragment = pinnedCardsFragment;
         } else {
+            // Save fragment data for pinnedCardsFragment here
             fragment = recentCardsFragment;
         }
         fragmentTransaction.replace(R.id.fragment_container, fragment);
@@ -90,5 +111,48 @@ public class SearchActivity extends AppCompatActivity implements PinnedCardsFrag
 
     }
 
+    @Override
+    public void onCardsPinned(String title) {
+        Card card = null;
+        for (Card c : sampleCards) {
+            if (c.title.equals(title)) {
+                card = c;
+                break;
+            }
+        }
+        ((PinnedCardsFragment)pinnedCardsFragment).addCard(card);
+    }
 
+    /**
+     * Adapter for paging between fragments.
+     */
+
+    public class PagerAdapter extends FragmentPagerAdapter {
+        int mNumOfTabs;
+        Fragment pinnedFragment, recentFragment;
+
+        public PagerAdapter(FragmentManager fm, Fragment pinnedFragment, Fragment recentFragment) {
+            super(fm);
+            mNumOfTabs = 2;
+            this.pinnedFragment = pinnedFragment;
+            this.recentFragment = recentFragment;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return pinnedFragment;
+                case 1:
+                    return recentFragment;
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return mNumOfTabs;
+        }
+    }
 }

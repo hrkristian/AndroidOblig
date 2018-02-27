@@ -115,6 +115,7 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
                         view.setVisibility(View.GONE);
                     }
                 });
+                ((SearchActivity)context).onCardsPinned(thisCard.title);
             } else {
                 Intent intent = new Intent(context, CardActivity.class);
                 intent.putExtra("searched_item", thisCard.title);

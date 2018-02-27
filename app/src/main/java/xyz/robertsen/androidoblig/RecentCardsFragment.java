@@ -40,11 +40,6 @@ public class RecentCardsFragment extends Fragment {
     int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
     ItemTouchHelper itemTouchHelper;
 
-    public interface OnCardPinnedListener {
-        public void onCardPinned(String cardTitle);
-    }
-
-
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -132,17 +127,13 @@ public class RecentCardsFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     public ItemTouchHelper getItemTouchHelper() {
 
@@ -182,6 +173,7 @@ public class RecentCardsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void onCardsPinned(String title);
     }
 
     private void setSampleCards() {
