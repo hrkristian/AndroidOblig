@@ -57,7 +57,7 @@ public class CardHitAdapter extends RecyclerView.Adapter<CardHitAdapter.CardHitH
 
             image = itemView.findViewById(R.id.card_cardhits_image);
             title = itemView.findViewById(R.id.card_cardhits_title);
-            text = itemView.findViewById(R.id.card_cardhits_title);
+            text = itemView.findViewById(R.id.card_cardhits_text);
             this.adapter = adapter;
         }
     }
