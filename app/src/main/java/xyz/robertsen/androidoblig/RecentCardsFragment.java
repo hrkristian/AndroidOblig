@@ -1,6 +1,7 @@
 package xyz.robertsen.androidoblig;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,65 +29,34 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RecentCardsFragment extends Fragment {
 
     private static final String TAG = RecentCardsFragment.class.getSimpleName();
-
     Card[] cardlist;
     ArrayList<Card> recentCards;
-
     private RecyclerView recyclerRecent;
     private SearchCardAdapter cardAdapter;
-
     int dragDirections =  ItemTouchHelper.UP |  ItemTouchHelper.DOWN;
     int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
-    ItemTouchHelper itemTouchHelper;
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
+    private ItemTouchHelper itemTouchHelper;
+    OnFragmentInteractionListener mListener;
     public RecentCardsFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RecentCardsFragment.
+     * Factory method for creating a new instance of this fragment
+     * @return A new instance of RecentCardsFragment
      */
-    // TODO: Rename and change types and number of parameters
-    public static RecentCardsFragment newInstance(String param1, String param2) {
-        RecentCardsFragment fragment = new RecentCardsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static RecentCardsFragment newInstance() {
+        return new RecentCardsFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.d(TAG, "onCreate");
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         setSampleCards();
         cardAdapter = new SearchCardAdapter(this.getContext(), recentCards, true);
         itemTouchHelper = getItemTouchHelper();
 
+        // Fragment is retained across Activity re-creation
         setRetainInstance(true);
     }
 
@@ -101,7 +70,14 @@ public class RecentCardsFragment extends Fragment {
         recyclerRecent.setLayoutManager(new LinearLayoutManager(this.getContext()));
         itemTouchHelper.attachToRecyclerView(recyclerRecent);
 
+        // Ensures that the CardViews in the recycler view is centered when the layout is horizontal
+        if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setRecyclerHorizontalOffsets();
+        }
+        return view;
+    }
 
+    private void setRecyclerHorizontalOffsets() {
         recyclerRecent.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -113,15 +89,6 @@ public class RecentCardsFragment extends Fragment {
                 outRect.set(sidePad, 0, sidePad, 0);
             }
         });
-
-        return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
