@@ -4,11 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="xyz.robertsen.androidoblig.CardActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+    <SearchView
+        android:id="@+id/cardHitSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:padding="8dp"
+        android:background="@drawable/shape_cardview_background"
+        android:queryHint="Search text goes here"
+
+        />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/card_recycler_cardHits"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:layout_below="@id/cardHitSearchView"
+        >
 
+
+    </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

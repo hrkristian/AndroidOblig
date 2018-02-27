@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="base_margin">8dp</dimen>
+    <dimen name="card_width">113dp</dimen>
+    <dimen name="card_height">160dp</dimen>
+    <dimen name="card_text_size">15dp</dimen>
+    <dimen name="card_title_size">22dp</dimen>
+    <dimen name="card_line_max">7</dimen>
+</resources>
