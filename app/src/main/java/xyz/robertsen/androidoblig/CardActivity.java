@@ -1,9 +1,12 @@
 package xyz.robertsen.androidoblig;
 
+import android.app.SearchManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.SearchView;
 
 
@@ -33,6 +36,8 @@ public class CardActivity extends AppCompatActivity {
         recyclerCardHits.setLayoutManager(new LinearLayoutManager(this));
 
 
+        handleIntent(getIntent());
+
     }
     private void setCardHitSearchFocus() {
         cardHitSearchView.setIconifiedByDefault(true);
@@ -41,4 +46,18 @@ public class CardActivity extends AppCompatActivity {
         cardHitSearchView.clearFocus();
         cardHitSearchView.requestFocusFromTouch();
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.i("SearchQuery", query);
+        }
+    }
+
 }

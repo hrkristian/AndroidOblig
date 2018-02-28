@@ -8,4 +8,6 @@
     <string name="main_lifecounter_plus">+</string>
     <string name="main_lifecounter_minus">-</string>
 
+    <string name="search_hint">Search for a card</string>
+
 </resources>

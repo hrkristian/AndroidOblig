@@ -107,7 +107,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/main_fab_settings"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="40dp"
         android:clickable="true"
         android:elevation="10dp"
@@ -117,7 +117,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/shape_card_background" />
+        app:srcCompat="@drawable/transition_expand_collapse" />
 
     <include
         android:id="@+id/main_actionView"

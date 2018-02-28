@@ -12,11 +12,27 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
         </activity>
-        <activity android:name=".CardActivity" />
-        <activity android:name=".SearchActivity"></activity>
+        <activity
+            android:name=".CardActivity"
+            android:label="Card Search"
+            android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+        </activity>
+        <activity
+            android:name=".SearchActivity"
+            android:label="Previous Card Searches"
+            android:parentActivityName=".MainActivity"/>
     </application>
 </manifest>

@@ -4,15 +4,21 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +31,8 @@ import java.util.Collections;
  * Endret ...
  * -----------------
  */
-public class MainActivity extends AppCompatActivity implements UserFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity
+        implements UserFragment.OnFragmentInteractionListener, SearchView.OnQueryTextListener {
 
     private final static String ARG_LIFE_PLAYER1 = "life_player2";
     private final static String ARG_LIFE_PLAYER2 = "life_player2";
@@ -36,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements UserFragment.OnFr
     private int life_player1, life_player2;
 
     View actionView;
+    FloatingActionButton actionFAB;
+    TransitionDrawable actionFABTransitionDrawable;
 
     // todo- Map istedenfor Array; implementer Comparable
     public static User[] logins = {
@@ -50,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements UserFragment.OnFr
         setContentView(R.layout.activity_main);
 
         actionView = findViewById(R.id.main_actionView);
+        actionFAB = findViewById(R.id.main_fab_settings);
+        actionFABTransitionDrawable = (TransitionDrawable)actionFAB.getDrawable();
 
         if (savedInstanceState != null) {
             life_player1 = savedInstanceState.getInt(ARG_LIFE_PLAYER1);
@@ -65,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements UserFragment.OnFr
         ((TextView)findViewById(R.id.text_lifeCounter1)).setText(Integer.toString(life_player1));
         ((TextView)findViewById(R.id.text_lifeCounter2)).setText(Integer.toString(life_player2));
 
+
+        initSearchView();
     }
 
     @Override
@@ -87,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements UserFragment.OnFr
      * @param view
      */
     public void spawnActionView(final View view) {
+        final int TRANSITION_DURATION = 400;
         final View v = findViewById(R.id.main_actionView);
         int cx = v.getWidth();
         int cy = v.getHeight();
@@ -95,12 +109,13 @@ public class MainActivity extends AppCompatActivity implements UserFragment.OnFr
         if (v.getVisibility() == View.INVISIBLE) {
             Animator animator = ViewAnimationUtils.createCircularReveal(v, cx/2, cy/2, 0, radius);
 
-            animator.setDuration(400);
+            animator.setDuration(TRANSITION_DURATION);
             v.setVisibility(View.VISIBLE);
             animator.start();
+            actionFABTransitionDrawable.startTransition(TRANSITION_DURATION);
         } else {
             Animator animator = ViewAnimationUtils.createCircularReveal(v, cx/2, cy/2, radius/2, 0);
-            animator.setDuration(400);
+            animator.setDuration(TRANSITION_DURATION);
             if (view != null)
                 view.setClickable(false);
             animator.addListener(new AnimatorListenerAdapter() {
@@ -113,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements UserFragment.OnFr
                 }
             });
             animator.start();
+            actionFABTransitionDrawable.reverseTransition(TRANSITION_DURATION);
         }
     }
 
@@ -192,5 +208,26 @@ public class MainActivity extends AppCompatActivity implements UserFragment.OnFr
             }
         }
         Toast.makeText(this, "Login incorrect.", Toast.LENGTH_SHORT).show();
+    }
+
+
+    private void initSearchView() {
+        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = findViewById(R.id.search_main_cardSearch);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(this);
+    }
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        Intent intent = new Intent(getApplicationContext(), CardActivity.class);
+        intent.setAction(Intent.ACTION_SEARCH);
+        intent.putExtra(SearchManager.QUERY, s);
+        startActivity(intent);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        return false;
     }
 }
