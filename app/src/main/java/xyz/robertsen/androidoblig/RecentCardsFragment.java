@@ -103,7 +103,10 @@ public class RecentCardsFragment extends Fragment {
         }
     }
 
-
+    /**
+     * Returns a Item
+     * @return ItemTouchHelper for use on a RecyclerView
+     */
     public ItemTouchHelper getItemTouchHelper() {
 
         itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(dragDirections, swipeDirections) {

@@ -36,7 +36,7 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
      * @param isRecentSearches - If this adapter is contained within RecentCardsFragment of PinnedCardsFragment
      */
     public SearchCardAdapter(Context context, ArrayList<Card> cardList, boolean isRecentSearches) {
-        Log.d(TAG, "Instantiate SearchCardAdapter");
+        // TODO: Find a better solution regarding "boolean isRecentSearches"
         cardArrayList = cardList;
         this.context = context;
         inflater = LayoutInflater.from(context);
