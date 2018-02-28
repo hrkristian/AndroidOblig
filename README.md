@@ -86,13 +86,10 @@ slik at de vises i PinnedCardsFragment.
 
 ## TODO
 ### Generelt
-* Fargetema for applikasjonen
 * Refaktorering av ressurser
 * Implementere Up-nagivation. [Up-navigation](https://developer.android.com/design/patterns/navigation.html)
 
-
 ### MainActivity
-* Implementere terningkast
 
 ### SearchActivity
 * Refaktorer Fragmenteneklassene, mye duplisert kode.
