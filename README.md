@@ -65,11 +65,11 @@ Denne delen av applikasjonen består i hovedsak av:
 * 2 fragmenter, (PinnedCardsFragment og RecentCardsFragment)
 
 #### TabLayout
-**Tab 1**
+* **Tab 1**
 Viser PinnedCardsFragment
-**Tab 2**
+* **Tab 2**
 Viser RecentCardsFragment
-**ViewPager**
+#### **ViewPager**
 Brukes for å bytte mellom fragmentene
 
 #### Fragmentene
@@ -78,9 +78,9 @@ et CardView. De har en ItemTouchHelper der swipe LEFT/RIGHT sletter. Drag UP/DOW
 endre posisjon i adapter (skal også oppdatere position i databasen).
 Ved klikk på kortene skal det gjøres et søk på korttittel og vises i Søk på kort.
 
-**PinnedCardsFragment**
+* **PinnedCardsFragment**
 Har et RecyclerView som viser søk/kort som er merket som interessante.
-**RecentCardsFragment**
+* **RecentCardsFragment**
 Har et RecyclerView som viser en søkshistorikk. Man har mulighet for å lagre interessante søk,
 slik at de vises i PinnedCardsFragment.
 
