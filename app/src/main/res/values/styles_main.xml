@@ -3,11 +3,12 @@
     <style name="main_LifeCounter">
         <item name="android:textSize">40sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
         <item name="android:background">@drawable/shape_main_lifebackground</item>
         <item name="android:gravity">center</item>
     </style>
     <style name="main_lifeButton" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:textSize">50sp</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
     </style>
 </resources>

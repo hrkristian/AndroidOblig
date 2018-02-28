@@ -8,5 +8,5 @@
     <solid android:color="@color/main_lifeCounterBackground" />
     <stroke
         android:width="1dp"
-        android:color="@android:color/black" />
+        android:color="@color/colorPrimaryDark" />
 </shape>
