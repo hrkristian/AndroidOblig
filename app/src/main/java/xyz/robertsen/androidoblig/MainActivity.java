@@ -82,7 +82,10 @@ public class MainActivity extends AppCompatActivity
         init_FABDrawable();
     }
 
-
+    /**
+     * Tar
+     * @param outState
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -105,7 +108,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Animerer visningen og fjerningen av app-handling knappene.
-     * todo- fjerne muligheten til å klikke igjennom
+     * todo- fjerne muligheten til å klikke igjennom || bare bytte ut med fragment
      * @param view
      */
     public void spawnActionView(final View view) {
