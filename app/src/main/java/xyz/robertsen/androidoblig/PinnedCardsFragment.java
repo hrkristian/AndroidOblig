@@ -1,6 +1,7 @@
 package xyz.robertsen.androidoblig;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,14 +9,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -32,23 +31,11 @@ public class PinnedCardsFragment extends Fragment {
 
     Card[] cardlist;
     ArrayList<Card> pinnedCards;
-
     private RecyclerView recyclerPinned;
     private SearchCardAdapter cardAdapter;
-
     private ItemTouchHelper itemTouchHelper;
     int dragDirections = ItemTouchHelper.UP |  ItemTouchHelper.DOWN;
     int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     public PinnedCardsFragment() {
@@ -56,42 +43,28 @@ public class PinnedCardsFragment extends Fragment {
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * Use this factory method to create a new instance of this fragment
      * @return A new instance of fragment PinnedCardsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static PinnedCardsFragment newInstance(String param1, String param2) {
-        PinnedCardsFragment fragment = new PinnedCardsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static PinnedCardsFragment newInstance() {
+        return new PinnedCardsFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.d(TAG, "onCreate");
-
         pinnedCards = new ArrayList<>();
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
         cardAdapter = new SearchCardAdapter(this.getContext(), pinnedCards, false);
         itemTouchHelper = getItemTouchHelper();
+
+        // Fragment is retained across Activity re-creation
+        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pinned_cards, container, false);
         recyclerPinned = view.findViewById(R.id.recycler_pinned_cards);
@@ -100,6 +73,13 @@ public class PinnedCardsFragment extends Fragment {
         itemTouchHelper.attachToRecyclerView(recyclerPinned);
 
         // Ensures that the CardViews in the recycler view is centered when the layout is horizontal
+        if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setRecyclerHorizontalOffsets();
+        }
+        return view;
+    }
+
+    private void setRecyclerHorizontalOffsets() {
         recyclerPinned.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
@@ -111,15 +91,6 @@ public class PinnedCardsFragment extends Fragment {
                 outRect.set(sidePad, 0, sidePad, 0);
             }
         });
-
-        return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -136,13 +107,11 @@ public class PinnedCardsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
     }
 
     @Override
@@ -171,7 +140,6 @@ public class PinnedCardsFragment extends Fragment {
                 cardAdapter.notifyItemRemoved(pos);
             }
         });
-
         return itemTouchHelper;
     }
 
@@ -188,16 +156,6 @@ public class PinnedCardsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    private void setSampleCards() {
-        int randInt;
-        cardlist = Card.getExampleData(this.getContext());
-        pinnedCards = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            randInt = ThreadLocalRandom.current().nextInt(0, cardlist.length);
-            pinnedCards.add(cardlist[randInt]);
-        }
     }
 
     public void addCard(Card card) {
