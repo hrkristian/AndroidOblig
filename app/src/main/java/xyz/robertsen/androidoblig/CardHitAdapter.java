@@ -1,6 +1,7 @@
 package xyz.robertsen.androidoblig;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,23 +17,42 @@ import java.util.ArrayList;
  */
 
 public class CardHitAdapter extends RecyclerView.Adapter<CardHitAdapter.CardHitHolder> {
-
+    /**
+     * Class-variables
+     */
     Context context;
     ArrayList<Card> cardArrayList;
     LayoutInflater inflater;
 
+    /**
+     *
+     * Constructor
+     * @param context
+     * @param cardArrayList
+     */
     public CardHitAdapter(Context context, ArrayList<Card> cardArrayList) {
         this.context = context;
         this.cardArrayList = cardArrayList;
         this.inflater = LayoutInflater.from(context);
     }
 
+    /**
+     * Creating view, returning viewholder
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @Override
     public CardHitAdapter.CardHitHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.card_cardhit_item, parent, false);
         return new CardHitHolder(view, this);
     }
 
+    /**
+     * Binds the view
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(CardHitAdapter.CardHitHolder holder, int position) {
         Card card = cardArrayList.get(position);
@@ -46,6 +66,11 @@ public class CardHitAdapter extends RecyclerView.Adapter<CardHitAdapter.CardHitH
         return cardArrayList.size();
     }
 
+    /**
+     * CardHitHolder-class
+     *
+     * Class variables
+     */
     public class CardHitHolder extends RecyclerView.ViewHolder {
 
         private final ImageView image;
@@ -61,4 +86,6 @@ public class CardHitAdapter extends RecyclerView.Adapter<CardHitAdapter.CardHitH
             this.adapter = adapter;
         }
     }
+
+
 }
