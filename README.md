@@ -89,10 +89,11 @@ slik at de vises i PinnedCardsFragment.
 * Fargetema for applikasjonen
 * Refaktorering av ressurser
 ### MainActivity
-* Implementere terningkast
-* Fikse ikon-størrelse  (FAB)
+* fjerne muligheten til å klikke igjennom ActionView || bare bytte ut med fragment
+* Ferdigstille settings/login-fragmentene
+* Login som HashMap, implementere Comparable i User
 ### SearchActivity
-* Refaktorer Fragmenteneklassene, mye duplisert kode.
+* Refaktorer Fragmentenklassene, mye duplisert kode.
 * Refaktorere Adapteret, dette gjenbrukes for i PinnedCardsFragment og RecentCardsFragment,
 selv om funksjonaliteten skal være noe forskjellig.
 

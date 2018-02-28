@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton actionFAB;
     TransitionDrawable actionFABTransitionDrawable;
 
-    // todo- Map istedenfor Array; implementer Comparable
+    // todo- Map instead of Array && implement Comparable in User
     public static User[] logins = {
             new User("kristian", "pwd"),
             new User("nikolai", "pwd"),
@@ -82,10 +82,6 @@ public class MainActivity extends AppCompatActivity
         init_FABDrawable();
     }
 
-    /**
-     * Tar
-     * @param outState
-     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -97,8 +93,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * todo- implementer terningskast
-     * @param view
+     * Performs a dice roll (1-6) and displays the result as a Toast.
+     * @param view the event-view
      */
     public void rollDice(View view) {
         String diceText = "Terningkast: ".concat( Integer.toString((int)(Math.random() * 6 + 1)) );
@@ -107,8 +103,8 @@ public class MainActivity extends AppCompatActivity
 
 
     /**
-     * Animerer visningen og fjerningen av app-handling knappene.
-     * todo- fjerne muligheten til å klikke igjennom || bare bytte ut med fragment
+     * Animates the showing and hiding of the "ActionView"
+     * todo- remove ability to click through the ActionView || switch it out with a Fragment
      * @param view
      */
     public void spawnActionView(final View view) {
@@ -144,6 +140,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Overridden in order to make the ActionView respons to a back event
+     */
     @Override
     public void onBackPressed() {
         if ( findViewById(R.id.main_actionView).getVisibility() == View.VISIBLE )
@@ -152,32 +151,10 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
     }
 
-    /* Activities and fragments */
-    public void spawnSearchActivity(View view) {
-        Intent intent = new Intent(this, SearchActivity.class);
-        spawnActivityWithFABClose(intent);
-    }
-
-    public void spawnCardActivity(View view) {
-        Intent intent = new Intent(this, CardActivity.class);
-        spawnActivityWithFABClose(intent);
-    }
-    private void spawnActivityWithFABClose(Intent intent) {
-        spawnActionView(findViewById(R.id.main_fab_settings));
-        startActivity(intent);
-    }
-
-    public void spawnLoginFragment(View view) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment previous = getFragmentManager().findFragmentByTag("userLoginFragment");
-        if (previous != null)
-            ft.remove(previous);
-        ft.addToBackStack(null);
-
-        UserFragment uf = UserFragment.newInstance(DEFAULT_PLAYERS, R.layout.fragment_user);
-        uf.show(ft, "userLoginFragment");
-        spawnActionView(findViewById(R.id.main_fab_settings));
-    }
+    /**
+     * Changes the remaining life of a player based on which view fires the event
+     * @param view the event view
+     */
     public void changeLifeRemaining(View view) {
         TextView v;
         switch (view.getId()) {
@@ -200,7 +177,52 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    /* Callbacks */
+    /* ------------ Interface methods ----------- */
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        Intent intent = new Intent(getApplicationContext(), CardActivity.class);
+        intent.setAction(Intent.ACTION_SEARCH);
+        intent.putExtra(SearchManager.QUERY, s);
+        spawnActivityWithFABClose(intent);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        return false;
+    }
+
+    /* ------------ Activities and fragments ----------- */
+    public void spawnSearchActivity(View view) {
+        Intent intent = new Intent(this, SearchActivity.class);
+        spawnActivityWithFABClose(intent);
+    }
+
+    private void spawnActivityWithFABClose(Intent intent) {
+        spawnActionView(findViewById(R.id.main_fab_settings));
+        startActivity(intent);
+    }
+
+    public void spawnLoginFragment(View view) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment previous = getFragmentManager().findFragmentByTag("userLoginFragment");
+        if (previous != null)
+            ft.remove(previous);
+        ft.addToBackStack(null);
+
+        UserFragment uf = UserFragment.newInstance(DEFAULT_PLAYERS, R.layout.fragment_user);
+        uf.show(ft, "userLoginFragment");
+        spawnActionView(findViewById(R.id.main_fab_settings));
+    }
+
+    /* ------------ Callbacks ----------- */
+
+    /**
+     * Callback-method for UserFragment, handles login-attempts.
+     * todo- complete settings and login-functionality
+     * @param usr brukernavn
+     * @param pwd passordet
+     */
     @Override
     public void onLoginButtonPressed(String usr, String pwd) {
 
@@ -222,6 +244,9 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, "Login incorrect.", Toast.LENGTH_SHORT).show();
     }
 
+
+
+    /* ------------ Init methods ----------- */
     private void init_FABDrawable() {
         actionFABTransitionDrawable = new TransitionDrawable( new Drawable[]{
                 getResources().getDrawable(R.drawable.icon_expand),
@@ -234,19 +259,5 @@ public class MainActivity extends AppCompatActivity
     private void initSearchView() {
         SearchView searchView = findViewById(R.id.search_main_cardSearch);
         searchView.setOnQueryTextListener(this);
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String s) {
-        Intent intent = new Intent(getApplicationContext(), CardActivity.class);
-        intent.setAction(Intent.ACTION_SEARCH);
-        intent.putExtra(SearchManager.QUERY, s);
-        startActivity(intent);
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String s) {
-        return false;
     }
 }
