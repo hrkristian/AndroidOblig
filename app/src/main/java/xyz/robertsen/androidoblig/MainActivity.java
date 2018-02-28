@@ -13,8 +13,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.AlignmentSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -26,10 +32,6 @@ import java.util.Collections;
 
 /**
  * Hovedklassen til AndroidOblig
- * ----------------- Dev info, fjernes før levering
- * Opprettet 22. Feb - Kristian
- * Endret ...
- * -----------------
  */
 public class MainActivity extends AppCompatActivity
         implements UserFragment.OnFragmentInteractionListener, SearchView.OnQueryTextListener {
@@ -60,7 +62,6 @@ public class MainActivity extends AppCompatActivity
 
         actionView = findViewById(R.id.main_actionView);
         actionFAB = findViewById(R.id.main_fab_settings);
-        actionFABTransitionDrawable = (TransitionDrawable)actionFAB.getDrawable();
 
         if (savedInstanceState != null) {
             life_player1 = savedInstanceState.getInt(ARG_LIFE_PLAYER1);
@@ -78,7 +79,9 @@ public class MainActivity extends AppCompatActivity
 
 
         initSearchView();
+        init_FABDrawable();
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -90,13 +93,19 @@ public class MainActivity extends AppCompatActivity
         outState.putBoolean(ARG_ACTIONVIEW_VISIBLE, actionView.getVisibility() == View.VISIBLE);
     }
 
+    /**
+     * todo- implementer terningskast
+     * @param view
+     */
     public void rollDice(View view) {
+        String diceText = "Terningkast: ".concat( Integer.toString((int)(Math.random() * 6 + 1)) );
+        Toast.makeText(this, diceText, Toast.LENGTH_SHORT).show();
     }
 
 
     /**
      * Animerer visningen og fjerningen av app-handling knappene.
-     * todo- endre bakgrunnen til FAB ved visning
+     * todo- fjerne muligheten til å klikke igjennom
      * @param view
      */
     public void spawnActionView(final View view) {
@@ -112,7 +121,7 @@ public class MainActivity extends AppCompatActivity
             animator.setDuration(TRANSITION_DURATION);
             v.setVisibility(View.VISIBLE);
             animator.start();
-            actionFABTransitionDrawable.startTransition(TRANSITION_DURATION);
+            actionFABTransitionDrawable.startTransition(0);
         } else {
             Animator animator = ViewAnimationUtils.createCircularReveal(v, cx/2, cy/2, radius/2, 0);
             animator.setDuration(TRANSITION_DURATION);
@@ -128,7 +137,7 @@ public class MainActivity extends AppCompatActivity
                 }
             });
             animator.start();
-            actionFABTransitionDrawable.reverseTransition(TRANSITION_DURATION);
+            actionFABTransitionDrawable.reverseTransition(0);
         }
     }
 
@@ -210,13 +219,20 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, "Login incorrect.", Toast.LENGTH_SHORT).show();
     }
 
+    private void init_FABDrawable() {
+        actionFABTransitionDrawable = new TransitionDrawable( new Drawable[]{
+                getResources().getDrawable(R.drawable.icon_expand),
+                getResources().getDrawable(R.drawable.icon_collapse)
+        });
+        actionFAB.setImageDrawable(actionFABTransitionDrawable);
+        actionFABTransitionDrawable.setCrossFadeEnabled(true);
+    }
 
     private void initSearchView() {
-        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = findViewById(R.id.search_main_cardSearch);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextListener(this);
     }
+
     @Override
     public boolean onQueryTextSubmit(String s) {
         Intent intent = new Intent(getApplicationContext(), CardActivity.class);

@@ -8,6 +8,9 @@
     <string name="main_lifecounter_plus">+</string>
     <string name="main_lifecounter_minus">-</string>
 
-    <string name="search_hint">Search for a card</string>
+    <string name="main_search_hint">Søk etter et kort</string>
+    <string name="main_icon_dice_hint">Trykk for å rulle terning</string>
+    <string name="main_icon_history_hint">Trykk for søkehistorikk</string>
+    <string name="main_icon_login_hint">Trykk for innlogging og instillinger</string>
 
 </resources>
