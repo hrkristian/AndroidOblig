@@ -16,10 +16,7 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = CardDatabaseOpenHelper.class.getSimpleName();
     // Database information
     private static final String DATABASE_NAME = "card_organizer";
-    private static final int DATABASE_VERSION = 1;
-
-    // _id column for all tables
-
+    private static final int DATABASE_VERSION = 1; // INCREMENT WHEN STRUCTURAL CHANGES
 
     public CardDatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -114,13 +111,22 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
 
     public String getDatabaseMetaData() {
         StringBuilder data = new StringBuilder();
-        Cursor c = getReadableDatabase().rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
-        if (c.moveToFirst()) {
-            while (!c.isAfterLast()) {
-                data.append("Table name -> " + c.getString(0) +"\n");
-                c.moveToNext();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor tableCursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        if (tableCursor.moveToFirst()) {
+            while (!tableCursor.isAfterLast()) {
+                String tableName = tableCursor.getString(0);
+                Cursor columnCursor = db.query(tableName, null, null, null, null, null, null);
+                String[] columns = columnCursor.getColumnNames(); columnCursor.close();
+                data.append("Table name:: " + tableName +"\n");
+                for (String column : columns) {
+                    data.append("   " + column + "\n");
+                }
+                tableCursor.moveToNext();
             }
         }
+        tableCursor.close();
+        db.close();
         return data.toString();
     }
 }
