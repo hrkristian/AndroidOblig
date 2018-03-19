@@ -6,6 +6,7 @@ package xyz.robertsen.androidoblig;
 
 public class User {
 
+    long db_id;
     String usr, pwd;
 
     public User(String usr, String pwd) {
@@ -15,5 +16,17 @@ public class User {
 
     public boolean isMatch(String usr, String pwd) {
         return (usr.equalsIgnoreCase(this.usr) && pwd.equals(this.pwd));
+    }
+
+    public String getUsr() {
+        return usr;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setId(long id) {
+        db_id = id;
     }
 }

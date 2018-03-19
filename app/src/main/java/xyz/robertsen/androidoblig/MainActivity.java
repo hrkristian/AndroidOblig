@@ -5,30 +5,19 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Layout;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.AlignmentSpan;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Collections;
 
 import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 
@@ -69,6 +58,34 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         dbHelper = new CardDatabaseOpenHelper(this);
+        dbHelper.seedUsers(logins);
+        dbHelper.dbAddRecentSearch("Jesper og Jonathan", logins[1]);
+        dbHelper.dbAddRecentSearch("Jace, the Mind Sculptor", logins[1]);
+        dbHelper.dbAddRecentSearch("Knut i hagen", logins[1]);
+
+        StringBuilder builder = new StringBuilder();
+        Cursor cursor = dbHelper.getRecentSearches(logins[1]);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String searchString = cursor.getString(
+                cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.SEARCH_STRING)
+            );
+            long time = cursor.getInt(
+                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.UNIX_TIME)
+            );
+            String user = cursor.getString(
+                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentCardsTable.USER)
+            );
+            builder.append("User: ").append(user).append("\n");
+            builder.append("Time: ").append(time).append("\n");
+            builder.append("SearchString: ").append(searchString).append("\n");
+            cursor.moveToNext();
+        }
+        cursor.close();
+        System.out.println(builder.toString());
+
+
+
         Log.w(TAG, dbHelper.getDatabaseMetaData());
 
         actionView = findViewById(R.id.main_actionView);
