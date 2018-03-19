@@ -30,11 +30,17 @@ import android.widget.Toast;
 
 import java.util.Collections;
 
+import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
+
 /**
  * Hovedklassen til AndroidOblig
  */
 public class MainActivity extends AppCompatActivity
         implements UserFragment.OnFragmentInteractionListener, SearchView.OnQueryTextListener {
+
+    // Database members
+    public static CardDatabaseOpenHelper dbHelper;
+
 
     private final static String ARG_LIFE_PLAYER1 = "life_player2";
     private final static String ARG_LIFE_PLAYER2 = "life_player2";
@@ -59,6 +65,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dbHelper = new CardDatabaseOpenHelper(this);
+        System.out.println(dbHelper.getDatabaseMetaData());
 
         actionView = findViewById(R.id.main_actionView);
         actionFAB = findViewById(R.id.main_fab_settings);
