@@ -38,6 +38,8 @@ import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 public class MainActivity extends AppCompatActivity
         implements UserFragment.OnFragmentInteractionListener, SearchView.OnQueryTextListener {
 
+    // Log tag
+    private static final String TAG = MainActivity.class.getSimpleName();
     // Database members
     public static CardDatabaseOpenHelper dbHelper;
 
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         dbHelper = new CardDatabaseOpenHelper(this);
-        System.out.println(dbHelper.getDatabaseMetaData());
+        Log.w(TAG, dbHelper.getDatabaseMetaData());
 
         actionView = findViewById(R.id.main_actionView);
         actionFAB = findViewById(R.id.main_fab_settings);

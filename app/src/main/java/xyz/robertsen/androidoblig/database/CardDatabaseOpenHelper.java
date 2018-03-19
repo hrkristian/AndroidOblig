@@ -38,7 +38,10 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Database Schema for CardDatabase
+    /**
+     * Database schema for the card_organizer database
+     * TABLES: UserTable, RecentCardsTable, RecentSearchesTable
+     */
     public final class DBSchema {
         // USER_TABLE
         /////////////
@@ -109,18 +112,23 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
         public static final String SQL_DROP_RECENT_SEARCHES = "DROP TABLE IF EXISTS " + RecentSearchesTable.TABLE_NAME + ";";
     }
 
+    /**
+     * Iterates through the database tables and table-colums, and returns a string of the found values
+     * @return String containing the "metadata" for the database.
+     */
     public String getDatabaseMetaData() {
         StringBuilder data = new StringBuilder();
+        data.append("Metadata for the ").append(DATABASE_NAME).append("database:\n");
         SQLiteDatabase db = getReadableDatabase();
         Cursor tableCursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
         if (tableCursor.moveToFirst()) {
             while (!tableCursor.isAfterLast()) {
                 String tableName = tableCursor.getString(0);
                 Cursor columnCursor = db.query(tableName, null, null, null, null, null, null);
-                String[] columns = columnCursor.getColumnNames(); columnCursor.close();
-                data.append("Table name:: " + tableName +"\n");
+                String[] columns = columnCursor.getColumnNames();
+                data.append("----Table name:: ").append(tableName).append("\n");
                 for (String column : columns) {
-                    data.append("   " + column + "\n");
+                    data.append("    |----").append(column ).append("\n");
                 }
                 tableCursor.moveToNext();
             }
