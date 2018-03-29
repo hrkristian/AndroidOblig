@@ -1,7 +1,6 @@
 package xyz.robertsen.androidoblig;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
  * Created by gitsieg on 26.02.18.
  */
 
-public class CardHitAdapter extends RecyclerView.Adapter<CardHitAdapter.CardHitHolder> {
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.CardHitHolder> {
     /**
      * Class-variables
      */
@@ -30,7 +29,7 @@ public class CardHitAdapter extends RecyclerView.Adapter<CardHitAdapter.CardHitH
      * @param context
      * @param cardArrayList
      */
-    public CardHitAdapter(Context context, ArrayList<Card> cardArrayList) {
+    public SearchAdapter(Context context, ArrayList<Card> cardArrayList) {
         this.context = context;
         this.cardArrayList = cardArrayList;
         this.inflater = LayoutInflater.from(context);
@@ -43,7 +42,7 @@ public class CardHitAdapter extends RecyclerView.Adapter<CardHitAdapter.CardHitH
      * @return
      */
     @Override
-    public CardHitAdapter.CardHitHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SearchAdapter.CardHitHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.card_cardhit_item, parent, false);
         return new CardHitHolder(view, this);
     }
@@ -54,7 +53,7 @@ public class CardHitAdapter extends RecyclerView.Adapter<CardHitAdapter.CardHitH
      * @param position
      */
     @Override
-    public void onBindViewHolder(CardHitAdapter.CardHitHolder holder, int position) {
+    public void onBindViewHolder(SearchAdapter.CardHitHolder holder, int position) {
         Card card = cardArrayList.get(position);
         holder.image.setImageDrawable(card.image);
         holder.title.setText(card.title);
@@ -75,9 +74,9 @@ public class CardHitAdapter extends RecyclerView.Adapter<CardHitAdapter.CardHitH
 
         private final ImageView image;
         private final TextView title, text;
-        private CardHitAdapter adapter;
+        private SearchAdapter adapter;
 
-        public CardHitHolder(View itemView, CardHitAdapter adapter) {
+        public CardHitHolder(View itemView, SearchAdapter adapter) {
             super(itemView);
 
             image = itemView.findViewById(R.id.card_cardhits_image);

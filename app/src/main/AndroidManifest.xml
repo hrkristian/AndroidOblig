@@ -19,7 +19,7 @@
                 android:resource="@xml/searchable"/>
         </activity>
         <activity
-            android:name=".CardActivity"
+            android:name=".SearchActivity"
             android:label="Card Search"
             android:launchMode="singleTop"
             android:parentActivityName=".MainActivity">
@@ -31,7 +31,7 @@
                 android:resource="@xml/searchable"/>
         </activity>
         <activity
-            android:name=".SearchActivity"
+            android:name=".HistoryActivity"
             android:label="Previous Card Searches"
             android:parentActivityName=".MainActivity"/>
     </application>

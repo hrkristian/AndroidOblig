@@ -32,7 +32,7 @@ public class RecentCardsFragment extends Fragment {
     Card[] cardlist;
     ArrayList<Card> recentCards;
     private RecyclerView recyclerRecent;
-    private SearchCardAdapter cardAdapter;
+    private HistoryCardAdapter cardAdapter;
     int dragDirections =  ItemTouchHelper.UP |  ItemTouchHelper.DOWN;
     int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
     private ItemTouchHelper itemTouchHelper;
@@ -53,7 +53,7 @@ public class RecentCardsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setSampleCards();
-        cardAdapter = new SearchCardAdapter(this.getContext(), recentCards, true);
+        cardAdapter = new HistoryCardAdapter(this.getContext(), recentCards, true);
         itemTouchHelper = getItemTouchHelper();
 
         // Fragment is retained across Activity re-creation

@@ -1,134 +1,130 @@
 package xyz.robertsen.androidoblig;
 
-import android.net.Uri;
+import android.app.SearchManager;
+import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.SearchView;
+import android.widget.TextView;
+
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class SearchActivity extends AppCompatActivity implements
-        PinnedCardsFragment.OnFragmentInteractionListener,
-        RecentCardsFragment.OnFragmentInteractionListener {
+public class SearchActivity extends AppCompatActivity {
+    /**
+     * Class variables
+     */
+    SearchView cardHitSearchView;
+    RecyclerView recyclerCardHits;
+    SearchAdapter searchAdapter;
+    ArrayList<Card> cardArrayList;
+    RequestHandler requestHandler;
 
-    private static final String TAG = SearchActivity.class.getSimpleName();
-    private static final String TAB_POSITION = "xyz.robertsen.androidoblig.SearchActivity";
-    private ArrayList<Card> sampleCards;
-    private TabLayout tabLayout;
-    private TabLayout.Tab recentTab, pinnedTab;
-    private Fragment recentFragment;
-    private Fragment pinnedFragment;
-    private ViewPager viewPager;
-    private PagerAdapter pagerAdapter;
-    int tabPosSelected = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_card);
 
-        // ViewPager for TabLayout
-        viewPager = findViewById(R.id.fragment_container);
-        sampleCards = new ArrayList<>(Arrays.asList(Card.getExampleData(this)));
+        /**
+         * Initalizing
+         */
+        cardHitSearchView = (SearchView) findViewById(R.id.cardHitSearchView);
+        /**
+         * Calls the method setCardHitSearchFocus
+         */
+        cardArrayList = new ArrayList<>(Arrays.asList(Card.getExampleData(this)));
+        searchAdapter = new SearchAdapter(this, cardArrayList);
+        recyclerCardHits = findViewById(R.id.card_recycler_cardHits);
+        recyclerCardHits.setAdapter(searchAdapter);
+        recyclerCardHits.setLayoutManager(new LinearLayoutManager(this));
+        /**
+         * Checks device orentation, if "landscape" -> Runs SetHorizontalOffsets-method
+         */
+            setRecyclerHorizontalOffsets();
 
-        // TabLayout
-        tabLayout = findViewById(R.id.search_recent_pinned_layout);
-        recentTab = tabLayout.newTab();
-        recentTab.setCustomView(R.layout.search_tab_pinned);
-        tabLayout.addTab(recentTab);
-        pinnedTab = tabLayout.newTab();
-        pinnedTab.setCustomView(R.layout.search_tab_recent);
-        tabLayout.addTab(pinnedTab);
+        handleIntent(getIntent());
 
-        if (savedInstanceState != null) {
-            tabPosSelected = savedInstanceState.getInt(TAB_POSITION);
-            TabLayout.Tab tab = tabLayout.getTabAt(tabPosSelected);
-            if (tab != null) {
-                tab.select();
-            }
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.i("SearchQuery", query);
         }
+    }
 
-        // Set fragments;
-        recentFragment = RecentCardsFragment.newInstance();
-        pinnedFragment = PinnedCardsFragment.newInstance();
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), pinnedFragment, recentFragment);
-        viewPager.setAdapter(pagerAdapter);
-
-        // listener placed on the TabLayout for pinned and recent cards
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+    /**
+     * Sets Horizintal Offsets in RecycleView
+     */
+    private void setRecyclerHorizontalOffsets() {
+        recyclerCardHits.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                System.out.println("onTabSelected pos" + tab.getPosition());
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                super.getItemOffsets(outRect, view, parent, state);
+                int totalWidth = parent.getWidth();
+                int cardWidth = getResources().getDimensionPixelOffset(R.dimen.land_card_width);
+                int sidePad = (totalWidth - cardWidth) / 2;
+                sidePad = Math.max(0, sidePad);
+                outRect.set(sidePad, 0, sidePad, 0);
             }
         });
 
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(TAB_POSITION, tabLayout.getSelectedTabPosition());
-        super.onSaveInstanceState(outState);
+
+    private class RequestHandler {
+        final String BASE_URL;
+        final RequestQueue REQUEST_QUEUE;
+
+        private RequestHandler() {
+            REQUEST_QUEUE = Volley.newRequestQueue(getApplicationContext());
+            BASE_URL = "https://api.magicthegathering.io/v1/cards?name=";
+        }
+
+        void sendRequest(String request) {
+            StringRequest stringRequest = new StringRequest(
+                    Request.Method.GET,
+                    BASE_URL.concat(request),
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            generateCardView(response);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            System.out.println(error.getMessage());
+                            // TODO
+                        }
+                    }
+            );
+            REQUEST_QUEUE.add(stringRequest);
+        }
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onCardsPinned(String title) {
-        Card card = null;
-        for (Card c : sampleCards) {
-            if (c.title.equals(title)) {
-                card = c;
-                break;
-            }
-        }
-        ((PinnedCardsFragment) pinnedFragment).addCard(card);
-    }
-
-    /**
-     * Adapter for paging between fragments.
-     */
-    public class PagerAdapter extends FragmentPagerAdapter {
-        int mNumOfTabs;
-        Fragment pinnedFragment, recentFragment;
-
-        private PagerAdapter(FragmentManager fm, Fragment pinnedFragment, Fragment recentFragment) {
-            super(fm);
-            mNumOfTabs = 2;
-            this.pinnedFragment = pinnedFragment;
-            this.recentFragment = recentFragment;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return pinnedFragment;
-                case 1:
-                    return recentFragment;
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return mNumOfTabs;
-        }
+    private void generateCardView(String response) {
     }
 }

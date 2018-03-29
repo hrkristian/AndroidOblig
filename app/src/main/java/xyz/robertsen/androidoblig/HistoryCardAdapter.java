@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,10 @@ import java.util.ArrayList;
  * Created by gitsieg on 23.02.18.
  */
 
-class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewHolder> {
+class HistoryCardAdapter extends RecyclerView.Adapter<HistoryCardAdapter.CardViewHolder> {
 
     // Tag for logging
-    private static String TAG = SearchCardAdapter.class.getSimpleName();
+    private static String TAG = HistoryCardAdapter.class.getSimpleName();
 
     private final boolean isRecentSearches;
     private ArrayList<Card> cardArrayList;
@@ -30,12 +29,12 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
     private Context context;
 
     /**
-     * Instantiates the SearchCardAdapter
+     * Instantiates the HistoryCardAdapter
      * @param context - The activity/context this adapter is created within
      * @param cardList - ArrayList of Cards to use with this adapter
      * @param isRecentSearches - If this adapter is contained within RecentCardsFragment of PinnedCardsFragment
      */
-    public SearchCardAdapter(Context context, ArrayList<Card> cardList, boolean isRecentSearches) {
+    public HistoryCardAdapter(Context context, ArrayList<Card> cardList, boolean isRecentSearches) {
         // TODO: Find a better solution regarding "boolean isRecentSearches"
         cardArrayList = cardList;
         this.context = context;
@@ -88,9 +87,9 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
         private final TextView title, cmc, text;
         private final ImageView cardCropImage;
         private final ImageButton searchPin;
-        final SearchCardAdapter cardAdapter;
+        final HistoryCardAdapter cardAdapter;
 
-        public CardViewHolder(View itemView, SearchCardAdapter adapter) {
+        public CardViewHolder(View itemView, HistoryCardAdapter adapter) {
             super(itemView);
             title = itemView.findViewById(R.id.search_carditem_title);
             cmc = itemView.findViewById(R.id.search_carditem_cmc);
@@ -104,7 +103,7 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
 
         /**
          * If search_pin view is clicked, save card to PinnedCardsFragment.
-         * If The holder is clicked, open CardActivity and search for the given card title.
+         * If The holder is clicked, open SearchActivity and search for the given card title.
          * @param view - The view that is clicked (either pin button or ViewHolder.
          */
         @Override
@@ -120,9 +119,9 @@ class SearchCardAdapter extends RecyclerView.Adapter<SearchCardAdapter.CardViewH
                         view.setVisibility(View.GONE);
                     }
                 });
-                ((SearchActivity)context).onCardsPinned(thisCard.title);
+                ((HistoryActivity)context).onCardsPinned(thisCard.title);
             } else {
-                Intent intent = new Intent(context, CardActivity.class);
+                Intent intent = new Intent(context, SearchActivity.class);
                 intent.putExtra("searched_item", thisCard.title);
                 context.startActivity(intent);
             }

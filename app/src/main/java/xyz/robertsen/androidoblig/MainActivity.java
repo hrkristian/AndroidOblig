@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity
     /* ------------ Interface methods ----------- */
     @Override
     public boolean onQueryTextSubmit(String s) {
-        Intent intent = new Intent(getApplicationContext(), CardActivity.class);
+        Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         intent.setAction(Intent.ACTION_SEARCH);
         intent.putExtra(SearchManager.QUERY, s);
         spawnActivityWithFABClose(intent);
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity
 
     /* ------------ Activities and fragments ----------- */
     public void spawnSearchActivity(View view) {
-        Intent intent = new Intent(this, SearchActivity.class);
+        Intent intent = new Intent(this, HistoryActivity.class);
         spawnActivityWithFABClose(intent);
     }
 
