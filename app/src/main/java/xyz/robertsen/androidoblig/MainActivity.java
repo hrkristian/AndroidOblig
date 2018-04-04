@@ -58,33 +58,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         dbHelper = new CardDatabaseOpenHelper(this);
-        dbHelper.seedUsers(logins);
-        dbHelper.dbAddRecentSearch("Jesper og Jonathan", logins[1]);
-        dbHelper.dbAddRecentSearch("Jace, the Mind Sculptor", logins[1]);
-        dbHelper.dbAddRecentSearch("Knut i hagen", logins[1]);
-
-        StringBuilder builder = new StringBuilder();
-        Cursor cursor = dbHelper.getRecentSearches(logins[1]);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            String searchString = cursor.getString(
-                cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.SEARCH_STRING)
-            );
-            long time = cursor.getInt(
-                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.UNIX_TIME)
-            );
-            String user = cursor.getString(
-                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentCardsTable.USER)
-            );
-            builder.append("User: ").append(user).append("\n");
-            builder.append("Time: ").append(time).append("\n");
-            builder.append("SearchString: ").append(searchString).append("\n");
-            cursor.moveToNext();
-        }
-        cursor.close();
-        System.out.println(builder.toString());
-
-
+//        dbHelper.seedUsers(logins);
+//        dbHelper.dbAddRecentSearch("Jesper og Jonathan", logins[1]);
+//        dbHelper.dbAddRecentSearch("Jace, the Mind Sculptor", logins[1]);
+//        dbHelper.dbAddRecentSearch("Knut i hagen", logins[1]);
 
         Log.w(TAG, dbHelper.getDatabaseMetaData());
 

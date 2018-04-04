@@ -198,6 +198,11 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
         mWritableDatabase.close();
     }
 
+    /**
+     * Adds a card to the Recentcards table.
+     * @param searchString
+     * @param user
+     */
     public void dbAddRecentSearch(String searchString, User user) {
         mWritableDatabase = getWritableDatabase();
         ContentValues values = new ContentValues();

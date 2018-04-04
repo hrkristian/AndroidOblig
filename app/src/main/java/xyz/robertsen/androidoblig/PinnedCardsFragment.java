@@ -32,7 +32,7 @@ public class PinnedCardsFragment extends Fragment {
     Card[] cardlist;
     ArrayList<Card> pinnedCards;
     private RecyclerView recyclerPinned;
-    private HistoryCardAdapter cardAdapter;
+    private PinnedCardAdapter cardAdapter;
     private ItemTouchHelper itemTouchHelper;
     int dragDirections = ItemTouchHelper.UP |  ItemTouchHelper.DOWN;
     int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
@@ -54,7 +54,7 @@ public class PinnedCardsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pinnedCards = new ArrayList<>();
-        cardAdapter = new HistoryCardAdapter(this.getContext(), pinnedCards, false);
+        cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards, false);
         itemTouchHelper = getItemTouchHelper();
 
         // Fragment is retained across Activity re-creation
