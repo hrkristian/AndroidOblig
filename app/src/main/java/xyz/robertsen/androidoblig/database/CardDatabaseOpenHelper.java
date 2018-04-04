@@ -11,10 +11,6 @@ import android.util.Log;
 
 import xyz.robertsen.androidoblig.User;
 
-/**
- * Created by gitsieg on 19.03.18.
- */
-
 public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
     // Log tag
     private static final String TAG = CardDatabaseOpenHelper.class.getSimpleName();
@@ -157,10 +153,11 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
         data.append("Metadata for the ").append(DATABASE_NAME).append("database:\n");
         SQLiteDatabase db = getReadableDatabase();
         Cursor tableCursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        Cursor columnCursor = null;
         if (tableCursor.moveToFirst()) {
             while (!tableCursor.isAfterLast()) {
                 String tableName = tableCursor.getString(0);
-                Cursor columnCursor = db.query(tableName, null, null, null, null, null, null);
+                columnCursor = db.query(tableName, null, null, null, null, null, null);
                 String[] columns = columnCursor.getColumnNames();
                 data.append("----Table name:: ").append(tableName).append("\n");
                 for (String column : columns) {
@@ -170,6 +167,7 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
             }
         }
         tableCursor.close();
+        columnCursor.close();
         db.close();
         return data.toString();
     }
