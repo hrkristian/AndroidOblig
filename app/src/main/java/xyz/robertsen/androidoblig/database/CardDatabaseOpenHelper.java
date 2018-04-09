@@ -9,8 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import xyz.robertsen.androidoblig.User;
-
 /**
  * Created by gitsieg on 19.03.18.
  */
@@ -177,7 +175,7 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
     /**
      * Seeds the user table with user data.
      * @param users - Array of users to be created
-     */
+     *//*
     public void seedUsers(User[] users) {
         // Lazy initialization, OK for single-threaded usage
         mWritableDatabase = getWritableDatabase();
@@ -209,12 +207,12 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
         mWritableDatabase.insert(DBSchema.RecentSearchesTable.TABLE_NAME, null, values);
         mWritableDatabase.close();
     }
-
+*/
     /**
      * Fetches recent search data for a given user
      * @param user - The user that the query will be filtered by
      * @return Cursor that points at the first row of the resultset
-     */
+     *//*
     public Cursor getRecentSearches(User user) {
         if (mReadableDatabase == null)
             mReadableDatabase = getReadableDatabase();
@@ -236,5 +234,5 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
 
     public void addRecentCard(User user) {
 
-    }
+    }*/
 }

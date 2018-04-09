@@ -14,7 +14,7 @@ import android.widget.EditText;
 /**
  * A simple {@link DialogFragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link UserFragment.OnFragmentInteractionListener} interface
+ * {@link UserFragment.userFragmentListener} interface
  * to handle interaction events.
  * Use the {@link UserFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -26,7 +26,7 @@ public class UserFragment extends DialogFragment {
     private int players;
     private int layoutId;
 
-    private OnFragmentInteractionListener mListener;
+    private userFragmentListener mListener;
 
 
     public UserFragment() {
@@ -86,29 +86,33 @@ public class UserFragment extends DialogFragment {
                     );
                 }
             });
-            v.findViewById(R.id.button_user_cancel).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    getActivity().onBackPressed();
-                }
-            });
         }
 
+        v.findViewById(R.id.button_user_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onCancelButtonPressed();
+            }
+        });
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onLoginButtonPressed(String usr, String pwd) {
         if (mListener != null) {
-            mListener.onLoginButtonPressed(usr, pwd);
+            mListener.onUserFragmentLoginButtonPressed(usr, pwd);
+        }
+    }
+    public void onCancelButtonPressed() {
+        if (mListener != null) {
+            mListener.onUserFragmentCancelButtonPressed(this);
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof userFragmentListener) {
+            mListener = (userFragmentListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -120,18 +124,8 @@ public class UserFragment extends DialogFragment {
         super.onDetach();
         mListener = null;
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        void onLoginButtonPressed(String usr, String pwd);
+    public interface userFragmentListener {
+        void onUserFragmentLoginButtonPressed(String usr, String pwd);
+        void onUserFragmentCancelButtonPressed(DialogFragment fragment);
     }
 }
