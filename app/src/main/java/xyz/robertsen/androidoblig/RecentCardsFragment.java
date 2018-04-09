@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
+import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,10 +31,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RecentCardsFragment extends Fragment {
 
     private static final String TAG = RecentCardsFragment.class.getSimpleName();
-    Card[] cardlist;
-    ArrayList<Card> recentCards;
+    CardDatabaseOpenHelper dbHelper;
+    ArrayList<RecentSearchItem> recentSearchItems;
     private RecyclerView recyclerRecent;
-    private HistoryCardAdapter cardAdapter;
+    private HistoryAdapter cardAdapter;
     int dragDirections =  ItemTouchHelper.UP |  ItemTouchHelper.DOWN;
     int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
     private ItemTouchHelper itemTouchHelper;
@@ -52,8 +54,9 @@ public class RecentCardsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setSampleCards();
-        cardAdapter = new HistoryCardAdapter(this.getContext(), recentCards, true);
+        dbHelper = new CardDatabaseOpenHelper(this.getContext());
+        recentSearchItems = RecentSearchItem.getRecentSearches(dbHelper.getRecentSearches(MainActivity.logins[1]));
+        cardAdapter = new HistoryAdapter(this.getContext(), recentSearchItems);
         itemTouchHelper = getItemTouchHelper();
 
         // Fragment is retained across Activity re-creation
@@ -114,7 +117,7 @@ public class RecentCardsFragment extends Fragment {
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 int from = viewHolder.getAdapterPosition();
                 int to = target.getAdapterPosition();
-                Collections.swap(recentCards, from, to);
+                Collections.swap(recentSearchItems, from, to);
                 cardAdapter.notifyItemMoved(from, to);
 
                 // TODO: Query database, change card indexes
@@ -124,7 +127,7 @@ public class RecentCardsFragment extends Fragment {
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int pos = viewHolder.getAdapterPosition();
-                recentCards.remove(pos);
+                recentSearchItems.remove(pos);
                 cardAdapter.notifyItemRemoved(pos);
             }
         });
@@ -148,13 +151,14 @@ public class RecentCardsFragment extends Fragment {
         void onCardsPinned(String title);
     }
 
-    private void setSampleCards() {
-        int randInt;
-        cardlist = Card.getExampleData(this.getContext());
-        recentCards = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            randInt = ThreadLocalRandom.current().nextInt(0, cardlist.length);
-            recentCards.add(cardlist[randInt]);
-        }
+    private void getRecentSearches() {
+
+//        int randInt;
+//        cardlist = Card.getExampleData(this.getContext());
+//        recentCards = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            randInt = ThreadLocalRandom.current().nextInt(0, cardlist.length);
+//            recentCards.add(cardlist[randInt]);
+//        }
     }
 }
