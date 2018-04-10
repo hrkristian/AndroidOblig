@@ -9,13 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-<<<<<<< HEAD
-/**
- * Created by gitsieg on 19.03.18.
- */
-=======
-import xyz.robertsen.androidoblig.User;
->>>>>>> 8736926ca593003d1df94116af5fce0d5b42ca91
 
 public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
     // Log tag
@@ -208,7 +201,7 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
      * Adds a card to the Recentcards table.
      * @param searchString
      * @param user
-     */
+
     public void dbAddRecentSearch(String searchString, User user) {
         mWritableDatabase = getWritableDatabase();
         ContentValues values = new ContentValues();

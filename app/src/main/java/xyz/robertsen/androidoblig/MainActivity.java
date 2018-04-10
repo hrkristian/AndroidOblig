@@ -22,6 +22,8 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,7 +35,8 @@ import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 public class MainActivity extends AppCompatActivity
         implements  UserFragment.userFragmentListener,
                     SearchView.OnQueryTextListener,
-                    User.ValidationListener {
+                    User.ValidationListener,
+                    LibAPI.RequestListener {
 
     // Log tag
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -238,6 +241,20 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         eventActions.spawnUserFragment(R.layout.fragment_user_authenticated);
     }
+    @Override
+    public void handlePinnedCardsResponse(JSONObject response) {
+        try {
+            Log.i("Pin Response", "Pin response received");
+            Log.i("Pin Response", response.toString(2));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void handlePinnedCardsError(VolleyError error) {
+        Log.i("Pinned Error", error.toString());
+    }
 
 
     /* ------------ Init methods ----------- */
@@ -261,6 +278,11 @@ public class MainActivity extends AppCompatActivity
             this.c = c;
         }
         private void rollDice() {
+            LibAPI.request(
+                    (LibAPI.RequestListener)c,
+                    c,
+                    new Card(),
+                    LibAPI.REQUEST.CARD_GET);
             spawnActionView(findViewById(R.id.main_fab_settings));
             String diceText = "Terningkast: "
                     .concat( Integer.toString((int)(Math.random() * 6 + 1)) );

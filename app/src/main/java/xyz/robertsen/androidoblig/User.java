@@ -27,6 +27,7 @@ import java.util.Map;
 class User {
 
     private final String fname, lname;
+    private static User authenticatedUser = null;
 
     User(String firstName, String lastName) {
         this.fname = firstName;
@@ -37,7 +38,6 @@ class User {
         return fname.concat(" ").concat(lname);
     }
 
-    private static User authenticatedUser = null;
     static void setAuthenticatedUser(User user) {
         if (authenticatedUser == null)
             authenticatedUser = user;
@@ -47,9 +47,10 @@ class User {
     static boolean isAuthenticated() {
         return authenticatedUser != null;
     }
-    static void authenticateUser(String usr, String pwd,
-                                 final Context c,
-                                 final ValidationListener v)
+
+    static void authenticateUser(@NonNull String usr, @NonNull String pwd,
+                                 @NonNull final Context c,
+                                 @NonNull final ValidationListener v)
             throws IllegalStateException {
         if (isAuthenticated())
             throw new IllegalStateException("A user is already authenticated");
@@ -57,7 +58,7 @@ class User {
         RequestQueue volley = Volley.newRequestQueue(c);
         volley.add( new JsonObjectRequest(
             Request.Method.GET,
-            compileLoginURL(usr, pwd),
+            loginUrlBuilder(usr, pwd),
             null,
             new Response.Listener<JSONObject>() {
                 @Override
@@ -73,57 +74,17 @@ class User {
             })
         );
     }
-    static void pinnedCardsUpdate(final CRUDListener listener) {
 
-    }
-    static void pinnedCardsCRUD(final CRUDListener listener,
-                                @NonNull Context c,
-                                @NonNull String request)
-            throws IllegalStateException {
-
-        if (!isAuthenticated())
-            throw new IllegalStateException("User not authenticated");
-
-        RequestQueue volley = Volley.newRequestQueue(c);
-        volley.add( new StringRequest(
-                Request.Method.POST,
-                request,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        listener.handlePinnedCardsCRUD(response);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        listener.handlePinnedCardsError(error);
-                    }
-                }
-        ));
-    }
-
-    private static String compileLoginURL(String usr, String pwd) {
+    @NonNull
+    private static String loginUrlBuilder(String usr, String pwd) {
         return "https://robertsen.xyz/mtg/login.php?usr="
                 .concat(usr)
                 .concat("&pwd=")
                 .concat(pwd);
     }
-    private static String compileCRUD_URL(String sql) {
-        return "https://robertsen.xyz/mtg/mtgdb.php?sql="
-                .concat(sql);
-    }
     interface ValidationListener {
         void handleValidationResponse(JSONObject response);
     }
-    interface CRUDListener {
-        void handlePinnedCardsCRUD(String response);
-        void handlePinnedCardsError(VolleyError error);
-    }
-    enum DB {
-        SELECT,
-        CREATE,
-        UPDATE,
-        DELETE
-    }
+
+
 }

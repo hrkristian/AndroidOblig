@@ -16,6 +16,7 @@ public class Card implements Serializable {
     Drawable image, cropImage;
     int convertedManaCost;
 
+    public Card(){}
     public Card(String title, String text, String[] rulings, Drawable image, Drawable cropImage, int convertedManaCost) {
         this.title = title;
         this.text = text;
