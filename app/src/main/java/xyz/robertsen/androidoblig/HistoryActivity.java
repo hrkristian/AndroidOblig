@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 
 import org.json.JSONException;
 
@@ -27,6 +28,7 @@ public class HistoryActivity extends AppCompatActivity implements
     private Fragment pinnedFragment;
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
+    private TextView tabLegend;
     int tabPosSelected = 0;
 
     @Override
@@ -35,7 +37,6 @@ public class HistoryActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_history);
 
         // Sets up the basic views and fragments for this activity
-        baseActivitySetup();
         //-- Checks if state saved, sets selected tab pos to the saved instance tab pos //
         if (savedInstanceState != null) {
             tabPosSelected = savedInstanceState.getInt(TAB_POSITION);
@@ -44,10 +45,14 @@ public class HistoryActivity extends AppCompatActivity implements
                 tab.select();
             }
         }
-
         if (User.authenticatedUser == null) {
-            ((SearchHistoryFragment)recentFragment).onNoAuthentication();
-            ((PinnedCardsFragment)pinnedFragment).onNoAuthentication();
+            // If no auth. user, prompt and
+            // Maybe click to redirect and start Login fragment.
+            tabLegend =findViewById(R.id.history_fragments_heading);
+            tabLegend.setText("Please click this log in to access your search history and pinned cards.");
+        } else {
+            // Set up fragments, fragments handles requests data via LibAPI
+            baseActivitySetup();
         }
     }
 
