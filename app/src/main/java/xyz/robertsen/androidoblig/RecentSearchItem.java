@@ -61,7 +61,7 @@ public class RecentSearchItem {
         ArrayList<RecentSearchItem> items = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             items.add(new RecentSearchItem(
-                    "Testing Recent Serches " + i,
+                    "Goblin Guide",
                     System.nanoTime(),
                     "nikolai")
             );
