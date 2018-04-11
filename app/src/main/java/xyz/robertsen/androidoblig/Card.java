@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import java.io.Serializable;
+
 /**
  * Created by kris on 23/02/18.
  */
@@ -59,6 +61,7 @@ public class Card {
             System.out.println("Error in Card:\n");
             e.printStackTrace();
         }
+
     }
 
     private SpannableStringBuilder symbolParser(String start, String source) {

@@ -2,9 +2,12 @@ package xyz.robertsen.androidoblig;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -19,19 +22,24 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 
 /**
  * Hovedklassen til AndroidOblig
  */
 public class MainActivity extends AppCompatActivity
-        implements UserFragment.OnFragmentInteractionListener, SearchView.OnQueryTextListener {
+        implements  UserFragment.userFragmentListener,
+                    SearchView.OnQueryTextListener,
+                    User.ValidationListener,
+                    LibAPI.RequestListener {
 
     // Log tag
     private static final String TAG = MainActivity.class.getSimpleName();
-    // Database members
-    public static CardDatabaseOpenHelper dbHelper;
-
 
     private final static String ARG_LIFE_PLAYER1 = "life_player2";
     private final static String ARG_LIFE_PLAYER2 = "life_player2";
@@ -44,52 +52,18 @@ public class MainActivity extends AppCompatActivity
     View actionView;
     FloatingActionButton actionFAB;
     TransitionDrawable actionFABTransitionDrawable;
-
-    // todo- Map instead of Array && implement Comparable in User
-    public static User[] logins = {
-            new User("kristian", "pwd"),
-            new User("nikolai", "pwd"),
-            new User("atle", "pwd")
-    };
+    FragmentManager fragmentManager;
+    EventActions eventActions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbHelper = new CardDatabaseOpenHelper(this);
-        dbHelper.seedUsers(logins);
-        dbHelper.dbAddRecentSearch("Jesper og Jonathan", logins[1]);
-        dbHelper.dbAddRecentSearch("Jace, the Mind Sculptor", logins[1]);
-        dbHelper.dbAddRecentSearch("Knut i hagen", logins[1]);
-
-        StringBuilder builder = new StringBuilder();
-        Cursor cursor = dbHelper.getRecentSearches(logins[1]);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            String searchString = cursor.getString(
-                cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.SEARCH_STRING)
-            );
-            long time = cursor.getInt(
-                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.UNIX_TIME)
-            );
-            String user = cursor.getString(
-                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentCardsTable.USER)
-            );
-            builder.append("User: ").append(user).append("\n");
-            builder.append("Time: ").append(time).append("\n");
-            builder.append("SearchString: ").append(searchString).append("\n");
-            cursor.moveToNext();
-        }
-        cursor.close();
-        System.out.println(builder.toString());
-
-
-
-        Log.w(TAG, dbHelper.getDatabaseMetaData());
-
         actionView = findViewById(R.id.main_actionView);
         actionFAB = findViewById(R.id.main_fab_settings);
+        fragmentManager = getFragmentManager();
+        eventActions = new EventActions(this);
 
         if (savedInstanceState != null) {
             life_player1 = savedInstanceState.getInt(ARG_LIFE_PLAYER1);
@@ -125,10 +99,8 @@ public class MainActivity extends AppCompatActivity
      * @param view the event-view
      */
     public void rollDice(View view) {
-        String diceText = "Terningkast: ".concat( Integer.toString((int)(Math.random() * 6 + 1)) );
-        Toast.makeText(this, diceText, Toast.LENGTH_SHORT).show();
+        eventActions.rollDice();
     }
-
 
     /**
      * Animates the showing and hiding of the "ActionView"
@@ -169,17 +141,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Overridden in order to make the ActionView respons to a back event
-     */
-    @Override
-    public void onBackPressed() {
-        if ( findViewById(R.id.main_actionView).getVisibility() == View.VISIBLE )
-            spawnActionView(findViewById(R.id.main_fab_settings));
-        else
-            super.onBackPressed();
-    }
-
-    /**
      * Changes the remaining life of a player based on which view fires the event
      * @param view the event view
      */
@@ -211,7 +172,8 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         intent.setAction(Intent.ACTION_SEARCH);
         intent.putExtra(SearchManager.QUERY, s);
-        spawnActivityWithFABClose(intent);
+
+        eventActions.spawnActivity(intent);
         return false;
     }
 
@@ -223,55 +185,76 @@ public class MainActivity extends AppCompatActivity
     /* ------------ Activities and fragments ----------- */
     public void spawnSearchActivity(View view) {
         Intent intent = new Intent(this, HistoryActivity.class);
-        spawnActivityWithFABClose(intent);
+        eventActions.spawnActivity(intent);
     }
 
-    private void spawnActivityWithFABClose(Intent intent) {
-        spawnActionView(findViewById(R.id.main_fab_settings));
-        startActivity(intent);
-    }
-
-    public void spawnLoginFragment(View view) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment previous = getFragmentManager().findFragmentByTag("userLoginFragment");
-        if (previous != null)
-            ft.remove(previous);
-        ft.addToBackStack(null);
-
-        UserFragment uf = UserFragment.newInstance(DEFAULT_PLAYERS, R.layout.fragment_user);
-        uf.show(ft, "userLoginFragment");
-        spawnActionView(findViewById(R.id.main_fab_settings));
+    final private static String FRAGMENT_USER = "userFragment";
+    public void spawnUserFragment(View view) {
+        if (User.isAuthenticated())
+            eventActions.spawnUserFragment(R.layout.fragment_user_authenticated);
+        else
+            eventActions.spawnUserFragment(R.layout.fragment_user);
     }
 
     /* ------------ Callbacks ----------- */
-
-    /**
-     * Callback-method for UserFragment, handles login-attempts.
-     * todo- complete settings and login-functionality
-     * @param usr brukernavn
-     * @param pwd passordet
-     */
     @Override
-    public void onLoginButtonPressed(String usr, String pwd) {
-
-        for (User u : logins) {
-            if (u.isMatch(usr, pwd)) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-                Fragment oldFragment = getFragmentManager().findFragmentByTag("userLoginFragment");
-                UserFragment newFragment = UserFragment.newInstance(DEFAULT_PLAYERS, R.layout.fragment_user_authenticated);
-
-                ft.addToBackStack(null);
-
-//                uf.show(ft, "userAuthenticatedFragment");
-
-                Toast.makeText(this, "Login correct.", Toast.LENGTH_SHORT).show();
-                return;
-            }
+    public void onUserFragmentLoginButtonPressed(String usr, String pwd) {
+        try {
+            User.authenticateUser(usr, pwd, this, this);
+        } catch(IllegalStateException e) {
+            Toast.makeText(
+                    this,
+                    "Error! User already authenticated.\nThis should not happen.",
+                    Toast.LENGTH_SHORT
+            ).show();
         }
-        Toast.makeText(this, "Login incorrect.", Toast.LENGTH_SHORT).show();
+    }
+    @Override
+    public void onUserFragmentCancelButtonPressed(DialogFragment fragment) {
+        fragmentManager.popBackStack();
     }
 
+    @Override
+    public void handleValidationResponse(JSONObject response) {
+        String message;
+        try {
+            if (!response.has("login")) {
+                Log.i("JSON Response", response.toString(2));
+                return;
+            }
+
+            if (response.getString("login").equals("username"))
+                message = "Login Failed: Wrong username";
+            else if (response.getString("login").equals("password"))
+                message = "Login Failed: Wrong password";
+            else {
+                message = "Login Succeeded";
+                User.setAuthenticatedUser(new User(
+                    response.getString("fornavn"),
+                    response.getString("etternavn")
+                ));
+            }
+        } catch (JSONException e) {
+            message = "JSON Exception while authenticating";
+            e.printStackTrace();
+        }
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        eventActions.spawnUserFragment(R.layout.fragment_user_authenticated);
+    }
+    @Override
+    public void handlePinnedCardsResponse(JSONObject response) {
+        try {
+            Log.i("Pin Response", "Pin response received");
+            Log.i("Pin Response", response.toString(2));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void handlePinnedCardsError(VolleyError error) {
+        Log.i("Pinned Error", error.toString());
+    }
 
 
     /* ------------ Init methods ----------- */
@@ -287,5 +270,39 @@ public class MainActivity extends AppCompatActivity
     private void initSearchView() {
         SearchView searchView = findViewById(R.id.search_main_cardSearch);
         searchView.setOnQueryTextListener(this);
+    }
+
+    private class EventActions {
+        Context c;
+        private EventActions(Context c) {
+            this.c = c;
+        }
+        private void rollDice() {
+            LibAPI.request(
+                    (LibAPI.RequestListener)c,
+                    c,
+                    new Card(),
+                    LibAPI.REQUEST.CARD_GET);
+            spawnActionView(findViewById(R.id.main_fab_settings));
+            String diceText = "Terningkast: "
+                    .concat( Integer.toString((int)(Math.random() * 6 + 1)) );
+            Toast.makeText(c, diceText, Toast.LENGTH_SHORT).show();
+        }
+        private void spawnActivity(Intent intent) {
+            spawnActionView(findViewById(R.id.main_fab_settings));
+            startActivity(intent);
+        }
+        private void spawnUserFragment(int layoutId) {
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            UserFragment previous = (UserFragment)fragmentManager.findFragmentByTag(FRAGMENT_USER);
+            if (previous != null)
+                fragmentManager.popBackStack();
+
+            ft.addToBackStack(null);
+
+            UserFragment uf = UserFragment.newInstance(DEFAULT_PLAYERS, layoutId);
+            uf.show(ft, FRAGMENT_USER);
+            spawnActionView(findViewById(R.id.main_fab_settings));
+        }
     }
 }

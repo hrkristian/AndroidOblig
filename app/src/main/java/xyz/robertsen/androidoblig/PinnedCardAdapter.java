@@ -15,13 +15,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by gitsieg on 23.02.18.
+    This adapter is used in PinnedCardsFragment. It shows a list of pinned cards
+
  */
 
-class HistoryCardAdapter extends RecyclerView.Adapter<HistoryCardAdapter.CardViewHolder> {
+class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewHolder> {
 
     // Tag for logging
-    private static String TAG = HistoryCardAdapter.class.getSimpleName();
+    private static String TAG = PinnedCardAdapter.class.getSimpleName();
 
     private final boolean isRecentSearches;
     private ArrayList<Card> cardArrayList;
@@ -29,12 +30,12 @@ class HistoryCardAdapter extends RecyclerView.Adapter<HistoryCardAdapter.CardVie
     private Context context;
 
     /**
-     * Instantiates the HistoryCardAdapter
+     * Instantiates the PinnedCardAdapter
      * @param context - The activity/context this adapter is created within
      * @param cardList - ArrayList of Cards to use with this adapter
      * @param isRecentSearches - If this adapter is contained within RecentCardsFragment of PinnedCardsFragment
      */
-    public HistoryCardAdapter(Context context, ArrayList<Card> cardList, boolean isRecentSearches) {
+    public PinnedCardAdapter(Context context, ArrayList<Card> cardList, boolean isRecentSearches) {
         // TODO: Find a better solution regarding "boolean isRecentSearches"
         cardArrayList = cardList;
         this.context = context;
@@ -87,9 +88,9 @@ class HistoryCardAdapter extends RecyclerView.Adapter<HistoryCardAdapter.CardVie
         private final TextView title, cmc, text;
         private final ImageView cardCropImage;
         private final ImageButton searchPin;
-        final HistoryCardAdapter cardAdapter;
+        final PinnedCardAdapter cardAdapter;
 
-        public CardViewHolder(View itemView, HistoryCardAdapter adapter) {
+        public CardViewHolder(View itemView, PinnedCardAdapter adapter) {
             super(itemView);
             title = itemView.findViewById(R.id.search_carditem_title);
             cmc = itemView.findViewById(R.id.search_carditem_cmc);

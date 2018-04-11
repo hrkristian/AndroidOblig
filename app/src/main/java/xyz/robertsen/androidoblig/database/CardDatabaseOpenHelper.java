@@ -9,11 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import xyz.robertsen.androidoblig.User;
-
-/**
- * Created by gitsieg on 19.03.18.
- */
 
 public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
     // Log tag
@@ -157,10 +152,11 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
         data.append("Metadata for the ").append(DATABASE_NAME).append("database:\n");
         SQLiteDatabase db = getReadableDatabase();
         Cursor tableCursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        Cursor columnCursor = null;
         if (tableCursor.moveToFirst()) {
             while (!tableCursor.isAfterLast()) {
                 String tableName = tableCursor.getString(0);
-                Cursor columnCursor = db.query(tableName, null, null, null, null, null, null);
+                columnCursor = db.query(tableName, null, null, null, null, null, null);
                 String[] columns = columnCursor.getColumnNames();
                 data.append("----Table name:: ").append(tableName).append("\n");
                 for (String column : columns) {
@@ -170,6 +166,7 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
             }
         }
         tableCursor.close();
+        columnCursor.close();
         db.close();
         return data.toString();
     }
@@ -177,7 +174,7 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
     /**
      * Seeds the user table with user data.
      * @param users - Array of users to be created
-     */
+     *//*
     public void seedUsers(User[] users) {
         // Lazy initialization, OK for single-threaded usage
         mWritableDatabase = getWritableDatabase();
@@ -200,6 +197,11 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
         mWritableDatabase.close();
     }
 
+    /**
+     * Adds a card to the Recentcards table.
+     * @param searchString
+     * @param user
+
     public void dbAddRecentSearch(String searchString, User user) {
         mWritableDatabase = getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -209,12 +211,12 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
         mWritableDatabase.insert(DBSchema.RecentSearchesTable.TABLE_NAME, null, values);
         mWritableDatabase.close();
     }
-
+*/
     /**
      * Fetches recent search data for a given user
      * @param user - The user that the query will be filtered by
      * @return Cursor that points at the first row of the resultset
-     */
+     *//*
     public Cursor getRecentSearches(User user) {
         if (mReadableDatabase == null)
             mReadableDatabase = getReadableDatabase();
@@ -236,5 +238,5 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
 
     public void addRecentCard(User user) {
 
-    }
+    }*/
 }

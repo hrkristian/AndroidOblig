@@ -24,7 +24,7 @@
 
     <ImageButton
         android:id="@+id/button_main_login"
-        android:onClick="spawnLoginFragment"
+        android:onClick="spawnUserFragment"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginEnd="8dp"

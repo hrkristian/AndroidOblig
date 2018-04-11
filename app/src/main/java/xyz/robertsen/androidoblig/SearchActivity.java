@@ -110,6 +110,7 @@ public class SearchActivity extends AppCompatActivity {
                 cards.add(new Card(this,
                         (item.has("name")) ? item.getString("name") : "",
                         (item.has("manaCost")) ? item.getString("manaCost") : "",
+                        (item.has("cmc")) ? item.getString("cmc") : "",
                         (item.has("type")) ? item.getString("type") : "",
                         (item.has("power")) ? item.getString("power") : "",
                         (item.has("toughness")) ? item.getString("toughness") : "",
@@ -167,6 +168,7 @@ public class SearchActivity extends AppCompatActivity {
             REQUEST_QUEUE.add(stringRequest);
         }
     }
+
 
     /**
      * Fetches and generates the linked image asychronously on a new thread,
