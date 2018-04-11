@@ -2,50 +2,110 @@ package xyz.robertsen.androidoblig;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by kris on 23/02/18.
  */
 
 public class Card {
-    String title;
-    String text;
-    String[] rulings;
-    Drawable image, cropImage;
-    int convertedManaCost;
+    Context context;
 
-    public Card(String title, String text, String[] rulings, Drawable image, Drawable cropImage, int convertedManaCost) {
-        this.title = title;
-        this.text = text;
-        this.rulings = rulings;
-        this.image = image;
-        this.cropImage = cropImage;
-        this.convertedManaCost = convertedManaCost;
+    String name;
+    SpannableStringBuilder mana;
+    String type;
+    String stats;
+    String cmc; // ConvertedManaCost
+    SpannableStringBuilder text;
+    String rules;
+    String imageUrl;
+
+    public Card(Context context,
+                String name, String mana, String cmc, String type, String power, String toughness,
+                String text, String imageUrl, JSONArray rules) {
+        this.context = context;
+
+
+        this.name = context.getResources().getString(R.string.cardTitlePlaceholder, name);
+        this.mana = symbolParser("Mana: ", mana);
+        this.cmc = context.getResources().getString(R.string.cardTitlePlaceholder, cmc);
+        this.type = context.getResources().getString(R.string.cardTypePlaceholder, type);
+        this.text = symbolParser("", text);
+        this.stats = context.getResources().getString(R.string.cardStatsPlaceholder, power, toughness);
+
+        this.imageUrl = imageUrl;
+        try {
+            StringBuilder builder = new StringBuilder();
+            if (rules != null)
+                for (int i = 0; i < rules.length(); i++)
+                    builder.append(context.getResources().getString(
+                            R.string.cardRulingsItem,
+                            rules.getJSONObject(i).getString("date"),
+                            rules.getJSONObject(i).getString("text")));
+            this.rules = builder.toString();
+        } catch (JSONException e) {
+            System.out.println("Error in Card:\n");
+            e.printStackTrace();
+        }
     }
 
-    public static Card[] getExampleData(Context context) {
-        Card[] cards =  {new Card(
-                "Jace, the Mind Sculptor",
-                "+2: Look at the top card of target player's library. You may put that card on the bottom of that player's library.\n0: Draw three cards, then put two cards from your hand on top of your library in any order.\\n−1: Return target creature to its owner's hand.\\n−12: Exile all cards from target player's library, then that player shuffles his or her hand into his or her library.",
-                "23/02-18|ya gon get rek'd".split("|"),
-                context.getResources().getDrawable(R.drawable.jace_mind_sculptor, null),
-                context.getResources().getDrawable(R.drawable.jace_mind_sculptor_crop, null),
-                4),
-                new Card(
-                "Goblin Guide",
-                "Haste\nWhenever Goblin Guide attacks, defending player reveals \nthe top card of his or her library. If it's a land card, \"\nthat player puts it into his or her hand.",
-                "23/02-18|Mana cost reduced when you point out he's high maintenance".split("|"),
-                context.getResources().getDrawable(R.drawable.goblin_guide, null),
-                context.getResources().getDrawable(R.drawable.goblin_guide_crop, null),
-                1),
-                new Card(
-                "Lightning Bolt",
-                "Lightning Bolt deals 3 damage to target creature or player.",
-                "23/02-18|You will die form the green stuff.".split("|"),
-                context.getResources().getDrawable(R.drawable.lightning_bolt, null),
-                context.getResources().getDrawable(R.drawable.lightning_bolt_crop, null),
-                1)
-        };
-        return cards;
+    private SpannableStringBuilder symbolParser(String start, String source) {
+        SpannableStringBuilder builder = new SpannableStringBuilder(start);
+
+        for (int i = 0; i < source.length(); i++) {
+            if (manaSymbolMap.containsKey(source.substring(i, i + 3))) {
+                Drawable image = context.getResources().getDrawable(manaSymbolMap.get(source.substring(i, i + 3)), null);
+                image.setBounds(0, 0, 50, 50);
+                builder.append(";", new ImageSpan(image), 0);
+                i += 2;
+            } else {
+                builder.append(source.charAt(i));
+            }
+        }
+        return builder;
     }
+
+
+    private class Ruling {
+        String date, text;
+
+        private Ruling(String date, String text) {
+            this.date = date;
+            this.text = text;
+        }
+    }
+
+    static final Map<String, Integer> manaSymbolMap = Collections.unmodifiableMap(new HashMap<String, Integer>() {
+        {
+            put("{0}", R.drawable.ic_mana_0);
+            put("{1}", R.drawable.ic_mana_1);
+            put("{2}", R.drawable.ic_mana_2);
+            put("{3}", R.drawable.ic_mana_3);
+            put("{4}", R.drawable.ic_mana_4);
+            put("{5}", R.drawable.ic_mana_5);
+            put("{6}", R.drawable.ic_mana_6);
+            put("{7}", R.drawable.ic_mana_7);
+            put("{8}", R.drawable.ic_mana_8);
+            put("{9}", R.drawable.ic_mana_9);
+            put("{G}", R.drawable.ic_mana_forest);
+            put("{U}", R.drawable.ic_mana_island);
+            put("{B}", R.drawable.ic_mana_swamp);
+            put("{R}", R.drawable.ic_mana_mountain);
+            put("{W}", R.drawable.ic_mana_plains);
+            put("{X}", R.drawable.ic_mana_x);
+            put("{T}", R.drawable.ic_mana_tap);
+        }
+    });
 }
