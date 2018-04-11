@@ -126,5 +126,6 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void generateCardView(String response) {
+
     }
 }

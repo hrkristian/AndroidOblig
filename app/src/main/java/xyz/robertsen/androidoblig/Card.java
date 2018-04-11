@@ -3,17 +3,20 @@ package xyz.robertsen.androidoblig;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 
+import java.io.Serializable;
+
 /**
  * Created by kris on 23/02/18.
  */
 
-public class Card {
+public class Card implements Serializable {
     String title;
     String text;
     String[] rulings;
     Drawable image, cropImage;
     int convertedManaCost;
 
+    public Card(){}
     public Card(String title, String text, String[] rulings, Drawable image, Drawable cropImage, int convertedManaCost) {
         this.title = title;
         this.text = text;

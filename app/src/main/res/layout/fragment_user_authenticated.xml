@@ -52,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@id/spinner_userauth_playerNumber" />
 
     <Button
-        android:id="@+id/button_userauth_close"
+        android:id="@+id/button_user_cancel"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

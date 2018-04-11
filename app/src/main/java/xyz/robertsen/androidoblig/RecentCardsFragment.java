@@ -55,7 +55,7 @@ public class RecentCardsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbHelper = new CardDatabaseOpenHelper(this.getContext());
-        recentSearchItems = RecentSearchItem.getRecentSearches(dbHelper.getRecentSearches(MainActivity.logins[1]));
+        //recentSearchItems = RecentSearchItem.getRecentSearches(dbHelper.getRecentSearches(MainActivity.logins[1]));
         cardAdapter = new HistoryAdapter(this.getContext(), recentSearchItems);
         itemTouchHelper = getItemTouchHelper();
 
