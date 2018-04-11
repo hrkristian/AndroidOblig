@@ -56,7 +56,7 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
         }
 
         // USER COLUMNS
-        public final String[] USER_COLUMNS = {
+        public static final String[] USER_COLUMNS = {
                 UserTable.USER,
                 UserTable.PASSWORD
         };
@@ -174,6 +174,7 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
 
     /**
      * Seeds the user table with user data.
+     *
      * @param users - Array of users to be created
      */
     public void seedUsers(User[] users) {
@@ -200,6 +201,7 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
 
     /**
      * Adds a card to the Recentcards table.
+     *
      * @param searchString
      * @param user
      */
@@ -215,29 +217,30 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
 
     /**
      * Fetches recent search data for a given user
+     *
      * @param user - The user that the query will be filtered by
      * @return Cursor that points at the first row of the resultset
      */
     public Cursor getRecentSearches(User user) {
-        if (mReadableDatabase == null)
-            mReadableDatabase = getReadableDatabase();
+        mReadableDatabase = getReadableDatabase();
 
         Cursor cursor = mReadableDatabase.query(
                 DBSchema.RecentSearchesTable.TABLE_NAME,
                 DBSchema.RECENT_SEARCHES_COLUMNS,
-                DBSchema.RecentSearchesTable.USER + "='" + user.getUsr()+"'",
+                DBSchema.RecentSearchesTable.USER + "='" + user.getUsr() + "'",
                 null, null, null,
                 DBSchema.RecentSearchesTable.UNIX_TIME + " DESC"
         );
         cursor.moveToFirst();
+        mReadableDatabase.close();
         return cursor;
     }
 
-    public Cursor getRecentCards(User user) {
+    public Cursor getPinnedCards(User user) {
         return null;
     }
 
-    public void addRecentCard(User user) {
-
+    public boolean addPinnedCard(User user) {
+        return false;
     }
 }
