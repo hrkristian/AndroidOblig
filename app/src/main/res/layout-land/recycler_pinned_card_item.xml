@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/search_base_margin_padding">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_cardview_background"
+        android:padding="@dimen/search_base_margin_padding">
+
+        <ImageView
+            android:id="@+id/pinned_card_image"
+            android:layout_width="@dimen/card_width"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/shape_card_background"
+            android:src="@drawable/jace_mind_sculptor"
+            android:contentDescription="@string/search_desc_card_image"
+            android:padding="1dp"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/pinned_card_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/pinned_card_image"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:text="The Tabernacle At Pendrell Vale"/>
+
+        <TextView
+            android:id="@+id/pinned_card_manaCost"
+            android:layout_width="wrap_content"
+            android:layout_height="12dp"
+            android:layout_below="@id/pinned_card_title"
+            android:layout_toEndOf="@id/pinned_card_image"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/pinned_card_cmc_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pinned_card_manaCost"
+            android:layout_toEndOf="@id/pinned_card_image"
+            android:textSize="14sp"
+            android:text="@string/search_heading_cmc" />
+
+        <TextView
+            android:id="@+id/pinned_card_cmc_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/pinned_card_cmc_label"
+            android:layout_toEndOf="@id/pinned_card_cmc_label"
+            android:paddingEnd="@dimen/search_base_margin_padding"
+            android:paddingStart="@dimen/search_base_margin_padding"
+            android:text="4"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/search_carditem_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pinned_card_cmc_value"
+            android:layout_toEndOf="@id/pinned_card_image"
+            android:textSize="12sp"
+            android:ellipsize="end"
+            android:maxLines="6"
+            android:text="Really long card description text yes it is just a sample text so this will be replaced by the adapter so i have to reiterate that this is just at test"/>
+
+
+        <!--Not in use any more, maybe use for it in SearchCardAdapter-->
+        <!--<ImageButton-->
+            <!--android:id="@+id/search_pin_btn"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:background="@drawable/shape_pin_background"-->
+            <!--android:contentDescription="@string/search_pin_card"-->
+            <!--android:padding="8dp"-->
+            <!--android:src="@drawable/pin_search_icon" />-->
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

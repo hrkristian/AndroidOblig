@@ -45,10 +45,10 @@ public class Card implements Serializable {
 
 
         this.name = context.getResources().getString(R.string.cardTitlePlaceholder, name);
-        this.mana = symbolParser("Mana: ", mana);
+        this.mana = symbolParser(mana);
         this.cmc = cmc;
         this.type = context.getResources().getString(R.string.cardTypePlaceholder, type);
-        this.text = symbolParser("", text);
+        this.text = symbolParser(text);
         this.stats = context.getResources().getString(R.string.cardStatsPlaceholder, power, toughness);
 
         this.imageUrl = imageUrl;
@@ -67,14 +67,14 @@ public class Card implements Serializable {
         }
     }
 
-    private SpannableStringBuilder symbolParser(String start, String source) {
-        SpannableStringBuilder bulider = new SpannableStringBuilder(start);
+    private SpannableStringBuilder symbolParser(String source) {
+        SpannableStringBuilder bulider = new SpannableStringBuilder("");
 
         for (int i = 0; i < source.length(); i++) {
             if (source.charAt(i) == '{') {
                 if (manaSymbolMap.containsKey(source.substring(i, i + 3))) {
                     Drawable image = context.getResources().getDrawable(manaSymbolMap.get(source.substring(i, i + 3)), null);
-                    image.setBounds(0, 0, 50, 50);
+                    image.setBounds(0, 0, 30, 30);
                     bulider.append(";", new ImageSpan(image), 0);
                     i += 2;
                 }
@@ -131,18 +131,20 @@ public class Card implements Serializable {
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
-/*
-    public Card(Context context,
-                String name, String mana, String cmc, String type, String power, String toughness,
-                String text, String imageUrl, JSONArray rules) {
-        this.context = context;
-*/
+
+    /*
+        public Card(Context context,
+                    String name, String mana, String cmc, String type, String power, String toughness,
+                    String text, String imageUrl, JSONArray rules) {
+            this.context = context;
+    */
     public static ArrayList<Card> getSampleCards(Context c) throws JSONException {
         ArrayList<Card> cards = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        String cardName = "";
+        for (int i = 0; i < cardNames.length; i++) {
             cards.add(new Card(
                     c,
-                    "Jace Beleren",
+                    cardNames[i],
                     "{2}{U}{U}",
                     "4",
                     "Jace",
@@ -155,4 +157,23 @@ public class Card implements Serializable {
         }
         return cards;
     }
+
+    private static String[] cardNames = {
+            "Jace Beleren",
+            "Goblin Guide",
+            "Nissa",
+            "Goblin Grenade",
+            "Inkmoth",
+            "Gurmag Angler",
+            "Setessan",
+            "Hero's Downfall",
+            "Mordi",
+            "Monastery Swiftspear",
+            "Tormod",
+            "Island",
+            "Mountain",
+            "Plains",
+            "Forest",
+            "Swamp"
+    };
 }
