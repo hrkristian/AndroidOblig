@@ -10,12 +10,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class HistoryActivity extends AppCompatActivity implements
         PinnedCardsFragment.OnFragmentInteractionListener,
         RecentCardsFragment.OnFragmentInteractionListener {
 
+    private static User authUser;
     private static final String TAG = HistoryActivity.class.getSimpleName();
     private static final String TAB_POSITION = "xyz.robertsen.androidoblig.HistoryActivity";
     private ArrayList<Card> sampleCards;
@@ -30,21 +30,21 @@ public class HistoryActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
 
         // ViewPager for TabLayout
         viewPager = findViewById(R.id.fragment_container);
         // sampleCards = new ArrayList<>(Arrays.asList(Card.getExampleData(this)));
 
-        // TabLayout
+        //--  Sets up TabLayout --//
         tabLayout = findViewById(R.id.search_recent_pinned_layout);
-        recentTab = tabLayout.newTab();
-        recentTab.setCustomView(R.layout.search_tab_pinned);
+        tabLayout.addTab(pinnedTab);
         tabLayout.addTab(recentTab);
         pinnedTab = tabLayout.newTab();
-        pinnedTab.setCustomView(R.layout.search_tab_recent);
-        tabLayout.addTab(pinnedTab);
+        recentTab = tabLayout.newTab();
+        pinnedTab.setCustomView(R.layout.history_recent_tab);
+        recentTab.setCustomView(R.layout.history_pinned_tab);
 
+        //-- Checks if state saved, sets selected tab pos to the saved instance tab pos //
         if (savedInstanceState != null) {
             tabPosSelected = savedInstanceState.getInt(TAB_POSITION);
             TabLayout.Tab tab = tabLayout.getTabAt(tabPosSelected);
@@ -53,13 +53,13 @@ public class HistoryActivity extends AppCompatActivity implements
             }
         }
 
-        // Set fragments;
+        // Request instances of fragments, and adapts them to conform with ViewPager interface
         recentFragment = RecentCardsFragment.newInstance();
         pinnedFragment = PinnedCardsFragment.newInstance();
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), pinnedFragment, recentFragment);
         viewPager.setAdapter(pagerAdapter);
 
-        // listener placed on the TabLayout for pinned and recent cards
+        // Changes currently displayed item in the viewpagers, ∕∕ swaps between the displayed frags.
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -76,6 +76,11 @@ public class HistoryActivity extends AppCompatActivity implements
 
     }
 
+
+    /**
+     * Save relevant state information and sends it's data to the next instance of this activity
+     * @param outState
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(TAB_POSITION, tabLayout.getSelectedTabPosition());
@@ -129,5 +134,12 @@ public class HistoryActivity extends AppCompatActivity implements
         public int getCount() {
             return mNumOfTabs;
         }
+    }
+    void onUnauthorizedUser() {
+
+    }
+
+    void onAuthorizedUser() {
+
     }
 }

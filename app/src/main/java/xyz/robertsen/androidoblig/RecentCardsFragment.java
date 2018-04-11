@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.ThreadLocalRandom;
 
 import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 
@@ -55,6 +54,11 @@ public class RecentCardsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbHelper = new CardDatabaseOpenHelper(this.getContext());
+
+        if (User.authenticatedUser != null) {
+            System.out.println("Name: " + User.authenticatedUser.getName() + " is logged in");
+        }
+
         //recentSearchItems = RecentSearchItem.getRecentSearches(dbHelper.getRecentSearches(MainActivity.logins[1]));
         cardAdapter = new HistoryAdapter(this.getContext(), recentSearchItems);
         itemTouchHelper = getItemTouchHelper();
@@ -67,7 +71,7 @@ public class RecentCardsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_recent_cards, container, false);
+        View view = inflater.inflate(R.layout.fragment_recent_searches, container, false);
         recyclerRecent = view.findViewById(R.id.recycler_recent_cards);
         recyclerRecent.setAdapter(cardAdapter);
         recyclerRecent.setLayoutManager(new LinearLayoutManager(this.getContext()));

@@ -27,7 +27,7 @@ import java.util.Map;
 class User {
 
     private final String fname, lname;
-    private static User authenticatedUser = null;
+    public static User authenticatedUser = null;
 
     User(String firstName, String lastName) {
         this.fname = firstName;

@@ -43,7 +43,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.RecentSe
 
     @Override
     public int getItemCount() {
-        return recentSearchItems.size();
+        return recentSearchItems == null ? 0: recentSearchItems.size();
     }
 
     public class RecentSearchHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
