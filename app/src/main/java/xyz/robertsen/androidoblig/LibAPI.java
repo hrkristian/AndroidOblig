@@ -71,7 +71,7 @@ public class LibAPI {
                 json.put("request", "backgrounds");
                 return json;
             }
-            json.put("name", card.title);
+            json.put("name", card.name);
             switch (requestType) {
                 case CARD_GET:
                     json.put("request", "sql");
@@ -80,7 +80,7 @@ public class LibAPI {
                 case CARD_CREATE:
                     json.put("request", "sql");
                     json.put("sql", "create");
-                    json.put("mana", card.convertedManaCost); // todo
+                    json.put("mana", card.cmc); // todo
                     json.put("description", card.text); // todo
                     break;
                 case CARD_UPDATE:

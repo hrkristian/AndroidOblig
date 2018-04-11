@@ -4,4 +4,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_pin_card">Pin icon for saving card searches</string>
 
+    <!-- Card View Strings -->
+    <string name="cardTitlePlaceholder">%1$s</string>
+    <string name="cardTypePlaceholder">Type: %1$s</string>
+    <string name="cardManaPlaceholder">Mana: %1$s</string>
+    <string name="cardStatsPlaceholder">Stats: %1$s / %2$s </string>
+    <string name="cardTextPlaceholder">%1$s</string>
+    <string name="cardRulingsItem"><b>%1$s</b>\n%2$s\n</string>
+
 </resources>

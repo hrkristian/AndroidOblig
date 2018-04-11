@@ -34,7 +34,7 @@ public class HistoryActivity extends AppCompatActivity implements
 
         // ViewPager for TabLayout
         viewPager = findViewById(R.id.fragment_container);
-        sampleCards = new ArrayList<>(Arrays.asList(Card.getExampleData(this)));
+        // sampleCards = new ArrayList<>(Arrays.asList(Card.getExampleData(this)));
 
         // TabLayout
         tabLayout = findViewById(R.id.search_recent_pinned_layout);
@@ -91,7 +91,7 @@ public class HistoryActivity extends AppCompatActivity implements
     public void onCardsPinned(String title) {
         Card card = null;
         for (Card c : sampleCards) {
-            if (c.title.equals(title)) {
+            if (c.name.equals(title)) {
                 card = c;
                 break;
             }

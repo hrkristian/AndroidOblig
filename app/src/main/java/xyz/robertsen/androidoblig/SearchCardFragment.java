@@ -63,12 +63,10 @@ public class SearchCardFragment extends DialogFragment {
     }
 
     private void populateElements() {
-        image.setImageDrawable(card.image);
-        title.setText(card.title);
+        image.setImageDrawable(getResources().getDrawable(R.drawable.icon_2)); // TODO
+        title.setText(card.name);
         text.setText(card.text);
-
-        for (String s : card.rulings)
-            rulings.append(s);
+        rulings.setText(card.rules);
     }
 
     private void findElements(View v) {
