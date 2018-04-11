@@ -12,27 +12,30 @@ import android.widget.BaseAdapter;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-
-import java.io.Serializable;
 
 /**
  * Created by kris on 23/02/18.
  */
 
-public class Card {
+public class Card implements Serializable {
     Context context;
 
     String name;
     SpannableStringBuilder mana;
+    String cmc; // ConvertedManaCost
     String type;
     String stats;
-    String cmc; // ConvertedManaCost
     SpannableStringBuilder text;
     String rules;
     String imageUrl;
+
+    public Card() {
+
+    }
 
     public Card(Context context,
                 String name, String mana, String cmc, String type, String power, String toughness,
@@ -42,7 +45,7 @@ public class Card {
 
         this.name = context.getResources().getString(R.string.cardTitlePlaceholder, name);
         this.mana = symbolParser("Mana: ", mana);
-        this.cmc = context.getResources().getString(R.string.cardTitlePlaceholder, cmc);
+        this.cmc = cmc;
         this.type = context.getResources().getString(R.string.cardTypePlaceholder, type);
         this.text = symbolParser("", text);
         this.stats = context.getResources().getString(R.string.cardStatsPlaceholder, power, toughness);
@@ -61,23 +64,24 @@ public class Card {
             System.out.println("Error in Card:\n");
             e.printStackTrace();
         }
-
     }
 
     private SpannableStringBuilder symbolParser(String start, String source) {
-        SpannableStringBuilder builder = new SpannableStringBuilder(start);
+        SpannableStringBuilder bulider = new SpannableStringBuilder(start);
 
         for (int i = 0; i < source.length(); i++) {
-            if (manaSymbolMap.containsKey(source.substring(i, i + 3))) {
-                Drawable image = context.getResources().getDrawable(manaSymbolMap.get(source.substring(i, i + 3)), null);
-                image.setBounds(0, 0, 50, 50);
-                builder.append(";", new ImageSpan(image), 0);
-                i += 2;
+            if (source.charAt(i) == '{') {
+                if (manaSymbolMap.containsKey(source.substring(i, i + 3))) {
+                    Drawable image = context.getResources().getDrawable(manaSymbolMap.get(source.substring(i, i + 3)), null);
+                    image.setBounds(0, 0, 50, 50);
+                    bulider.append(";", new ImageSpan(image), 0);
+                    i += 2;
+                }
             } else {
-                builder.append(source.charAt(i));
+                bulider.append(source.charAt(i));
             }
         }
-        return builder;
+        return bulider;
     }
 
 
@@ -111,4 +115,19 @@ public class Card {
             put("{T}", R.drawable.ic_mana_tap);
         }
     });
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "context=" + context +
+                ", name='" + name + '\'' +
+                ", mana=" + mana +
+                ", cmc='" + cmc + '\'' +
+                ", type='" + type + '\'' +
+                ", stats='" + stats + '\'' +
+                ", text=" + text +
+                ", rules='" + rules + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                '}';
+    }
 }

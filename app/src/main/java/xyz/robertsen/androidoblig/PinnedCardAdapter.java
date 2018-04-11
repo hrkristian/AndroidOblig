@@ -63,9 +63,9 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
     @Override
     public void onBindViewHolder(CardViewHolder holder, int position) {
         Card card = cardArrayList.get(position);
-        holder.title.setText(card.title);
-        holder.cmc.setText(String.valueOf(card.convertedManaCost));
-        holder.cardCropImage.setImageDrawable(card.cropImage);
+        holder.title.setText(card.name);
+        holder.cmc.setText(String.valueOf(card.cmc));
+        holder.cardCropImage.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_2));
         holder.text.setText(card.text);
 
         // Not ideal, sets visibility for the pin icon.
@@ -120,10 +120,10 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
                         view.setVisibility(View.GONE);
                     }
                 });
-                ((HistoryActivity)context).onCardsPinned(thisCard.title);
+                ((HistoryActivity)context).onCardsPinned(thisCard.name);
             } else {
                 Intent intent = new Intent(context, SearchActivity.class);
-                intent.putExtra("searched_item", thisCard.title);
+                intent.putExtra("searched_item", thisCard.name);
                 context.startActivity(intent);
             }
         }

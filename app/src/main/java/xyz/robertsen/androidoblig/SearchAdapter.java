@@ -19,7 +19,7 @@ import java.util.Map;
  * Created by gitsieg on 26.02.18.
  */
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHitHolder> {
+public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /**
      * Class-variables
      */
@@ -43,6 +43,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHitH
     }
 
 
+
     /**
      * Creating view, returning viewholder
      *
@@ -56,6 +57,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHitH
         return new SearchHitHolder(view, this);
     }
 
+
+
     /**
      * Binds the view
      *
@@ -63,7 +66,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHitH
      * @param position
      */
     @Override
-    public void onBindViewHolder(SearchAdapter.SearchHitHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         ((SearchHitHolder) holder).image.setImageDrawable(cardImages.get(position));
         ((SearchHitHolder) holder).title.setText(cards.get(position).name);

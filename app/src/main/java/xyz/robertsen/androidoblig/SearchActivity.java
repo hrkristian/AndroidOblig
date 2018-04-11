@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.android.volley.Request;
@@ -36,6 +38,9 @@ import java.util.List;
 import java.util.Map;
 
 public class SearchActivity extends AppCompatActivity {
+
+    private static final String TAG = SearchActivity.class.getSimpleName();
+
     /**
      * Class variables
      */
@@ -60,14 +65,14 @@ public class SearchActivity extends AppCompatActivity {
         //cardArrayList = new ArrayList<>(Arrays.asList(Card.getExampleData(this)));
 
         recyclerSearchHits = findViewById(R.id.card_recycler_cardHits);
-        recyclerSearchHits.setAdapter(searchAdapter);
-        recyclerSearchHits.setLayoutManager(new LinearLayoutManager(this));
+
 
         /**
          * Checks device orentation, if "landscape" -> Runs SetHorizontalOffsets-method
          **/
+        /*
         setRecyclerHorizontalOffsets();
-
+        */
         handleIntent(getIntent());
 
     }
@@ -84,14 +89,17 @@ public class SearchActivity extends AppCompatActivity {
         if (!Intent.ACTION_SEARCH.equals(intent.getAction())) {
             finish();
         }
-            requestHandler.sendRequest(
-                    intent.getStringExtra(
-                            SearchManager.QUERY.replace(' ', '+')
-                    )
-            );
+        String searchString = intent.getStringExtra(SearchManager.QUERY).replace(' ', '+');
+        Log.d(TAG, searchString);
+        requestHandler.sendRequest(
+                searchString
+
+        );
+        Log.d(TAG, "handleIntent");
     }
 
     private void generateCardView(String JSONString) {
+        Log.d(TAG, "generateCardView");
         List<Card> cards = new ArrayList<>();
         Map<Integer, Drawable> cardImages = new HashMap<>();
 
@@ -103,11 +111,13 @@ public class SearchActivity extends AppCompatActivity {
                 json = tmp.getJSONArray("card");
             } else {
                 json = tmp.getJSONArray("cards");
+//                System.out.println(json.toString(2));
             }
 
             for (int i = 0; i < json.length(); i++) {
                 item = json.getJSONObject(i);
-                cards.add(new Card(this,
+                Card card = new Card(
+                        this,
                         (item.has("name")) ? item.getString("name") : "",
                         (item.has("manaCost")) ? item.getString("manaCost") : "",
                         (item.has("cmc")) ? item.getString("cmc") : "",
@@ -115,10 +125,10 @@ public class SearchActivity extends AppCompatActivity {
                         (item.has("power")) ? item.getString("power") : "",
                         (item.has("toughness")) ? item.getString("toughness") : "",
                         (item.has("text")) ? item.getString("text") : "",
-                        (item.has("imageUrl")) ? item.getString("imageUrl") : "",
+                        (item.has("imageUrl")) ? item.getString("imageUrl") : "defImageUrl",
                         (item.has("rulings")) ? item.getJSONArray("rulings") : null
-                ));
-
+                );
+                cards.add(card);
             }
 
             searchAdapter = new SearchAdapter(this, cards, cardImages);
@@ -135,6 +145,8 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
+
+
     /**
      * RequestHandler, for sending and receiving requests
      */
@@ -148,12 +160,14 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         void sendRequest(String request) {
+            Log.d(TAG, "sendRequest");
             StringRequest stringRequest = new StringRequest(
                     Request.Method.GET,
                     BASE_URL.concat(request),
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
+                            Log.d(TAG, "onResponse + ");
                             generateCardView(response);
                         }
                     },
@@ -161,14 +175,13 @@ public class SearchActivity extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             System.out.println(error.getMessage());
-                            // TODO -> Error messages
+                            // TODO
                         }
                     }
             );
             REQUEST_QUEUE.add(stringRequest);
         }
     }
-
 
     /**
      * Fetches and generates the linked image asychronously on a new thread,
@@ -188,6 +201,8 @@ public class SearchActivity extends AppCompatActivity {
 
                         cardImages.put(pos, img);
                     }  catch (IOException e) {
+                        // Catching IOException handles both URL, InputStream,
+                        // and createFromStream exceptions
                         e.printStackTrace();
                         System.out.println("Problem URL: ".concat(cards.get(i).imageUrl));
                         cardImages.put(pos, getResources().getDrawable(R.drawable.icon_2));
@@ -198,7 +213,7 @@ public class SearchActivity extends AppCompatActivity {
                                 // Because the currently active Viewholder(s) might need to be updated
                                 SearchAdapter.SearchHitHolder v =
                                         (SearchAdapter.SearchHitHolder)
-                                        recyclerSearchHits.findViewHolderForAdapterPosition(pos);
+                                                recyclerSearchHits.findViewHolderForAdapterPosition(pos);
                                 if ( v != null ) {
                                     v.image.setImageDrawable(cardImages.get(pos));
                                 }
