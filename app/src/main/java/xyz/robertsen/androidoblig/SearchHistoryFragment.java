@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +23,14 @@ import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link RecentCardsFragment.OnFragmentInteractionListener} interface
+ * {@link SearchHistoryFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link RecentCardsFragment#newInstance} factory method to
+ * Use the {@link SearchHistoryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecentCardsFragment extends Fragment {
+public class SearchHistoryFragment extends Fragment {
 
-    private static final String TAG = RecentCardsFragment.class.getSimpleName();
+    private static final String TAG = SearchHistoryFragment.class.getSimpleName();
     CardDatabaseOpenHelper dbHelper;
     ArrayList<RecentSearchItem> recentSearchItems;
     private RecyclerView recyclerRecent;
@@ -38,16 +39,16 @@ public class RecentCardsFragment extends Fragment {
     int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
     private ItemTouchHelper itemTouchHelper;
     OnFragmentInteractionListener mListener;
-    public RecentCardsFragment() {
+    public SearchHistoryFragment() {
         // Required empty public constructor
     }
 
     /**
      * Factory method for creating a new instance of this fragment
-     * @return A new instance of RecentCardsFragment
+     * @return A new instance of SearchHistoryFragment
      */
-    public static RecentCardsFragment newInstance() {
-        return new RecentCardsFragment();
+    public static SearchHistoryFragment newInstance() {
+        return new SearchHistoryFragment();
     }
 
     @Override
@@ -60,7 +61,7 @@ public class RecentCardsFragment extends Fragment {
         }
 
         //recentSearchItems = RecentSearchItem.getRecentSearches(dbHelper.getRecentSearches(MainActivity.logins[1]));
-        cardAdapter = new HistoryAdapter(this.getContext(), recentSearchItems);
+        cardAdapter = new HistoryAdapter(this.getContext(), RecentSearchItem.generateSampleRecentSearches());
         itemTouchHelper = getItemTouchHelper();
 
         // Fragment is retained across Activity re-creation
@@ -70,6 +71,7 @@ public class RecentCardsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "onCreateView");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recent_searches, container, false);
         recyclerRecent = view.findViewById(R.id.recycler_recent_cards);
@@ -138,6 +140,31 @@ public class RecentCardsFragment extends Fragment {
 
         return itemTouchHelper;
     }
+
+    public void onNoAuthentication() {
+
+    }
+
+    ////////////////////////////////////////////////
+    //  START: Implements User.IsAuthenticatedTasks
+    ////////////////////////////////////////////////
+//    /**
+//     * Interface defined in User.IsAuthenticatedTasks
+//     */
+//    @Override
+//    public void notAuthenticated() {
+//
+//    }
+//    /**
+//     * Interface defined in User.IsAuthenticatedTasks
+//     */
+//    @Override
+//    public void isAuthenticated() {
+//
+//    }
+    ////////////////////////////////////////////////
+    //  END: Implements User.IsAuthenticatedTasks
+    ////////////////////////////////////////////////
 
     /**
      * This interface must be implemented by activities that contain this

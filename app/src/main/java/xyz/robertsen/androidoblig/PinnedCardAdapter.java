@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 /**
     This adapter is used in PinnedCardsFragment. It shows a list of pinned cards
-
  */
 
 class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewHolder> {
@@ -24,7 +23,6 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
     // Tag for logging
     private static String TAG = PinnedCardAdapter.class.getSimpleName();
 
-    private final boolean isRecentSearches;
     private ArrayList<Card> cardArrayList;
     private LayoutInflater inflater;
     private Context context;
@@ -33,14 +31,11 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
      * Instantiates the PinnedCardAdapter
      * @param context - The activity/context this adapter is created within
      * @param cardList - ArrayList of Cards to use with this adapter
-     * @param isRecentSearches - If this adapter is contained within RecentCardsFragment of PinnedCardsFragment
      */
-    public PinnedCardAdapter(Context context, ArrayList<Card> cardList, boolean isRecentSearches) {
-        // TODO: Find a better solution regarding "boolean isRecentSearches"
+    public PinnedCardAdapter(Context context, ArrayList<Card> cardList) {
         cardArrayList = cardList;
         this.context = context;
         inflater = LayoutInflater.from(context);
-        this.isRecentSearches = isRecentSearches;
     }
 
     /**
@@ -67,12 +62,6 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
         holder.cmc.setText(String.valueOf(card.cmc));
         holder.cardCropImage.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_2));
         holder.text.setText(card.text);
-
-        // Not ideal, sets visibility for the pin icon.
-        if (!isRecentSearches) {
-            holder.searchPin.setVisibility(View.GONE);
-        }
-
     }
 
     @Override
@@ -87,7 +76,6 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
         private boolean pinned;
         private final TextView title, cmc, text;
         private final ImageView cardCropImage;
-        private final ImageButton searchPin;
         final PinnedCardAdapter cardAdapter;
 
         public CardViewHolder(View itemView, PinnedCardAdapter adapter) {
@@ -96,8 +84,6 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
             cmc = itemView.findViewById(R.id.search_carditem_cmc);
             cardCropImage = itemView.findViewById(R.id.search_carditem_cropImage);
             text = itemView.findViewById(R.id.search_carditem_text);
-            searchPin = itemView.findViewById(R.id.search_pin_btn);
-            searchPin.setOnClickListener(this);
             cardAdapter = adapter;
             itemView.setOnClickListener(this);
         }

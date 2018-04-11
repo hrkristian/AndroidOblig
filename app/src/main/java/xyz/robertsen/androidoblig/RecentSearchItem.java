@@ -12,40 +12,41 @@ import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
  */
 
 public class RecentSearchItem {
-        String searchString, user;
-        long time;
+    String searchString, user;
+    long time;
 
-        public RecentSearchItem(String searchString, long time, String user) {
-            this.searchString = searchString;
-            this.user = user;
-            this.time = time;
-        }
+    public RecentSearchItem(String searchString, long time, String user) {
+        this.searchString = searchString;
+        this.user = user;
+        this.time = time;
+    }
 
     /**
      * Take a Cursor as a parameter. Returns an ArrayList of the users recent searches.
+     *
      * @param cursor
      * @return ArrayList<RecentSearchItem>
      */
     public static ArrayList<RecentSearchItem> getRecentSearches(Cursor cursor) {
-            ArrayList<RecentSearchItem> recentSearchItems = new ArrayList<>();
+        ArrayList<RecentSearchItem> recentSearchItems = new ArrayList<>();
 
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                String searchString = cursor.getString(
-                        cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.SEARCH_STRING)
-                );
-                long time = cursor.getInt(
-                        cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.UNIX_TIME)
-                );
-                String user = cursor.getString(
-                        cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentCardsTable.USER)
-                );
-                recentSearchItems.add(new RecentSearchItem(searchString, time, user));
-                cursor.moveToNext();
-            }
-            cursor.close();
-            return recentSearchItems;
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String searchString = cursor.getString(
+                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.SEARCH_STRING)
+            );
+            long time = cursor.getInt(
+                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.UNIX_TIME)
+            );
+            String user = cursor.getString(
+                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentCardsTable.USER)
+            );
+            recentSearchItems.add(new RecentSearchItem(searchString, time, user));
+            cursor.moveToNext();
         }
+        cursor.close();
+        return recentSearchItems;
+    }
 
     @Override
     public String toString() {
@@ -54,5 +55,17 @@ public class RecentSearchItem {
                 ", user='" + user + '\'' +
                 ", time=" + time +
                 '}';
+    }
+
+    public static ArrayList<RecentSearchItem> generateSampleRecentSearches() {
+        ArrayList<RecentSearchItem> items = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            items.add(new RecentSearchItem(
+                    "Testing Recent Serches " + i,
+                    System.nanoTime(),
+                    "nikolai")
+            );
+        }
+        return items;
     }
 }

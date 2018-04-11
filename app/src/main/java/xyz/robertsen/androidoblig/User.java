@@ -86,5 +86,10 @@ class User {
         void handleValidationResponse(JSONObject response);
     }
 
+    interface IsAuthenticatedTasks {
+        void notAuthenticated();
+        void isAuthenticated();
+    }
+
 
 }

@@ -15,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_card_background"
+            android:src="@drawable/goblin_guide_crop"
             android:contentDescription="@string/search_desc_card_image"
             android:padding="1dp"
             android:scaleType="fitXY" />
@@ -26,7 +27,8 @@
             android:layout_alignParentStart="true"
             android:layout_below="@id/search_carditem_cropImage"
             android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:text="Goblin Guide"/>
 
         <TextView
             android:id="@+id/search_carditem_cmcLabel"
@@ -42,7 +44,9 @@
             android:layout_alignBottom="@id/search_carditem_cmcLabel"
             android:layout_toEndOf="@id/search_carditem_cmcLabel"
             android:paddingEnd="@dimen/search_base_margin_padding"
-            android:paddingStart="@dimen/search_base_margin_padding" />
+            android:paddingStart="@dimen/search_base_margin_padding"
+            android:text="2"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/search_carditem_text"
@@ -52,7 +56,8 @@
             android:layout_below="@id/search_carditem_cmcLabel"
             android:layout_toStartOf="@id/search_pin_btn"
             android:ellipsize="end"
-            android:maxLines="3" />
+            android:maxLines="3"
+            android:text="Haste"/>
 
         <ImageButton
             android:id="@+id/search_pin_btn"

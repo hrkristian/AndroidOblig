@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -129,5 +130,29 @@ public class Card implements Serializable {
                 ", rules='" + rules + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';
+    }
+/*
+    public Card(Context context,
+                String name, String mana, String cmc, String type, String power, String toughness,
+                String text, String imageUrl, JSONArray rules) {
+        this.context = context;
+*/
+    public static ArrayList<Card> getSampleCards(Context c) throws JSONException {
+        ArrayList<Card> cards = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            cards.add(new Card(
+                    c,
+                    "Jace Beleren",
+                    "{2}{U}{U}",
+                    "4",
+                    "Jace",
+                    "3",
+                    "3",
+                    "+2: Look at the top card of target player's library. You may put that card on the bottom of that player's library\n+0: Draw three cards, then put two cards from your hand on top of your library in any order.\n−1: Return target creature to its owner's hand.\n−12: Exile all cards from target player's library, then that player shuffles his or her hand into his or her library.",
+                    "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413599&type=card",
+                    new JSONArray("[]")
+            ));
+        }
+        return cards;
     }
 }

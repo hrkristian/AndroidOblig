@@ -9,9 +9,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,8 +31,6 @@ import java.util.Collections;
 public class PinnedCardsFragment extends Fragment {
 
     private static final String TAG = PinnedCardsFragment.class.getSimpleName();
-
-    Card[] cardlist;
     ArrayList<Card> pinnedCards;
     private RecyclerView recyclerPinned;
     private PinnedCardAdapter cardAdapter;
@@ -53,8 +54,12 @@ public class PinnedCardsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pinnedCards = new ArrayList<>();
-        cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards, false);
+        try {
+            pinnedCards = Card.getSampleCards(getContext());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards);
         itemTouchHelper = getItemTouchHelper();
 
         // Fragment is retained across Activity re-creation
@@ -64,7 +69,7 @@ public class PinnedCardsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        Log.d(TAG, "onCreateView");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pinned_cards, container, false);
         recyclerPinned = view.findViewById(R.id.recycler_pinned_cards);
@@ -142,6 +147,31 @@ public class PinnedCardsFragment extends Fragment {
         });
         return itemTouchHelper;
     }
+
+    public void onNoAuthentication() {
+    }
+
+    ////////////////////////////////////////////////
+    //  START: Implements User.IsAuthenticatedTasks
+    ////////////////////////////////////////////////
+//    /**
+//     * Interface defined in User.IsAuthenticatedTasks
+//     */
+//    @Override
+//    public void notAuthenticated() {
+//
+//    }
+//    /**
+//     * Interface defined in User.IsAuthenticatedTasks
+//     */
+//    @Override
+//    public void isAuthenticated() {
+//
+//    }
+    ////////////////////////////////////////////////
+    //  END: Implements User.IsAuthenticatedTasks
+    ////////////////////////////////////////////////
+
 
     /**
      * This interface must be implemented by activities that contain this
