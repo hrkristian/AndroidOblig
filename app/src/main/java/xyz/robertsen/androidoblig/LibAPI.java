@@ -9,6 +9,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
@@ -17,16 +18,17 @@ import org.json.JSONObject;
 public class LibAPI {
     /**
      * Sends a request to the User API, requesting a predefined action or response.
-     * @param listener The object making the request call.
-     * @param c The context of the requesting object.
-     * @param card The model for the data being sent.
+     *
+     * @param listener    The object making the request call.
+     * @param c           The context of the requesting object.
+     * @param card        The model for the data being sent.
      * @param requestType The type of request being sent.
      * @throws IllegalStateException Thrown when a user has not yet been authenticated.
      */
     static void request(final RequestListener listener,
-                                    @NonNull Context c,
-                                    @NonNull Card card,
-                                    REQUEST requestType)
+                        @NonNull Context c,
+                        @NonNull Card card,
+                        REQUEST requestType)
             throws IllegalStateException {
 
         if (!User.isAuthenticated())
@@ -36,10 +38,11 @@ public class LibAPI {
         JSONObject json = requestBuilder(card, requestType);
         try {
             Log.i("JSON Request", json.toString(2));
-        } catch (JSONException e){}
+        } catch (JSONException e) {
+        }
 
         RequestQueue volley = Volley.newRequestQueue(c);
-        volley.add( new JsonObjectRequest(
+        JsonRequest request = new JsonObjectRequest(
                 Request.Method.POST,
                 url,
                 json,
@@ -55,12 +58,16 @@ public class LibAPI {
                         listener.handlePinnedCardsError(error);
                     }
                 }
-        ));
+        );
+        Log.d("request-tostring", request.toString());
+        volley.add(request);
     }
+
     /**
      * Builds the request string sent to the User API.
      * todo- Update does nothing, create is not complete
-     * @param card The card model
+     *
+     * @param card        The card model
      * @param requestType The request type made to the server
      * @return The completed request string
      */
@@ -99,8 +106,10 @@ public class LibAPI {
 
     interface RequestListener {
         void handlePinnedCardsResponse(JSONObject response);
+
         void handlePinnedCardsError(VolleyError error);
     }
+
     enum REQUEST {
         IMG_GET,
         CARD_GET,

@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class Card implements Serializable {
 
     public Card(Context context,
                 String name, String mana, String cmc, String type, String power, String toughness,
-                String text, String imageUrl, JSONArray rules) {
+                String text, String imageUrl, String rulings) {
         this.context = context;
 
 
@@ -50,21 +51,50 @@ public class Card implements Serializable {
         this.type = context.getResources().getString(R.string.cardTypePlaceholder, type);
         this.text = symbolParser(text);
         this.stats = context.getResources().getString(R.string.cardStatsPlaceholder, power, toughness);
-
+        this.rules = rulings;
         this.imageUrl = imageUrl;
-        try {
-            StringBuilder builder = new StringBuilder();
-            if (rules != null)
-                for (int i = 0; i < rules.length(); i++)
-                    builder.append(context.getResources().getString(
-                            R.string.cardRulingsItem,
-                            rules.getJSONObject(i).getString("date"),
-                            rules.getJSONObject(i).getString("text")));
-            this.rules = builder.toString();
-        } catch (JSONException e) {
-            System.out.println("Error in Card:\n");
-            e.printStackTrace();
-        }
+    }
+
+    /**
+     * Returns the String representation of the
+     *
+     * @param context
+     * @param rulings
+     * @return
+     * @throws JSONException
+     */
+    public static String deArrayalize(Context context, JSONArray rulings) throws JSONException {
+        StringBuilder builder = new StringBuilder();
+        if (rulings != null)
+            for (int i = 0; i < rulings.length(); i++)
+                builder.append(context.getResources().getString(
+                        R.string.cardRulingsItem,
+                        rulings.getJSONObject(i).getString("date"),
+                        rulings.getJSONObject(i).getString("text")));
+        return builder.toString();
+    }
+
+    /**
+     * Takes an jsonObject, deserializes it and returns a Card
+     *
+     * @param context
+     * @param jsonCard
+     * @return Card
+     * @throws JSONException
+     */
+    public static Card newCard(Context context, JSONObject jsonCard) throws JSONException {
+        return new Card(
+                context,
+                (jsonCard.has("name")) ? jsonCard.getString("name") : "",
+                (jsonCard.has("manaCost")) ? jsonCard.getString("manaCost") : "",
+                (jsonCard.has("cmc")) ? jsonCard.getString("cmc") : "",
+                (jsonCard.has("type")) ? jsonCard.getString("type") : "",
+                (jsonCard.has("power")) ? jsonCard.getString("power") : "",
+                (jsonCard.has("toughness")) ? jsonCard.getString("toughness") : "",
+                (jsonCard.has("text")) ? jsonCard.getString("text") : "",
+                (jsonCard.has("imageUrl")) ? jsonCard.getString("imageUrl") : "defImageUrl",
+                (jsonCard.has("rulings")) ? deArrayalize(context, jsonCard.getJSONArray("rulings")) : null
+        );
     }
 
     private SpannableStringBuilder symbolParser(String source) {
@@ -110,7 +140,7 @@ public class Card implements Serializable {
             put("{G}", R.drawable.ic_mana_forest);
             put("{U}", R.drawable.ic_mana_island);
             put("{B}", R.drawable.ic_mana_swamp);
-            put("{R}", R.drawable.ic_mana_mountain);
+            put("{RecentSearchesTable}", R.drawable.ic_mana_mountain);
             put("{W}", R.drawable.ic_mana_plains);
             put("{X}", R.drawable.ic_mana_x);
             put("{T}", R.drawable.ic_mana_tap);
@@ -152,8 +182,8 @@ public class Card implements Serializable {
                     "3",
                     "+2: Look at the top card of target player's library. You may put that card on the bottom of that player's library\n+0: Draw three cards, then put two cards from your hand on top of your library in any order.\n−1: Return target creature to its owner's hand.\n−12: Exile all cards from target player's library, then that player shuffles his or her hand into his or her library.",
                     "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413599&type=card",
-                    new JSONArray("[]")
-            ));
+                    "def")
+            );
         }
         return cards;
     }

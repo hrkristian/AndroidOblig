@@ -1,6 +1,5 @@
 package xyz.robertsen.androidoblig;
 
-import android.content.Context;
 import android.database.Cursor;
 
 import java.util.ArrayList;
@@ -13,12 +12,10 @@ import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 
 public class RecentSearchItem {
     String searchString, user;
-    long time;
 
-    public RecentSearchItem(String searchString, long time, String user) {
+    public RecentSearchItem(String searchString, String user) {
         this.searchString = searchString;
         this.user = user;
-        this.time = time;
     }
 
     /**
@@ -27,7 +24,7 @@ public class RecentSearchItem {
      * @param cursor
      * @return ArrayList<RecentSearchItem>
      */
-    public static ArrayList<RecentSearchItem> getRecentSearches(Cursor cursor) {
+    public static ArrayList<RecentSearchItem> getRecentSearchesFromCursor(Cursor cursor) {
         ArrayList<RecentSearchItem> recentSearchItems = new ArrayList<>();
 
         cursor.moveToFirst();
@@ -35,13 +32,10 @@ public class RecentSearchItem {
             String searchString = cursor.getString(
                     cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.SEARCH_STRING)
             );
-            long time = cursor.getInt(
-                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.UNIX_TIME)
-            );
             String user = cursor.getString(
-                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentCardsTable.USER)
+                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.USER)
             );
-            recentSearchItems.add(new RecentSearchItem(searchString, time, user));
+            recentSearchItems.add(new RecentSearchItem(searchString, user));
             cursor.moveToNext();
         }
         cursor.close();
@@ -53,7 +47,6 @@ public class RecentSearchItem {
         return "RecentSearchItem{" +
                 "searchString='" + searchString + '\'' +
                 ", user='" + user + '\'' +
-                ", time=" + time +
                 '}';
     }
 
@@ -62,9 +55,8 @@ public class RecentSearchItem {
         for (int i = 0; i < 30; i++) {
             items.add(new RecentSearchItem(
                     "Goblin Guide",
-                    System.nanoTime(),
-                    "nikolai")
-            );
+                    "nikolai"
+            ));
         }
         return items;
     }

@@ -15,13 +15,16 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
+
 public class HistoryActivity extends AppCompatActivity implements
         PinnedCardsFragment.OnFragmentInteractionListener,
         SearchHistoryFragment.OnFragmentInteractionListener {
 
-    private static User authUser;
+    public static User authUser;
     private static final String TAG = HistoryActivity.class.getSimpleName();
     private static final String TAB_POSITION = "xyz.robertsen.androidoblig.HistoryActivity";
+    private CardDatabaseOpenHelper dbHelper;
     private TabLayout tabLayout;
     private TabLayout.Tab recentTab, pinnedTab;
     private Fragment recentFragment;
@@ -35,24 +38,37 @@ public class HistoryActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-
+        dbHelper = new CardDatabaseOpenHelper(this);
         // Sets up the basic views and fragments for this activity
         //-- Checks if state saved, sets selected tab pos to the saved instance tab pos //
-        if (savedInstanceState != null) {
-            tabPosSelected = savedInstanceState.getInt(TAB_POSITION);
-            TabLayout.Tab tab = tabLayout.getTabAt(tabPosSelected);
-            if (tab != null) {
-                tab.select();
-            }
-        }
-        if (User.authenticatedUser == null) {
+
+        // TODO Replace with User.authenticatedUser
+        authUser = new User("nikolai","Nikolai", "Fosså");
+        // Checks for authenticated user
+        if (authUser == null) {
+//        if (User.authenticatedUser == null) {
             // If no auth. user, prompt and
             // Maybe click to redirect and start Login fragment.
             tabLegend =findViewById(R.id.history_fragments_heading);
             tabLegend.setText("Please click this log in to access your search history and pinned cards.");
         } else {
+            // Check if local version of user exist, if not, create one mathcing authenticated user
+            if (!dbHelper.sqliteUserExists(HistoryActivity.authUser.getUsername())) {
+                System.out.println("CREATING USER " + HistoryActivity.authUser.getUsername());
+                dbHelper.sqliteCreateUser(HistoryActivity.authUser.getUsername());
+            } else {
+                System.out.println("DID NOT CREATE USER " + HistoryActivity.authUser.getUsername());
+            }
             // Set up fragments, fragments handles requests data via LibAPI
             baseActivitySetup();
+
+            if (savedInstanceState != null) {
+                tabPosSelected = savedInstanceState.getInt(TAB_POSITION);
+                TabLayout.Tab tab = tabLayout.getTabAt(tabPosSelected);
+                if (tab != null) {
+                    tab.select();
+                }
+            }
         }
     }
 
@@ -74,14 +90,7 @@ public class HistoryActivity extends AppCompatActivity implements
 
     @Override
     public void onCardsPinned(String title) {
-//        Card card = null;
-//        for (Card c : sampleCards) {
-//            if (c.name.equals(title)) {
-//                card = c;
-//                break;
-//            }
-//        }
-//        ((PinnedCardsFragment) pinnedFragment).addCard(card);
+
     }
 
     /**
@@ -150,13 +159,5 @@ public class HistoryActivity extends AppCompatActivity implements
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
-    }
-
-    private void noAuthentication() {
-
-    }
-
-    interface NoAuthenticationCommand {
-        void onNoAuthentication();
     }
 }

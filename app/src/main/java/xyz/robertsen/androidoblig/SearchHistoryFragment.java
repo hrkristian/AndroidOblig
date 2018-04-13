@@ -35,16 +35,18 @@ public class SearchHistoryFragment extends Fragment {
     ArrayList<RecentSearchItem> recentSearchItems;
     private RecyclerView recyclerRecent;
     private HistoryAdapter cardAdapter;
-    int dragDirections =  ItemTouchHelper.UP |  ItemTouchHelper.DOWN;
+    int dragDirections = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
     int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
     private ItemTouchHelper itemTouchHelper;
     OnFragmentInteractionListener mListener;
+
     public SearchHistoryFragment() {
         // Required empty public constructor
     }
 
     /**
      * Factory method for creating a new instance of this fragment
+     *
      * @return A new instance of SearchHistoryFragment
      */
     public static SearchHistoryFragment newInstance() {
@@ -54,14 +56,11 @@ public class SearchHistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // TODO Testing
         dbHelper = new CardDatabaseOpenHelper(this.getContext());
-
-        if (User.authenticatedUser != null) {
-            System.out.println("Name: " + User.authenticatedUser.getName() + " is logged in");
-        }
-
-        //recentSearchItems = RecentSearchItem.getRecentSearches(dbHelper.getRecentSearches(MainActivity.logins[1]));
-        cardAdapter = new HistoryAdapter(this.getContext(), RecentSearchItem.generateSampleRecentSearches());
+//        for (int i = 0; i < 20; i++) {
+//            Log.d(TAG, dbHelper.dbAddRecentSearch("Nikolai strings " + i , HistoryActivity.authUser.getUsername()) + "");
+//        }
         itemTouchHelper = getItemTouchHelper();
 
         // Fragment is retained across Activity re-creation
@@ -72,6 +71,10 @@ public class SearchHistoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
+        // TODO Replace with User.authenticatedUser
+        recentSearchItems = RecentSearchItem.getRecentSearchesFromCursor(dbHelper.getRecentSearchesCursor(HistoryActivity.authUser.getUsername()));
+        System.out.println(recentSearchItems.toString());
+        cardAdapter = new HistoryAdapter(this.getContext(), recentSearchItems);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recent_searches, container, false);
         recyclerRecent = view.findViewById(R.id.recycler_recent_cards);
@@ -93,7 +96,7 @@ public class SearchHistoryFragment extends Fragment {
                 super.getItemOffsets(outRect, view, parent, state);
                 int totalWidth = parent.getWidth();
                 int cardWidth = getResources().getDimensionPixelOffset(R.dimen.land_card_width);
-                int sidePad = (totalWidth - cardWidth)/ 2;
+                int sidePad = (totalWidth - cardWidth) / 2;
                 sidePad = Math.max(0, sidePad);
                 outRect.set(sidePad, 0, sidePad, 0);
             }
@@ -114,6 +117,7 @@ public class SearchHistoryFragment extends Fragment {
 
     /**
      * Returns a Item
+     *
      * @return ItemTouchHelper for use on a RecyclerView
      */
     public ItemTouchHelper getItemTouchHelper() {
@@ -141,9 +145,6 @@ public class SearchHistoryFragment extends Fragment {
         return itemTouchHelper;
     }
 
-    public void onNoAuthentication() {
-
-    }
 
     ////////////////////////////////////////////////
     //  START: Implements User.IsAuthenticatedTasks
@@ -179,6 +180,7 @@ public class SearchHistoryFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+
         void onCardsPinned(String title);
     }
 

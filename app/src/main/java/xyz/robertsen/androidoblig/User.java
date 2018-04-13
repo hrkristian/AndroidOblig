@@ -24,18 +24,23 @@ import java.util.Map;
  * Created by kris on 25/02/18.
  */
 
-class User {
+public class User {
 
-    private final String fname, lname;
+    private final String username, fname, lname;
     public static User authenticatedUser = null;
 
-    User(String firstName, String lastName) {
+    User(String username, String firstName, String lastName) {
+        this.username = username;
         this.fname = firstName;
         this.lname = lastName;
     }
 
     String getName() {
         return fname.concat(" ").concat(lname);
+    }
+
+    String getUsername() {
+        return username;
     }
 
     static void setAuthenticatedUser(User user) {
@@ -85,11 +90,4 @@ class User {
     interface ValidationListener {
         void handleValidationResponse(JSONObject response);
     }
-
-    interface IsAuthenticatedTasks {
-        void notAuthenticated();
-        void isAuthenticated();
-    }
-
-
 }

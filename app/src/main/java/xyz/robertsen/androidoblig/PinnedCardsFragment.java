@@ -14,10 +14,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.VolleyError;
+
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 
 
 /**
@@ -28,14 +34,14 @@ import java.util.Collections;
  * Use the {@link PinnedCardsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PinnedCardsFragment extends Fragment {
+public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListener {
 
     private static final String TAG = PinnedCardsFragment.class.getSimpleName();
     ArrayList<Card> pinnedCards;
     private RecyclerView recyclerPinned;
     private PinnedCardAdapter cardAdapter;
     private ItemTouchHelper itemTouchHelper;
-    int dragDirections = ItemTouchHelper.UP |  ItemTouchHelper.DOWN;
+    int dragDirections = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
     int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
     private OnFragmentInteractionListener mListener;
 
@@ -45,6 +51,7 @@ public class PinnedCardsFragment extends Fragment {
 
     /**
      * Use this factory method to create a new instance of this fragment
+     *
      * @return A new instance of fragment PinnedCardsFragment.
      */
     public static PinnedCardsFragment newInstance() {
@@ -54,22 +61,21 @@ public class PinnedCardsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
-            pinnedCards = Card.getSampleCards(getContext());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards);
         itemTouchHelper = getItemTouchHelper();
 
         // Fragment is retained across Activity re-creation
         setRetainInstance(true);
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
+
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pinned_cards, container, false);
         recyclerPinned = view.findViewById(R.id.recycler_pinned_cards);
@@ -81,6 +87,12 @@ public class PinnedCardsFragment extends Fragment {
         if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setRecyclerHorizontalOffsets();
         }
+//        LibAPI.request(
+//                this,
+//                getContext(),
+//                new Card(),
+//                LibAPI.REQUEST.CARD_GET
+//        );
         return view;
     }
 
@@ -91,7 +103,7 @@ public class PinnedCardsFragment extends Fragment {
                 super.getItemOffsets(outRect, view, parent, state);
                 int totalWidth = parent.getWidth();
                 int cardWidth = getResources().getDimensionPixelOffset(R.dimen.land_card_width);
-                int sidePad = (totalWidth - cardWidth)/ 2;
+                int sidePad = (totalWidth - cardWidth) / 2;
                 sidePad = Math.max(0, sidePad);
                 outRect.set(sidePad, 0, sidePad, 0);
             }
@@ -149,6 +161,29 @@ public class PinnedCardsFragment extends Fragment {
     }
 
     public void onNoAuthentication() {
+    }
+
+    @Override
+    public void handlePinnedCardsResponse(JSONObject response) {
+        pinnedCards = new ArrayList<>();
+        try {
+            Log.d(TAG, response.toString(2));
+            JSONArray data = response.getJSONArray("cards");
+            for (int i = 0; i < data.length(); i++) {
+                pinnedCards.add(Card.newCard(getContext(), data.getJSONObject(i)));
+                cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards);
+                recyclerPinned.setAdapter(cardAdapter);
+                recyclerPinned.setLayoutManager(new LinearLayoutManager(this.getContext()));
+            }
+            Log.d(TAG, pinnedCards.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void handlePinnedCardsError(VolleyError error) {
+
     }
 
     ////////////////////////////////////////////////

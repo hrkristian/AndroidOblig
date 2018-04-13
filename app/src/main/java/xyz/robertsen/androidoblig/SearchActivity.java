@@ -119,19 +119,7 @@ public class SearchActivity extends AppCompatActivity {
 
             for (int i = 0; i < json.length(); i++) {
                 item = json.getJSONObject(i);
-                Card card = new Card(
-                        this,
-                        (item.has("name")) ? item.getString("name") : "",
-                        (item.has("manaCost")) ? item.getString("manaCost") : "",
-                        (item.has("cmc")) ? item.getString("cmc") : "",
-                        (item.has("type")) ? item.getString("type") : "",
-                        (item.has("power")) ? item.getString("power") : "",
-                        (item.has("toughness")) ? item.getString("toughness") : "",
-                        (item.has("text")) ? item.getString("text") : "",
-                        (item.has("imageUrl")) ? item.getString("imageUrl") : "defImageUrl",
-                        (item.has("rulings")) ? item.getJSONArray("rulings") : null
-                );
-                cards.add(card);
+                cards.add(Card.newCard(this, item));
             }
 
             searchAdapter = new SearchAdapter(this, cards, cardImages);

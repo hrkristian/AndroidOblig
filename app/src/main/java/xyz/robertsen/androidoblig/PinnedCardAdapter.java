@@ -69,7 +69,7 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
 
     @Override
     public int getItemCount() {
-        return cardArrayList.size();
+        return cardArrayList == null ? 0: cardArrayList.size();
     }
 
     public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -102,7 +102,7 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
             int viewID = view.getId();
             int adapterPos = getAdapterPosition();
             Card thisCard = cardArrayList.get(adapterPos);
-//            if (viewID == R.id.search_pin_btn) {
+//            if (viewID == RecentSearchesTable.id.search_pin_btn) {
 //                view.animate().alpha(0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
 //                    @Override
 //                    public void onAnimationEnd(Animator animation) {

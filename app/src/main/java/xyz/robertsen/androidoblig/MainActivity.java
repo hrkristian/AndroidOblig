@@ -230,6 +230,7 @@ public class MainActivity extends AppCompatActivity
             else {
                 message = "Login Succeeded";
                 User.setAuthenticatedUser(new User(
+                    response.getString("usr"),
                     response.getString("fornavn"),
                     response.getString("etternavn")
                 ));
