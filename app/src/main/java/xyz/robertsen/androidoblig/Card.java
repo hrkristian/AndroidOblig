@@ -30,9 +30,11 @@ public class Card implements Serializable {
     String cmc; // ConvertedManaCost
     String type;
     String stats;
+    String power, toughness;
     SpannableStringBuilder text;
     String rules;
     String imageUrl;
+    int pos;
 
     public Card() {
 
@@ -49,6 +51,8 @@ public class Card implements Serializable {
         this.cmc = cmc;
         this.type = context.getResources().getString(R.string.cardTypePlaceholder, type);
         this.text = symbolParser(text);
+        this.power = power;
+        this.toughness = toughness;
         this.stats = context.getResources().getString(R.string.cardStatsPlaceholder, power, toughness);
 
         this.imageUrl = imageUrl;

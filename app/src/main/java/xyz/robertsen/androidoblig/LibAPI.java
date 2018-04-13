@@ -36,7 +36,7 @@ public class LibAPI {
         JSONObject json = requestBuilder(card, requestType);
         try {
             Log.i("JSON Request", json.toString(2));
-        } catch (JSONException e){}
+        } catch (JSONException e) {}
 
         RequestQueue volley = Volley.newRequestQueue(c);
         volley.add( new JsonObjectRequest(
@@ -72,24 +72,33 @@ public class LibAPI {
                 return json;
             }
             json.put("name", card.name);
+            json.put("request", "sql");
             switch (requestType) {
                 case CARD_GET:
-                    json.put("request", "sql");
+
                     json.put("sql", "select");
                     break;
                 case CARD_CREATE:
-                    json.put("request", "sql");
+//                    json.put("request", "sql");
                     json.put("sql", "create");
-                    json.put("mana", card.cmc); // todo
-                    json.put("description", card.text); // todo
+
+                    json.put("name", card.name);
+                    json.put("manaCost", card.mana);
+                    json.put("cmc", card.cmc);
+                    json.put("type", card.type);
+                    json.put("power", card.power);
+                    json.put("toughness", card.toughness);
+                    json.put("text", card.text);
+                    json.put("imgUrl", card.imageUrl);
+                    json.put("rulings", card.rules);
                     break;
                 case CARD_UPDATE:
-                    json.put("request", "sql");
+//                    json.put("request", "sql");
                     json.put("sql", "update");
-                    json.put("position", "1"); // todo
+                    json.put("position", card.pos);
                     break;
                 case CARD_DELETE:
-                    json.put("request", "sql");
+//                    json.put("request", "sql");
                     json.put("sql", "delete");
                     break;
             }
