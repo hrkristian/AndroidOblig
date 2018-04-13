@@ -11,5 +11,6 @@
     <string name="cardStatsPlaceholder">Stats: %1$s / %2$s </string>
     <string name="cardTextPlaceholder">%1$s</string>
     <string name="cardRulingsItem"><b>%1$s</b>\n%2$s\n</string>
+    <string name="please_log_in_for_history">Please click this log in to access your search history and pinned cards.</string>
 
 </resources>

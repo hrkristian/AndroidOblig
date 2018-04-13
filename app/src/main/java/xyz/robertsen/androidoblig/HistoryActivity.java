@@ -41,14 +41,15 @@ public class HistoryActivity extends AppCompatActivity implements
         dbHelper = new CardDatabaseOpenHelper(this);
         // Sets up the basic views and fragments for this activity
         //-- Checks if state saved, sets selected tab pos to the saved instance tab pos //
-
+        init_tabs();
+        tabLegend = findViewById(R.id.history_fragments_heading);
         // Checks for authenticated user
         if (User.authenticatedUser == null) {
             // If no auth. user, prompt and
             // Maybe click to redirect and start Login fragment.
-            tabLegend = findViewById(R.id.history_fragments_heading);
-            tabLegend.setText("Please click this log in to access your search history and pinned cards.");
+            tabLegend.setText(R.string.please_log_in_for_history);
         } else {
+            tabLegend.setText(R.string.click_item_to_search);
             String username = User.authenticatedUser.getUsr();
             // Check if local version of user exist, if not, create one mathcing authenticated user
             if (!dbHelper.sqliteUserExists(username)) {
@@ -124,11 +125,7 @@ public class HistoryActivity extends AppCompatActivity implements
         }
     }
 
-    void baseActivitySetup() {
-        // ViewPager for TabLayout
-        viewPager = findViewById(R.id.fragment_container);
-        // sampleCards = new ArrayList<>(Arrays.asList(Card.getExampleData(this)));
-
+    private void init_tabs() {
         //--  Sets up TabLayout --//
         tabLayout = findViewById(R.id.search_recent_pinned_layout);
         pinnedTab = tabLayout.newTab();
@@ -137,6 +134,13 @@ public class HistoryActivity extends AppCompatActivity implements
         tabLayout.addTab(recentTab);
         pinnedTab.setCustomView(R.layout.history_pinned_tab);
         recentTab.setCustomView(R.layout.history_recent_tab);
+
+    }
+
+    void baseActivitySetup() {
+        // ViewPager for TabLayout
+        viewPager = findViewById(R.id.fragment_container);
+        // sampleCards = new ArrayList<>(Arrays.asList(Card.getExampleData(this)));
 
 
         // Request instances of fragments, and adapts them to conform with ViewPager interface

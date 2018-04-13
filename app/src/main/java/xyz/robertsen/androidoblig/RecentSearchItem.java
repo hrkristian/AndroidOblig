@@ -76,15 +76,4 @@ public class RecentSearchItem {
                 ", user='" + user + '\'' +
                 '}';
     }
-
-    public static ArrayList<RecentSearchItem> generateSampleRecentSearches() {
-        ArrayList<RecentSearchItem> items = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            items.add(new RecentSearchItem(
-                    "Goblin Guide",
-                    "nikolai"
-            ));
-        }
-        return items;
-    }
 }

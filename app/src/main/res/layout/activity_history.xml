@@ -23,7 +23,6 @@
     <TextView
         android:id="@+id/history_fragments_heading"
         android:layout_below="@id/tabBarLayout"
-        android:text="Click an item to search for it"
         android:textSize="16dp"
         android:textStyle="bold"
         android:padding="4dp"
@@ -31,6 +30,7 @@
         android:layout_height="wrap_content" />
     <android.support.v4.view.ViewPager
         android:id="@+id/fragment_container"
+        android:labelFor="@id/history_fragments_heading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/history_fragments_heading">

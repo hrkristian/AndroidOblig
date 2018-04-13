@@ -49,7 +49,8 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     SearchAdapter searchAdapter;
     RequestHandler requestHandler;
 
-
+    // TODO HANDLE CONFIGURATION CHANGES, FLIP PHONE ETC
+    // TODO, DO NOT ADD TO BACKSTACK
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +68,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         /**
          * Checks device orentation, if "landscape" -> Runs SetHorizontalOffsets-method
          **/
-        /*
         setRecyclerHorizontalOffsets();
-        */
         handleIntent(getIntent());
 
     }
@@ -91,6 +90,10 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         }
 
         Log.d(TAG, searchString);
+
+        if (User.authenticatedUser != null)
+            RecentSearchItem.addRecentSearchItem(this, searchString);
+
         requestHandler.sendRequest(
                 searchString
 
@@ -136,6 +139,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     @Override
     public boolean onQueryTextSubmit(String s) {
         Log.d(TAG, "onQueryTextSubmit(String s)");
+        // TODO Remove focus from SearchView
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         intent.setAction(Intent.ACTION_SEARCH);
         intent.putExtra(SearchManager.QUERY, s);
