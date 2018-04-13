@@ -43,21 +43,22 @@ public class HistoryActivity extends AppCompatActivity implements
         //-- Checks if state saved, sets selected tab pos to the saved instance tab pos //
 
         // TODO Replace with User.authenticatedUser
-        authUser = new User("nikolai","Nikolai", "Fosså");
+        authUser = new User("nikolai", "Nikolai", "Fosså");
         // Checks for authenticated user
-        if (authUser == null) {
+        if (User.authenticatedUser == null) {
 //        if (User.authenticatedUser == null) {
             // If no auth. user, prompt and
             // Maybe click to redirect and start Login fragment.
-            tabLegend =findViewById(R.id.history_fragments_heading);
+            tabLegend = findViewById(R.id.history_fragments_heading);
             tabLegend.setText("Please click this log in to access your search history and pinned cards.");
         } else {
+            String username = User.authenticatedUser.getUsr();
             // Check if local version of user exist, if not, create one mathcing authenticated user
-            if (!dbHelper.sqliteUserExists(HistoryActivity.authUser.getUsr())) {
-                System.out.println("CREATING USER " + HistoryActivity.authUser.getUsr());
-                dbHelper.sqliteCreateUser(HistoryActivity.authUser.getUsr());
+            if (!dbHelper.sqliteUserExists(username)) {
+                System.out.println("CREATING USER " + username);
+                dbHelper.sqliteCreateUser(username);
             } else {
-                System.out.println("DID NOT CREATE USER " + HistoryActivity.authUser.getUsr());
+                System.out.println("DID NOT CREATE USER " + username);
             }
             // Set up fragments, fragments handles requests data via LibAPI
             baseActivitySetup();
@@ -75,6 +76,7 @@ public class HistoryActivity extends AppCompatActivity implements
 
     /**
      * Save relevant state information and sends it's data to the next instance of this activity
+     *
      * @param outState
      */
     @Override
@@ -124,6 +126,7 @@ public class HistoryActivity extends AppCompatActivity implements
             return mNumOfTabs;
         }
     }
+
     void baseActivitySetup() {
         // ViewPager for TabLayout
         viewPager = findViewById(R.id.fragment_container);
@@ -152,9 +155,11 @@ public class HistoryActivity extends AppCompatActivity implements
                 System.out.println("onTabSelected pos" + tab.getPosition());
                 viewPager.setCurrentItem(tab.getPosition());
             }
+
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
             }
+
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
             }
