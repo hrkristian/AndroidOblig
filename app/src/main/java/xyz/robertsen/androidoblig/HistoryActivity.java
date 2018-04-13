@@ -42,11 +42,8 @@ public class HistoryActivity extends AppCompatActivity implements
         // Sets up the basic views and fragments for this activity
         //-- Checks if state saved, sets selected tab pos to the saved instance tab pos //
 
-        // TODO Replace with User.authenticatedUser
-        authUser = new User("nikolai", "Nikolai", "Fosså");
         // Checks for authenticated user
         if (User.authenticatedUser == null) {
-//        if (User.authenticatedUser == null) {
             // If no auth. user, prompt and
             // Maybe click to redirect and start Login fragment.
             tabLegend = findViewById(R.id.history_fragments_heading);

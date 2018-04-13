@@ -146,27 +146,6 @@ public class SearchHistoryFragment extends Fragment {
     }
 
 
-    ////////////////////////////////////////////////
-    //  START: Implements User.IsAuthenticatedTasks
-    ////////////////////////////////////////////////
-//    /**
-//     * Interface defined in User.IsAuthenticatedTasks
-//     */
-//    @Override
-//    public void notAuthenticated() {
-//
-//    }
-//    /**
-//     * Interface defined in User.IsAuthenticatedTasks
-//     */
-//    @Override
-//    public void isAuthenticated() {
-//
-//    }
-    ////////////////////////////////////////////////
-    //  END: Implements User.IsAuthenticatedTasks
-    ////////////////////////////////////////////////
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -182,16 +161,5 @@ public class SearchHistoryFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
 
         void onCardsPinned(String title);
-    }
-
-    private void getRecentSearches() {
-
-//        int randInt;
-//        cardlist = Card.getExampleData(this.getContext());
-//        recentCards = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            randInt = ThreadLocalRandom.current().nextInt(0, cardlist.length);
-//            recentCards.add(cardlist[randInt]);
-//        }
     }
 }

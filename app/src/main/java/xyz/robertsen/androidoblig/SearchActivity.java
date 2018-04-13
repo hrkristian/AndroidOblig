@@ -37,14 +37,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
 
     /**
      * Class variables
      */
-
     SearchView cardHitSearchView;
     RecyclerView recyclerSearchHits;
     SearchAdapter searchAdapter;
@@ -61,10 +60,7 @@ public class SearchActivity extends AppCompatActivity {
          * Initalizing
          */
         cardHitSearchView = findViewById(R.id.cardHitSearchView);
-
-        // TODO!!!
-        //cardArrayList = new ArrayList<>(Arrays.asList(Card.getExampleData(this)));
-
+        cardHitSearchView.setOnQueryTextListener(this);
         recyclerSearchHits = findViewById(R.id.card_recycler_cardHits);
 
 
@@ -135,6 +131,21 @@ public class SearchActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        Log.d(TAG, "onQueryTextSubmit(String s)");
+        Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+        intent.setAction(Intent.ACTION_SEARCH);
+        intent.putExtra(SearchManager.QUERY, s);
+        startActivity(intent);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        return false;
     }
 
 

@@ -33,10 +33,10 @@ import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
  * Hovedklassen til AndroidOblig
  */
 public class MainActivity extends AppCompatActivity
-        implements  UserFragment.userFragmentListener,
-                    SearchView.OnQueryTextListener,
-                    User.ValidationListener,
-                    LibAPI.RequestListener {
+        implements UserFragment.userFragmentListener,
+        SearchView.OnQueryTextListener,
+        User.ValidationListener,
+        LibAPI.RequestListener {
 
     // Log tag
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -76,8 +76,8 @@ public class MainActivity extends AppCompatActivity
             life_player2 = DEFAULT_LIFE;
         }
 
-        ((TextView)findViewById(R.id.text_lifeCounter1)).setText(Integer.toString(life_player1));
-        ((TextView)findViewById(R.id.text_lifeCounter2)).setText(Integer.toString(life_player2));
+        ((TextView) findViewById(R.id.text_lifeCounter1)).setText(Integer.toString(life_player1));
+        ((TextView) findViewById(R.id.text_lifeCounter2)).setText(Integer.toString(life_player2));
 
 
         initSearchView();
@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Performs a dice roll (1-6) and displays the result as a Toast.
+     *
      * @param view the event-view
      */
     public void rollDice(View view) {
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * Animates the showing and hiding of the "ActionView"
      * todo- remove ability to click through the ActionView || switch it out with a Fragment
+     *
      * @param view
      */
     public void spawnActionView(final View view) {
@@ -112,17 +114,17 @@ public class MainActivity extends AppCompatActivity
         final View v = findViewById(R.id.main_actionView);
         int cx = v.getWidth();
         int cy = v.getHeight();
-        float radius = (float)Math.hypot(cx, cy);
+        float radius = (float) Math.hypot(cx, cy);
 
         if (v.getVisibility() == View.INVISIBLE) {
-            Animator animator = ViewAnimationUtils.createCircularReveal(v, cx/2, cy/2, 0, radius);
+            Animator animator = ViewAnimationUtils.createCircularReveal(v, cx / 2, cy / 2, 0, radius);
 
             animator.setDuration(TRANSITION_DURATION);
             v.setVisibility(View.VISIBLE);
             animator.start();
             actionFABTransitionDrawable.startTransition(0);
         } else {
-            Animator animator = ViewAnimationUtils.createCircularReveal(v, cx/2, cy/2, radius/2, 0);
+            Animator animator = ViewAnimationUtils.createCircularReveal(v, cx / 2, cy / 2, radius / 2, 0);
             animator.setDuration(TRANSITION_DURATION);
             if (view != null)
                 view.setClickable(false);
@@ -142,6 +144,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Changes the remaining life of a player based on which view fires the event
+     *
      * @param view the event view
      */
     public void changeLifeRemaining(View view) {
@@ -169,6 +172,7 @@ public class MainActivity extends AppCompatActivity
     /* ------------ Interface methods ----------- */
     @Override
     public boolean onQueryTextSubmit(String s) {
+        Log.d(TAG, "onQueryTextSubmit(String s)");
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         intent.setAction(Intent.ACTION_SEARCH);
         intent.putExtra(SearchManager.QUERY, s);
@@ -189,6 +193,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     final private static String FRAGMENT_USER = "userFragment";
+
     public void spawnUserFragment(View view) {
         if (User.isAuthenticated())
             eventActions.spawnUserFragment(R.layout.fragment_user_authenticated);
@@ -201,7 +206,7 @@ public class MainActivity extends AppCompatActivity
     public void onUserFragmentLoginButtonPressed(String usr, String pwd) {
         try {
             User.authenticateUser(usr, pwd, this, this);
-        } catch(IllegalStateException e) {
+        } catch (IllegalStateException e) {
             Toast.makeText(
                     this,
                     "Error! User already authenticated.\nThis should not happen.",
@@ -209,6 +214,7 @@ public class MainActivity extends AppCompatActivity
             ).show();
         }
     }
+
     @Override
     public void onUserFragmentCancelButtonPressed(DialogFragment fragment) {
         fragmentManager.popBackStack();
@@ -230,9 +236,9 @@ public class MainActivity extends AppCompatActivity
             else {
                 message = "Login Succeeded";
                 User.setAuthenticatedUser(new User(
-                    response.getString("usr"),
-                    response.getString("fornavn"),
-                    response.getString("etternavn")
+                        response.getString("usr"),
+                        response.getString("fornavn"),
+                        response.getString("etternavn")
                 ));
             }
         } catch (JSONException e) {
@@ -242,6 +248,7 @@ public class MainActivity extends AppCompatActivity
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         eventActions.spawnUserFragment(R.layout.fragment_user_authenticated);
     }
+
     @Override
     public void handlePinnedCardsResponse(JSONObject response) {
         try {
@@ -260,7 +267,7 @@ public class MainActivity extends AppCompatActivity
 
     /* ------------ Init methods ----------- */
     private void init_FABDrawable() {
-        actionFABTransitionDrawable = new TransitionDrawable( new Drawable[]{
+        actionFABTransitionDrawable = new TransitionDrawable(new Drawable[]{
                 getResources().getDrawable(R.drawable.icon_expand),
                 getResources().getDrawable(R.drawable.icon_collapse)
         });
@@ -275,27 +282,31 @@ public class MainActivity extends AppCompatActivity
 
     private class EventActions {
         Context c;
+
         private EventActions(Context c) {
             this.c = c;
         }
+
         private void rollDice() {
             LibAPI.request(
-                    (LibAPI.RequestListener)c,
+                    (LibAPI.RequestListener) c,
                     c,
                     new Card(),
                     LibAPI.REQUEST.CARD_GET);
             spawnActionView(findViewById(R.id.main_fab_settings));
             String diceText = "Terningkast: "
-                    .concat( Integer.toString((int)(Math.random() * 6 + 1)) );
+                    .concat(Integer.toString((int) (Math.random() * 6 + 1)));
             Toast.makeText(c, diceText, Toast.LENGTH_SHORT).show();
         }
+
         private void spawnActivity(Intent intent) {
             spawnActionView(findViewById(R.id.main_fab_settings));
             startActivity(intent);
         }
+
         private void spawnUserFragment(int layoutId) {
             FragmentTransaction ft = fragmentManager.beginTransaction();
-            UserFragment previous = (UserFragment)fragmentManager.findFragmentByTag(FRAGMENT_USER);
+            UserFragment previous = (UserFragment) fragmentManager.findFragmentByTag(FRAGMENT_USER);
             if (previous != null)
                 fragmentManager.popBackStack();
 

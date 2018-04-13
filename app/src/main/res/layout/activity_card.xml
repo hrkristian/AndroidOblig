@@ -6,22 +6,22 @@
     android:orientation="vertical"
     tools:context="xyz.robertsen.androidoblig.SearchActivity">
 
-        <SearchView
-            android:id="@+id/cardHitSearchView"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:background="@drawable/shape_cardview_background"
-            android:padding="8dp"
-            android:queryHint="Search text goes here"
+    <SearchView
+        android:id="@+id/cardHitSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@drawable/shape_cardview_background"
+        android:padding="8dp"
+        android:queryHint="Search text goes here"
 
-            />
+        />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/card_recycler_cardHits"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/cardHitSearchView">
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/card_recycler_cardHits"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/cardHitSearchView">
 
 
-        </android.support.v7.widget.RecyclerView>
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>
