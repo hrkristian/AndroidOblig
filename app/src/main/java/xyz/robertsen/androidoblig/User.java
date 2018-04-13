@@ -26,21 +26,22 @@ import java.util.Map;
 
 public class User {
 
-    private final String username, fname, lname;
+
+    private final String fname, lname;
+    private final String usr;
     public static User authenticatedUser = null;
 
-    User(String username, String firstName, String lastName) {
-        this.username = username;
+    User(String usr, String firstName, String lastName) {
         this.fname = firstName;
         this.lname = lastName;
+        this.usr = usr;
     }
 
     String getName() {
         return fname.concat(" ").concat(lname);
     }
-
-    String getUsername() {
-        return username;
+    String getUsr() {
+        return usr;
     }
 
     static void setAuthenticatedUser(User user) {

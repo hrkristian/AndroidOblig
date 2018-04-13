@@ -53,11 +53,11 @@ public class HistoryActivity extends AppCompatActivity implements
             tabLegend.setText("Please click this log in to access your search history and pinned cards.");
         } else {
             // Check if local version of user exist, if not, create one mathcing authenticated user
-            if (!dbHelper.sqliteUserExists(HistoryActivity.authUser.getUsername())) {
-                System.out.println("CREATING USER " + HistoryActivity.authUser.getUsername());
-                dbHelper.sqliteCreateUser(HistoryActivity.authUser.getUsername());
+            if (!dbHelper.sqliteUserExists(HistoryActivity.authUser.getUsr())) {
+                System.out.println("CREATING USER " + HistoryActivity.authUser.getUsr());
+                dbHelper.sqliteCreateUser(HistoryActivity.authUser.getUsr());
             } else {
-                System.out.println("DID NOT CREATE USER " + HistoryActivity.authUser.getUsername());
+                System.out.println("DID NOT CREATE USER " + HistoryActivity.authUser.getUsr());
             }
             // Set up fragments, fragments handles requests data via LibAPI
             baseActivitySetup();
