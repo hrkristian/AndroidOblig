@@ -72,7 +72,7 @@ public class SearchHistoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
         // TODO Replace with User.authenticatedUser
-        recentSearchItems = RecentSearchItem.getRecentSearchesFromCursor(dbHelper.getRecentSearchesCursor(User.authenticatedUser.getUsr()));
+        recentSearchItems = RecentSearchItem.getRecentSearches(getContext());
         cardAdapter = new HistoryAdapter(this.getContext(), recentSearchItems);
 
         // Inflate the layout for this fragment

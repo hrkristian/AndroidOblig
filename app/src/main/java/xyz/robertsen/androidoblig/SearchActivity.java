@@ -44,6 +44,7 @@ public class SearchActivity extends AppCompatActivity {
     /**
      * Class variables
      */
+
     SearchView cardHitSearchView;
     RecyclerView recyclerSearchHits;
     SearchAdapter searchAdapter;

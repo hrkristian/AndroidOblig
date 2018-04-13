@@ -38,7 +38,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.RecentSe
     @Override
     public void onBindViewHolder(HistoryAdapter.RecentSearchHolder holder, int position) {
         RecentSearchItem item = recentSearchItems.get(position);
-        holder.twSearchString.setText(item.searchString);
+        holder.twSearchString.setText(item.getSearchString());
     }
 
     @Override
@@ -62,7 +62,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.RecentSe
         public void onClick(View view) {
             RecentSearchItem recentSearchItem = recentSearchItems.get(getAdapterPosition());
             Intent intent = new Intent(context, SearchActivity.class);
-            intent.putExtra("search_string", recentSearchItem.searchString);
+            intent.putExtra("search_string", recentSearchItem.getSearchString());
             context.startActivity(intent);
         }
     }

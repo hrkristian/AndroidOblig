@@ -1,5 +1,6 @@
 package xyz.robertsen.androidoblig;
 
+import android.content.Context;
 import android.database.Cursor;
 
 import java.util.ArrayList;
@@ -11,20 +12,32 @@ import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
  */
 
 public class RecentSearchItem {
-    String searchString, user;
+    private String searchString, user;
+    private static CardDatabaseOpenHelper dbHelper;
 
     public RecentSearchItem(String searchString, String user) {
         this.searchString = searchString;
         this.user = user;
     }
 
+    public String getSearchString() {
+        return searchString;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
     /**
-     * Take a Cursor as a parameter. Returns an ArrayList of the users recent searches.
-     *
-     * @param cursor
-     * @return ArrayList<RecentSearchItem>
+     * Gets recent search histor from the database.
+     * @param context
+     * @return
      */
-    public static ArrayList<RecentSearchItem> getRecentSearchesFromCursor(Cursor cursor) {
+    public static ArrayList<RecentSearchItem> getRecentSearches(Context context) {
+        if (dbHelper == null) {
+            dbHelper = new CardDatabaseOpenHelper(context);
+        }
+        Cursor cursor = dbHelper.getRecentSearchesCursor(User.authenticatedUser.getUsr());
         ArrayList<RecentSearchItem> recentSearchItems = new ArrayList<>();
 
         cursor.moveToFirst();
@@ -40,6 +53,20 @@ public class RecentSearchItem {
         }
         cursor.close();
         return recentSearchItems;
+    }
+
+    /**
+     * Adds a new RecentSearchItem to the database. Returns the sqlitedb storage id, or -1
+     * if error occured.
+     * @param context
+     * @param searchString
+     * @return
+     */
+    public static long addRecentSearchItem(Context context, String searchString) {
+        if (dbHelper == null) {
+            dbHelper = new CardDatabaseOpenHelper(context);
+        }
+        return dbHelper.dbAddRecentSearch(searchString, User.authenticatedUser.getUsr());
     }
 
     @Override
