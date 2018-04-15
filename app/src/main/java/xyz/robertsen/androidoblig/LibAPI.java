@@ -39,7 +39,8 @@ public class LibAPI {
         try {
             Log.i("JSON Request", json.toString(2));
 
-        } catch (JSONException e) {}
+        } catch (JSONException e) {
+        }
 
 
         RequestQueue volley = Volley.newRequestQueue(c);
@@ -81,6 +82,7 @@ public class LibAPI {
             }
             json.put("name", card.name);
             json.put("request", "sql");
+            json.put("usr", User.authenticatedUser.getUsr());
             switch (requestType) {
                 case CARD_GET:
                     json.put("sql", "select");
@@ -88,7 +90,6 @@ public class LibAPI {
                 case CARD_CREATE:
 //                    json.put("request", "sql");
                     json.put("sql", "create");
-                    json.put("usr", User.authenticatedUser.getUsr());
                     json.put("manaCost", card.mana);
                     json.put("cmc", card.cmc);
                     json.put("type", card.type);
@@ -115,6 +116,7 @@ public class LibAPI {
 
     interface RequestListener {
         void handlePinnedCardsResponse(JSONObject response);
+
         void handlePinnedCardsError(VolleyError error);
     }
 

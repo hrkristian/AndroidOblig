@@ -111,6 +111,9 @@ public class Card implements Serializable {
      * @throws JSONException
      */
     public static Card newCard(Context context, JSONObject jsonCard) throws JSONException {
+        JSONArray arrRulings = jsonCard.optJSONArray("rulings");
+        String strRulings = jsonCard.optString("rulings", "");
+
         return new Card(
                 context,
                 (jsonCard.has("name")) ? jsonCard.getString("name") : "",
@@ -121,7 +124,8 @@ public class Card implements Serializable {
                 (jsonCard.has("toughness")) ? jsonCard.getString("toughness") : "",
                 (jsonCard.has("text")) ? jsonCard.getString("text") : "",
                 (jsonCard.has("imageUrl")) ? jsonCard.getString("imageUrl") : "",
-                (jsonCard.has("rulings")) ? deArrayalize(context, jsonCard.getJSONArray("rulings")) : null
+                (arrRulings == null) ? strRulings : deArrayalize(context, arrRulings)
+//                (jsonCard.has("rulings")) ? deArrayalize(context, jsonCard.getJSONArray("rulings")) : null
         );
     }
 
@@ -191,6 +195,7 @@ public class Card implements Serializable {
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
+
 
     /*
         public Card(Context context,
