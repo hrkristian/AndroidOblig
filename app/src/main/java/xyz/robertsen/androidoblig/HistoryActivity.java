@@ -44,29 +44,24 @@ public class HistoryActivity extends AppCompatActivity implements
         init_tabs();
         tabLegend = findViewById(R.id.history_fragments_heading);
         // Checks for authenticated user
-        if (User.authenticatedUser == null) {
-            // If no auth. user, prompt and
-            // Maybe click to redirect and start Login fragment.
-            tabLegend.setText(R.string.please_log_in_for_history);
-        } else {
-            tabLegend.setText(R.string.click_item_to_search);
-            String username = User.authenticatedUser.getUsr();
-            // Check if local version of user exist, if not, create one mathcing authenticated user
-            if (!dbHelper.sqliteUserExists(username)) {
-                System.out.println("CREATING USER " + username);
-                dbHelper.sqliteCreateUser(username);
-            } else {
-                System.out.println("DID NOT CREATE USER " + username);
-            }
-            // Set up fragments, fragments handles requests data via LibAPI
-            baseActivitySetup();
 
-            if (savedInstanceState != null) {
-                tabPosSelected = savedInstanceState.getInt(TAB_POSITION);
-                TabLayout.Tab tab = tabLayout.getTabAt(tabPosSelected);
-                if (tab != null) {
-                    tab.select();
-                }
+        tabLegend.setText(R.string.click_item_to_search);
+        String username = User.authenticatedUser.getUsr();
+        // Check if local version of user exist, if not, create one mathcing authenticated user
+        if (!dbHelper.sqliteUserExists(username)) {
+            System.out.println("CREATING USER " + username);
+            dbHelper.sqliteCreateUser(username);
+        } else {
+            System.out.println("DID NOT CREATE USER " + username);
+        }
+        // Set up fragments, fragments handles requests data via LibAPI
+        baseActivitySetup();
+
+        if (savedInstanceState != null) {
+            tabPosSelected = savedInstanceState.getInt(TAB_POSITION);
+            TabLayout.Tab tab = tabLayout.getTabAt(tabPosSelected);
+            if (tab != null) {
+                tab.select();
             }
         }
     }

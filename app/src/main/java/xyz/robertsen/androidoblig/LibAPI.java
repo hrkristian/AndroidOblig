@@ -101,12 +101,10 @@ public class LibAPI {
                     json.put("pos", card.pos);
                     break;
                 case CARD_UPDATE:
-//                    json.put("request", "sql");
                     json.put("sql", "update");
                     json.put("position", card.pos);
                     break;
                 case CARD_DELETE:
-//                    json.put("request", "sql");
                     json.put("sql", "delete");
                     break;
             }
