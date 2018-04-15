@@ -2,24 +2,34 @@ package xyz.robertsen.androidoblig;
 
 import android.app.DialogFragment;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.android.volley.VolleyError;
+
+import org.json.JSONObject;
 
 /**
  * Created by kris on 29/03/18.
  */
 
-public class SearchCardFragment extends DialogFragment {
+public class SearchCardFragment extends DialogFragment implements LibAPI.RequestListener {
+    private static final String TAG = SearchCardFragment.class.getSimpleName();
     private static String ARG_CARD = "fragment_card";
-
+    private Drawable cardDrawable;
     private Card card;
     private ImageView image;
     private TextView title, type, mana, pt, text, rulings;
+    private ImageButton pinCardButton;
+    private SearchCardFragment fragment = this;
 
     public SearchCardFragment() {
 
@@ -29,7 +39,6 @@ public class SearchCardFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null)
             card = (Card)getArguments().getSerializable(ARG_CARD);
     }
@@ -40,11 +49,11 @@ public class SearchCardFragment extends DialogFragment {
         if (getDialog().getWindow() != null) {
             int width, height;
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                width = (int)(getResources().getDisplayMetrics().widthPixels * 0.8);
-                height = (int)(getResources().getDisplayMetrics().heightPixels * 0.6);
+                width = (int)(getResources().getDisplayMetrics().widthPixels * 0.9);
+                height = (int)(getResources().getDisplayMetrics().heightPixels * 0.9);
             } else {
-                width = (int)(getResources().getDisplayMetrics().widthPixels * 0.6);
-                height = (int)(getResources().getDisplayMetrics().heightPixels * 0.8);
+                width = (int)(getResources().getDisplayMetrics().widthPixels * 0.9);
+                height = (int)(getResources().getDisplayMetrics().heightPixels * 0.9);
             }
             getDialog().getWindow().setLayout(width, height);
         }
@@ -63,7 +72,7 @@ public class SearchCardFragment extends DialogFragment {
     }
 
     private void populateElements() {
-        image.setImageDrawable(getResources().getDrawable(R.drawable.icon_2)); // TODO
+        image.setImageDrawable(cardDrawable); // TODO
         title.setText(card.name);
         text.setText(card.text);
         rulings.setText(card.rules);
@@ -77,6 +86,13 @@ public class SearchCardFragment extends DialogFragment {
         pt = v.findViewById(R.id.text_search_frag_pt);
         text = v.findViewById(R.id.text_search_frag_text);
         rulings = v.findViewById(R.id.text_search_frag_rulings);
+        pinCardButton = v.findViewById(R.id.btn_pin_card);
+        pinCardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LibAPI.request(fragment, fragment.getActivity(), card, LibAPI.REQUEST.CARD_CREATE);
+            }
+        });
     }
 
     static SearchCardFragment newInstance(Card card) {
@@ -89,4 +105,19 @@ public class SearchCardFragment extends DialogFragment {
         return fragment;
     }
 
+    static SearchCardFragment newInstance(Card card, Drawable cardImage) {
+        SearchCardFragment fragment = SearchCardFragment.newInstance(card);
+        fragment.cardDrawable = cardImage;
+        return fragment;
+    }
+
+    @Override
+    public void handlePinnedCardsResponse(JSONObject response) {
+        Log.d(TAG, "handlePinnedCardsResponse: " +  response.toString());
+    }
+
+    @Override
+    public void handlePinnedCardsError(VolleyError error) {
+        error.printStackTrace();
+    }
 }
