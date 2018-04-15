@@ -98,11 +98,13 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
      * <p>
      * Class variables
      */
-    public class SearchHitHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class SearchHitHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener,
+            MtgApiRequestHandler.OnImageReceivedListener {
 
-        final ImageView image;
+        public final ImageView image;
         final TextView title, text;
-        SearchAdapter adapter;
+        public SearchAdapter adapter;
 
         public SearchHitHolder(View itemView, SearchAdapter adapter) {
             super(itemView);
@@ -124,6 +126,11 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Log.d(TAG, "onClick: ");
             FragmentTransaction ft = ((AppCompatActivity)context).getFragmentManager().beginTransaction();
             cardDialogFragment.show(ft, "cardDialog");
+        }
+
+        @Override
+        public void updateViewHolder(Drawable drawable) {
+            image.setImageDrawable(drawable);
         }
     }
 

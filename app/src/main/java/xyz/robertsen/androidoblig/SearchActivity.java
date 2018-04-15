@@ -4,7 +4,6 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,8 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.android.volley.Request;
@@ -29,17 +26,15 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SearchActivity extends AppCompatActivity implements
         SearchView.OnQueryTextListener,
-        LibAPI.RequestListener {
+        MtgApiRequestHandler.MtgApiResponseListener {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
 
@@ -49,7 +44,7 @@ public class SearchActivity extends AppCompatActivity implements
     SearchView cardHitSearchView;
     RecyclerView recyclerSearchHits;
     SearchAdapter searchAdapter;
-    RequestHandler requestHandler;
+    MtgApiRequestHandler requestHandler;
 
     // TODO HANDLE CONFIGURATION CHANGES, FLIP PHONE ETC
     // TODO, DO NOT ADD TO BACKSTACK
@@ -58,7 +53,7 @@ public class SearchActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_card);
 
-        requestHandler = new RequestHandler();
+        requestHandler = new MtgApiRequestHandler(this);
         /**
          * Initalizing
          */
@@ -96,8 +91,7 @@ public class SearchActivity extends AppCompatActivity implements
             RecentSearchItem.addRecentSearchItem(this, searchString);
 
         requestHandler.sendRequest(
-                searchString
-
+                searchString, this
         );
         Log.d(TAG, "handleIntent");
     }
@@ -129,7 +123,7 @@ public class SearchActivity extends AppCompatActivity implements
             recyclerSearchHits.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
             // Load images as they arrive
-            getImageFromURL(cards, cardImages);
+            requestHandler.getImagesFromUrl(recyclerSearchHits, cards, cardImages);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -154,15 +148,14 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void handlePinnedCardsResponse(JSONObject response) {
-        System.out.println(response.toString());
+    public void handleMtgApiResponse(String response) {
+        generateCardView(response);
     }
 
     @Override
-    public void handlePinnedCardsError(VolleyError error) {
+    public void handleMtgApiError(VolleyError error) {
         error.printStackTrace();
     }
-
 
     /**
      * RequestHandler, for sending and receiving requests
