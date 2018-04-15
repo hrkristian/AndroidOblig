@@ -27,12 +27,12 @@ public class Card implements Serializable {
     Context context;
 
     String name;
-    SpannableStringBuilder mana;
+    String mana;
     String cmc; // ConvertedManaCost
     String type;
     String stats;
     String power, toughness;
-    SpannableStringBuilder text;
+    String text;
     String rules;
     String imageUrl;
     int pos;
@@ -48,16 +48,40 @@ public class Card implements Serializable {
 
 
         this.name = context.getResources().getString(R.string.cardTitlePlaceholder, name);
-        this.mana = symbolParser(mana);
+        this.mana =mana; // getter SpannableStringBuilder
         this.cmc = cmc;
-        this.type = context.getResources().getString(R.string.cardTypePlaceholder, type);
-        this.text = symbolParser(text);
+        this.type = type;
+        this.text = text; // getter SpannableStringBuiler
         this.power = power;
         this.toughness = toughness;
         this.stats = context.getResources().getString(R.string.cardStatsPlaceholder, power, toughness);
         this.rules = rulings;
         this.imageUrl = imageUrl;
     }
+    public Card(Context context,
+                String name, String mana, String cmc, String type, String power, String toughness,
+                String text, String imageUrl, String rulings, int pos) {
+        this(context, name, mana, cmc, type, power, toughness, text, imageUrl, rulings);
+        this.pos = pos;
+    }
+
+    /**
+     * Returns the card text, spanned
+     * @return text
+     */
+    SpannableStringBuilder getSpanText() {
+        return symbolParser(text);
+    }
+
+    /**
+     * Returns the card's mana cost, spanned
+     * @return
+     */
+    SpannableStringBuilder getSpanManaCost() {
+        return symbolParser(text);
+    }
+
+
 
     /**
      * Returns the String representation of the
@@ -96,10 +120,11 @@ public class Card implements Serializable {
                 (jsonCard.has("power")) ? jsonCard.getString("power") : "",
                 (jsonCard.has("toughness")) ? jsonCard.getString("toughness") : "",
                 (jsonCard.has("text")) ? jsonCard.getString("text") : "",
-                (jsonCard.has("imageUrl")) ? jsonCard.getString("imageUrl") : "defImageUrl",
+                (jsonCard.has("imageUrl")) ? jsonCard.getString("imageUrl") : "",
                 (jsonCard.has("rulings")) ? deArrayalize(context, jsonCard.getJSONArray("rulings")) : null
         );
     }
+
 
     private SpannableStringBuilder symbolParser(String source) {
         SpannableStringBuilder bulider = new SpannableStringBuilder("");
@@ -118,6 +143,7 @@ public class Card implements Serializable {
         }
         return bulider;
     }
+
 
 
     private class Ruling {
@@ -172,42 +198,42 @@ public class Card implements Serializable {
                     String text, String imageUrl, JSONArray rules) {
             this.context = context;
     */
-    public static ArrayList<Card> getSampleCards(Context c) throws JSONException {
-        ArrayList<Card> cards = new ArrayList<>();
-        String cardName = "";
-        for (int i = 0; i < cardNames.length; i++) {
-            cards.add(new Card(
-                    c,
-                    cardNames[i],
-                    "{2}{U}{U}",
-                    "4",
-                    "Jace",
-                    "3",
-                    "3",
-                    "+2: Look at the top card of target player's library. You may put that card on the bottom of that player's library\n+0: Draw three cards, then put two cards from your hand on top of your library in any order.\n−1: Return target creature to its owner's hand.\n−12: Exile all cards from target player's library, then that player shuffles his or her hand into his or her library.",
-                    "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413599&type=card",
-                    "def")
-            );
-        }
-        return cards;
-    }
-
-    private static String[] cardNames = {
-            "Jace Beleren",
-            "Goblin Guide",
-            "Nissa",
-            "Goblin Grenade",
-            "Inkmoth",
-            "Gurmag Angler",
-            "Setessan",
-            "Hero's Downfall",
-            "Mordi",
-            "Monastery Swiftspear",
-            "Tormod",
-            "Island",
-            "Mountain",
-            "Plains",
-            "Forest",
-            "Swamp"
-    };
+//    public static ArrayList<Card> getSampleCards(Context c) throws JSONException {
+//        ArrayList<Card> cards = new ArrayList<>();
+//        String cardName = "";
+//        for (int i = 0; i < cardNames.length; i++) {
+//            cards.add(new Card(
+//                    c,
+//                    cardNames[i],
+//                    "{2}{U}{U}",
+//                    "4",
+//                    "Jace",
+//                    "3",
+//                    "3",
+//                    "+2: Look at the top card of target player's library. You may put that card on the bottom of that player's library\n+0: Draw three cards, then put two cards from your hand on top of your library in any order.\n−1: Return target creature to its owner's hand.\n−12: Exile all cards from target player's library, then that player shuffles his or her hand into his or her library.",
+//                    "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413599&type=card",
+//                    "def")
+//            );
+//        }
+//        return cards;
+//    }
+//
+//    private static String[] cardNames = {
+//            "Jace Beleren",
+//            "Goblin Guide",
+//            "Nissa",
+//            "Goblin Grenade",
+//            "Inkmoth",
+//            "Gurmag Angler",
+//            "Setessan",
+//            "Hero's Downfall",
+//            "Mordi",
+//            "Monastery Swiftspear",
+//            "Tormod",
+//            "Island",
+//            "Mountain",
+//            "Plains",
+//            "Forest",
+//            "Swamp"
+//    };
 }

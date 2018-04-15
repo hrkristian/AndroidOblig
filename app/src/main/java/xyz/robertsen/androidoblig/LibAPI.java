@@ -83,14 +83,12 @@ public class LibAPI {
             json.put("request", "sql");
             switch (requestType) {
                 case CARD_GET:
-
                     json.put("sql", "select");
                     break;
                 case CARD_CREATE:
 //                    json.put("request", "sql");
                     json.put("sql", "create");
-
-                    json.put("name", card.name);
+                    json.put("usr", User.authenticatedUser.getUsr());
                     json.put("manaCost", card.mana);
                     json.put("cmc", card.cmc);
                     json.put("type", card.type);
@@ -99,6 +97,7 @@ public class LibAPI {
                     json.put("text", card.text);
                     json.put("imgUrl", card.imageUrl);
                     json.put("rulings", card.rules);
+                    json.put("pos", card.pos);
                     break;
                 case CARD_UPDATE:
 //                    json.put("request", "sql");
@@ -116,7 +115,6 @@ public class LibAPI {
 
     interface RequestListener {
         void handlePinnedCardsResponse(JSONObject response);
-
         void handlePinnedCardsError(VolleyError error);
     }
 

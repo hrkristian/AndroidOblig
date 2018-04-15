@@ -37,7 +37,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class SearchActivity extends AppCompatActivity implements
+        SearchView.OnQueryTextListener,
+        LibAPI.RequestListener {
 
     private static final String TAG = SearchActivity.class.getSimpleName();
 
@@ -64,6 +66,37 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         cardHitSearchView.setOnQueryTextListener(this);
         recyclerSearchHits = findViewById(R.id.card_recycler_cardHits);
 
+        // Testing LibAPI cardCreate()
+        // Creating a sample-card
+        Card card = new Card(
+                this,
+                "Goblin Guide",
+                "R",
+                "1",
+                "Creature - Goblin Scout",
+                "2",
+                "2",
+                "Haste\nWhenever Goblin Guide attacks, defending player the top card of his or her library. If it's a land card, that player puts it into his or her hand",
+                "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=425921&type=card",
+                "placeholder rulings",
+                2
+        );
+        Card card2 = new Card(
+                this,
+                "Unwilling Test Subject",
+                "RUBWG",
+                "1",
+                "Creature - Goblin Scout",
+                "2",
+                "2",
+                "Haste\nWhenever Goblin Guide attacks, defending player the top card of his or her library. If it's a land card, that player puts it into his or her hand",
+                "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=425921&type=card",
+                "placeholder rulings",
+                3
+        );
+        // TODO - Fix API, something fucky with insert.
+        LibAPI.request(this,this, card, LibAPI.REQUEST.CARD_CREATE); // Request Failed
+        LibAPI.request(this,this, card2, LibAPI.REQUEST.CARD_CREATE); // Request Failed
 
         /**
          * Checks device orentation, if "landscape" -> Runs SetHorizontalOffsets-method
@@ -150,6 +183,16 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     @Override
     public boolean onQueryTextChange(String s) {
         return false;
+    }
+
+    @Override
+    public void handlePinnedCardsResponse(JSONObject response) {
+        System.out.println(response.toString());
+    }
+
+    @Override
+    public void handlePinnedCardsError(VolleyError error) {
+        error.printStackTrace();
     }
 
 

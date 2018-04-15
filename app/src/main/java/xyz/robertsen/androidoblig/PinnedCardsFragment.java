@@ -64,6 +64,8 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
         cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards);
         itemTouchHelper = getItemTouchHelper();
 
+        LibAPI.request(this, this.getContext(), new Card(), LibAPI.REQUEST.CARD_GET);
+
         // Fragment is retained across Activity re-creation
         setRetainInstance(true);
 
@@ -160,15 +162,17 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
         return itemTouchHelper;
     }
 
-    public void onNoAuthentication() {
-    }
-
     @Override
     public void handlePinnedCardsResponse(JSONObject response) {
         pinnedCards = new ArrayList<>();
         try {
             Log.d(TAG, response.toString(2));
-            JSONArray data = response.getJSONArray("cards");
+            JSONArray data;
+            if (response.has("cards"))
+                Log.d(TAG, "handlePinnedCardsResponse: got cards");
+            else
+                Log.d(TAG, "handlePinnedCardsResponse: got no cards");
+            data = response.getJSONArray("cards");
             for (int i = 0; i < data.length(); i++) {
                 pinnedCards.add(Card.newCard(getContext(), data.getJSONObject(i)));
                 cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards);
@@ -183,7 +187,7 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
 
     @Override
     public void handlePinnedCardsError(VolleyError error) {
-
+        error.printStackTrace();
     }
 
     ////////////////////////////////////////////////

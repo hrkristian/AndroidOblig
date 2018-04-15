@@ -277,7 +277,15 @@ public class MainActivity extends AppCompatActivity
 
     private void initSearchView() {
         SearchView searchView = findViewById(R.id.search_main_cardSearch);
-        searchView.setOnQueryTextListener(this);
+//        TextView textView = findViewById(R.id.search_main_no_authenticated);
+//        if (User.authenticatedUser == null) {
+//            textView.setVisibility(View.VISIBLE);
+//            searchView.setVisibility(View.GONE);
+//        } else {
+//            textView.setVisibility(View.GONE);
+//            searchView.setVisibility(View.VISIBLE);
+            searchView.setOnQueryTextListener(this);
+//        }
     }
 
     private class EventActions {
