@@ -23,6 +23,9 @@ import java.util.Map;
  * Created by gitsieg on 15.04.18.
  */
 
+/**
+ * This class handles requesting Card-data and images from external api's
+ */
 public class MtgApiRequestHandler {
     private final static String TAG = MtgApiRequestHandler.class.getSimpleName();
     final Context context;
@@ -35,6 +38,12 @@ public class MtgApiRequestHandler {
         BASE_URL = "https://api.magicthegathering.io/v1/cards?name=";
     }
 
+    /**
+     * Requests cards from Mtg-api. Takes a cardname and a MtgApiResponseListener as an argument.
+     * Objects using this method must supply a listener
+     * @param request requested card
+     * @param listener object that handles the response
+     */
     public void sendRequest(String request, final MtgApiResponseListener listener) {
         Log.d(TAG, "sendRequest");
         StringRequest stringRequest = new StringRequest(
@@ -58,16 +67,27 @@ public class MtgApiRequestHandler {
         REQUEST_QUEUE.add(stringRequest);
     }
 
+    /**
+     * Interface for handling responses from the MtgApi
+     */
     public interface MtgApiResponseListener {
         void handleMtgApiResponse(String response);
-
         void handleMtgApiError(VolleyError error);
     }
 
+    /**
+     * Interface for updating RecyclerView.ViewHolder objects asynchronously
+     */
     interface OnImageReceivedListener {
         void updateViewHolder(Drawable drawable);
     }
 
+    /**
+     * Takes a RecyclerView, list of Card-objects and a Map<Integer, Drawable>
+     * @param recyclerView
+     * @param cards
+     * @param cardImages
+     */
     public synchronized void getImagesFromUrl(RecyclerView recyclerView, List<Card> cards, Map<Integer, Drawable> cardImages) {
         ImageFromUrlFetcher imgFetcher = new ImageFromUrlFetcher(context, recyclerView, cards, cardImages);
         imgFetcher.getImagesFromUrl();
