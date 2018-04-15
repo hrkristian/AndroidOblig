@@ -187,7 +187,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     /* ------------ Activities and fragments ----------- */
-    public void spawnSearchActivity(View view) {
+    public void spawnHistoryActivity(View view) {
+        if (!User.isAuthenticated()) {
+            eventActions.spawnUserFragment(R.layout.fragment_user);
+            return;
+        }
         Intent intent = new Intent(this, HistoryActivity.class);
         eventActions.spawnActivity(intent);
     }
@@ -296,11 +300,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         private void rollDice() {
-            LibAPI.request(
-                    (LibAPI.RequestListener) c,
-                    c,
-                    new Card(),
-                    LibAPI.REQUEST.CARD_GET);
             spawnActionView(findViewById(R.id.main_fab_settings));
             String diceText = "Terningkast: "
                     .concat(Integer.toString((int) (Math.random() * 6 + 1)));

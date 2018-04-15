@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 
 /**
@@ -86,6 +87,9 @@ public class UserFragment extends DialogFragment {
                     );
                 }
             });
+        } else {
+            ((TextView)v.findViewById(R.id.text_userauth_title))
+                    .setText("Velkommen\n".concat(User.authenticatedUser.getName()));
         }
 
         v.findViewById(R.id.button_user_cancel).setOnClickListener(new View.OnClickListener() {
