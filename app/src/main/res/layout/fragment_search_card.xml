@@ -23,7 +23,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="title"
+        android:text="name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView_search_frag_image"
         app:layout_constraintTop_toTopOf="parent" />
@@ -65,6 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_search_frag_mana" />
 
     <ScrollView
+        android:id="@+id/scrollView_search_frag"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
@@ -72,7 +73,7 @@
         android:layout_marginStart="8dp"
 
         android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_pin_card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView_search_frag_image">
@@ -94,6 +95,19 @@
                 android:layout_height="wrap_content"
                 android:text="rulings" />
         </LinearLayout>
-
     </ScrollView>
+
+    <ImageButton
+        android:id="@+id/btn_pin_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/pin_search_icon"
+        android:contentDescription="Button for pinning a card"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.975"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scrollView_search_frag"
+        app:layout_constraintVertical_bias="1.0" />
 </android.support.constraint.ConstraintLayout>

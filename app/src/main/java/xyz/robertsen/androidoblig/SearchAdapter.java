@@ -1,8 +1,12 @@
 package xyz.robertsen.androidoblig;
 
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +24,9 @@ import java.util.Map;
  */
 
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final String TAG = SearchAdapter.class.getSimpleName();
+
     /**
      * Class-variables
      */
@@ -104,11 +111,19 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             title = itemView.findViewById(R.id.card_cardhits_title);
             text = itemView.findViewById(R.id.card_cardhits_text);
             this.adapter = adapter;
+            itemView.setOnClickListener(this);
+
         }
 
         @Override
         public void onClick(View view) {
-            // TODO
+            // TODO Spawn SearchCardFragment
+            int adapterPos = getAdapterPosition();
+            Card thisCard = cards.get(adapterPos);
+            DialogFragment cardDialogFragment = SearchCardFragment.newInstance(thisCard, image.getDrawable());
+            Log.d(TAG, "onClick: ");
+            FragmentTransaction ft = ((AppCompatActivity)context).getFragmentManager().beginTransaction();
+            cardDialogFragment.show(ft, "cardDialog");
         }
     }
 

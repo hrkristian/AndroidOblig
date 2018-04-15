@@ -89,12 +89,12 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
         if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setRecyclerHorizontalOffsets();
         }
-//        LibAPI.request(
-//                this,
-//                getContext(),
-//                new Card(),
-//                LibAPI.REQUEST.CARD_GET
-//        );
+        LibAPI.request(
+                this,
+                getContext(),
+                new Card(),
+                LibAPI.REQUEST.CARD_GET
+        );
         return view;
     }
 
