@@ -77,7 +77,6 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     private void handleIntent(Intent intent) {
-
         String searchString;
         if (!Intent.ACTION_SEARCH.equals(intent.getAction())) {
             searchString = intent.getStringExtra("search_string");

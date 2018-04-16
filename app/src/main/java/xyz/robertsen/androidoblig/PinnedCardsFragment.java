@@ -68,8 +68,6 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
 
         // Fragment is retained across Activity re-creation
         setRetainInstance(true);
-
-
     }
 
     @Override
