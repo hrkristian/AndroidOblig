@@ -14,8 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -119,10 +117,10 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         @Override
         public void onClick(View view) {
-            // TODO Spawn SearchCardFragment
+            // TODO Spawn CardDialogFragment
             int adapterPos = getAdapterPosition();
             Card thisCard = cards.get(adapterPos);
-            DialogFragment cardDialogFragment = SearchCardFragment.newInstance(thisCard, image.getDrawable());
+            DialogFragment cardDialogFragment = CardDialogFragment.newInstance(thisCard, image.getDrawable());
             Log.d(TAG, "onClick: ");
             FragmentTransaction ft = ((AppCompatActivity)context).getFragmentManager().beginTransaction();
             cardDialogFragment.show(ft, "cardDialog");
