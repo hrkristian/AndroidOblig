@@ -45,8 +45,8 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
     private PinnedCardAdapter cardAdapter;
     private ItemTouchHelper itemTouchHelper;
     private MtgApiRequestHandler requestHandler;
-    int dragDirections = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-    int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
+    int dragDirections = ItemTouchHelper.DOWN;
+    int swipeDirections = ItemTouchHelper.END;
     private OnFragmentInteractionListener mListener;
 
     public PinnedCardsFragment() {
@@ -146,9 +146,7 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 int from = viewHolder.getAdapterPosition();
                 int to = target.getAdapterPosition();
-                Collections.swap(pinnedCards, from, to);
                 cardAdapter.notifyItemMoved(from, to);
-
                 // TODO: Query database, change card indexes
                 return false;
             }
@@ -156,7 +154,7 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int pos = viewHolder.getAdapterPosition();
-                pinnedCards.remove(pos);
+                LibAPI.request(PinnedCardsFragment.this, getContext(), pinnedCards.remove(pos), LibAPI.REQUEST.CARD_DELETE);
                 cardAdapter.notifyItemRemoved(pos);
             }
         });
@@ -165,24 +163,26 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
 
     @Override
     public void handlePinnedCardsResponse(JSONObject response) {
-        pinnedCards = new ArrayList<>();
-        Map<Integer, Drawable> cardImages = new HashMap<>();
         try {
-            Log.d(TAG, "handlePinnedCardsResponse: " + response.toString(2));
-            JSONArray data;
-            if (response.has("cards"))
+            if (response.has("cards")) {
                 Log.d(TAG, "handlePinnedCardsResponse: got cards");
-            else
-                Log.d(TAG, "handlePinnedCardsResponse: got no cards");
-            data = response.getJSONArray("cards");
-            for (int i = 0; i < data.length(); i++) {
-                pinnedCards.add(Card.newCard(getContext(), data.getJSONObject(i)));
-
+                processPinnedCards(response);
             }
-
-            Log.d(TAG, pinnedCards.toString());
+            Log.d(TAG, "handlePinnedCardsResponse: " + response.toString(2));
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+
+    }
+
+    private void processPinnedCards(JSONObject response) throws JSONException {
+        pinnedCards = new ArrayList<>();
+        Map<Integer, Drawable> cardImages = new HashMap<>();
+        JSONArray data;
+        data = response.getJSONArray("cards");
+        for (int i = 0; i < data.length(); i++) {
+            pinnedCards.add(Card.newCard(getContext(), data.getJSONObject(i)));
         }
         cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards, cardImages);
         recyclerPinned.setAdapter(cardAdapter);
