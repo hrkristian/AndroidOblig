@@ -76,6 +76,9 @@ public class SearchCardFragment extends DialogFragment implements LibAPI.Request
         title.setText(card.name);
         text.setText(card.text);
         rulings.setText(card.rules);
+        if (User.authenticatedUser == null) {
+            pinCardButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void findElements(View v) {
