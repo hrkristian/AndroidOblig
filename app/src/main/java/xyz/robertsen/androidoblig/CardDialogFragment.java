@@ -106,8 +106,9 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                card.notes = notes.getText().toString();
                 LibAPI.request(fragment, fragment.getActivity(), card, LibAPI.REQUEST.CARD_CREATE);
+                fragment.dismiss();
             }
         });
     }
