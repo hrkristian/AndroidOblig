@@ -105,21 +105,6 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
          */
         @Override
         public void onClick(final View view) {
-            int viewID = view.getId();
-            int adapterPos = getAdapterPosition();
-            Card thisCard = cardArrayList.get(adapterPos);
-//            if (viewID == RecentSearchesTable.id.search_pin_btn) {
-//                view.animate().alpha(0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
-//                    @Override
-//                    public void onAnimationEnd(Animator animation) {
-//                        view.setVisibility(View.GONE);
-//                    }
-//                });
-//                ((HistoryActivity)context).onCardsPinned(thisCard.name);
-//            } else {
-            Intent intent = new Intent(context, SearchActivity.class);
-            intent.putExtra("search_string", thisCard.name);
-            context.startActivity(intent);
         }
 
         @Override
