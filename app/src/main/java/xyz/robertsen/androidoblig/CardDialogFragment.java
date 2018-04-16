@@ -21,17 +21,17 @@ import org.json.JSONObject;
  * Created by kris on 29/03/18.
  */
 
-public class SearchCardFragment extends DialogFragment implements LibAPI.RequestListener {
-    private static final String TAG = SearchCardFragment.class.getSimpleName();
+public class CardDialogFragment extends DialogFragment implements LibAPI.RequestListener {
+    private static final String TAG = CardDialogFragment.class.getSimpleName();
     private static String ARG_CARD = "fragment_card";
-    private Drawable cardDrawable;
+    private Drawable cardDrawable = null;
     private Card card;
     private ImageView image;
     private TextView title, type, mana, pt, text, rulings;
     private ImageButton pinCardButton;
-    private SearchCardFragment fragment = this;
+    private CardDialogFragment fragment = this;
 
-    public SearchCardFragment() {
+    public CardDialogFragment() {
 
     }
 
@@ -72,10 +72,14 @@ public class SearchCardFragment extends DialogFragment implements LibAPI.Request
     }
 
     private void populateElements() {
-        image.setImageDrawable(cardDrawable); // TODO
         title.setText(card.name);
+        mana.setText(card.mana);
+        type.setText(card.type);
+        pt.setText(card.power.concat("/").concat(card.toughness));
         text.setText(card.text);
         rulings.setText(card.rules);
+        if (cardDrawable != null)
+            image.setImageDrawable(cardDrawable);
     }
 
     private void findElements(View v) {
@@ -95,8 +99,8 @@ public class SearchCardFragment extends DialogFragment implements LibAPI.Request
         });
     }
 
-    static SearchCardFragment newInstance(Card card) {
-        SearchCardFragment fragment = new SearchCardFragment();
+    static CardDialogFragment newInstance(Card card) {
+        CardDialogFragment fragment = new CardDialogFragment();
 
         Bundle args = new Bundle();
         args.putSerializable(ARG_CARD, card);
@@ -105,8 +109,8 @@ public class SearchCardFragment extends DialogFragment implements LibAPI.Request
         return fragment;
     }
 
-    static SearchCardFragment newInstance(Card card, Drawable cardImage) {
-        SearchCardFragment fragment = SearchCardFragment.newInstance(card);
+    static CardDialogFragment newInstance(Card card, Drawable cardImage) {
+        CardDialogFragment fragment = CardDialogFragment.newInstance(card);
         fragment.cardDrawable = cardImage;
         return fragment;
     }

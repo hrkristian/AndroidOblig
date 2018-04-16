@@ -67,8 +67,6 @@ public class LibAPI {
 
     /**
      * Builds the request string sent to the User API.
-     * todo- Update does nothing, create is not complete
-     *
      * @param card        The card model
      * @param requestType The request type made to the server
      * @return The completed request string
