@@ -96,10 +96,8 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     private void generateCardView(String JSONString) {
-        Log.d(TAG, "generateCardView");
         List<Card> cards = new ArrayList<>();
         Map<Integer, Drawable> cardImages = new HashMap<>();
-
         try {
             JSONObject tmp = new JSONObject(JSONString), item;
             JSONArray json;
@@ -108,7 +106,6 @@ public class SearchActivity extends AppCompatActivity implements
                 json = tmp.getJSONArray("card");
             } else {
                 json = tmp.getJSONArray("cards");
-//                System.out.println(json.toString(2));
             }
 
             for (int i = 0; i < json.length(); i++) {
@@ -117,13 +114,11 @@ public class SearchActivity extends AppCompatActivity implements
             }
 
             searchAdapter = new SearchAdapter(this, cards, cardImages);
-
             recyclerSearchHits.setAdapter(searchAdapter);
             recyclerSearchHits.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
             // Load images as they arrive
             requestHandler.getImagesFromUrl(recyclerSearchHits, cards, cardImages);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
