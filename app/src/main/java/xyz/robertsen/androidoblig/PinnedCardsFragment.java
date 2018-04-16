@@ -3,6 +3,7 @@ package xyz.robertsen.androidoblig;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 
@@ -41,6 +44,7 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
     private RecyclerView recyclerPinned;
     private PinnedCardAdapter cardAdapter;
     private ItemTouchHelper itemTouchHelper;
+    private MtgApiRequestHandler requestHandler;
     int dragDirections = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
     int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
     private OnFragmentInteractionListener mListener;
@@ -61,9 +65,8 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards);
         itemTouchHelper = getItemTouchHelper();
-
+        requestHandler = new MtgApiRequestHandler(this.getContext());
         LibAPI.request(this, this.getContext(), new Card(), LibAPI.REQUEST.CARD_GET);
 
         // Fragment is retained across Activity re-creation
@@ -163,8 +166,9 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
     @Override
     public void handlePinnedCardsResponse(JSONObject response) {
         pinnedCards = new ArrayList<>();
+        Map<Integer, Drawable> cardImages = new HashMap<>();
         try {
-            Log.d(TAG, response.toString(2));
+            Log.d(TAG, "handlePinnedCardsResponse: " + response.toString(2));
             JSONArray data;
             if (response.has("cards"))
                 Log.d(TAG, "handlePinnedCardsResponse: got cards");
@@ -173,14 +177,17 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
             data = response.getJSONArray("cards");
             for (int i = 0; i < data.length(); i++) {
                 pinnedCards.add(Card.newCard(getContext(), data.getJSONObject(i)));
-                cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards);
-                recyclerPinned.setAdapter(cardAdapter);
-                recyclerPinned.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
             }
+
             Log.d(TAG, pinnedCards.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards, cardImages);
+        recyclerPinned.setAdapter(cardAdapter);
+        recyclerPinned.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        requestHandler.getImagesFromUrl(recyclerPinned, pinnedCards, cardImages);
     }
 
     @Override

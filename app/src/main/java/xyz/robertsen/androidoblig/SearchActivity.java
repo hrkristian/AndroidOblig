@@ -96,10 +96,8 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     private void generateCardView(String JSONString) {
-        Log.d(TAG, "generateCardView");
         List<Card> cards = new ArrayList<>();
         Map<Integer, Drawable> cardImages = new HashMap<>();
-
         try {
             JSONObject tmp = new JSONObject(JSONString), item;
             JSONArray json;
@@ -108,7 +106,6 @@ public class SearchActivity extends AppCompatActivity implements
                 json = tmp.getJSONArray("card");
             } else {
                 json = tmp.getJSONArray("cards");
-//                System.out.println(json.toString(2));
             }
 
             for (int i = 0; i < json.length(); i++) {
@@ -117,17 +114,14 @@ public class SearchActivity extends AppCompatActivity implements
             }
 
             searchAdapter = new SearchAdapter(this, cards, cardImages);
-
             recyclerSearchHits.setAdapter(searchAdapter);
             recyclerSearchHits.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
             // Load images as they arrive
             requestHandler.getImagesFromUrl(recyclerSearchHits, cards, cardImages);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -157,85 +151,6 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     /**
-     * RequestHandler, for sending and receiving requests
-     */
-    private class RequestHandler {
-        final String BASE_URL;
-        final RequestQueue REQUEST_QUEUE;
-
-        private RequestHandler() {
-            REQUEST_QUEUE = Volley.newRequestQueue(getApplicationContext());
-            BASE_URL = "https://api.magicthegathering.io/v1/cards?name=";
-        }
-
-        void sendRequest(String request) {
-            Log.d(TAG, "sendRequest");
-            StringRequest stringRequest = new StringRequest(
-                    Request.Method.GET,
-                    BASE_URL.concat(request),
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d(TAG, "onResponse + ");
-                            generateCardView(response);
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            System.out.println(error.getMessage());
-                            // TODO
-                        }
-                    }
-            );
-            REQUEST_QUEUE.add(stringRequest);
-        }
-    }
-
-    /**
-     * Fetches and generates the linked image asychronously on a new thread,
-     * in order to not lock the main thread
-     *
-     * @param cards
-     * @param cardImages
-     */
-    private void getImageFromURL(final List<Card> cards, final Map<Integer, Drawable> cardImages) {
-        new Thread() {
-            public void run() {
-                for (int i = 0; i < cards.size(); i++) {
-                    final int pos = i;
-                    try {
-                        URL url = new URL(cards.get(i).imageUrl);
-                        InputStream stream = (InputStream) url.getContent();
-                        Drawable img = Drawable.createFromStream(stream, null);
-
-                        cardImages.put(pos, img);
-                    } catch (IOException e) {
-                        // Catching IOException handles both URL, InputStream,
-                        // and createFromStream exceptions
-                        e.printStackTrace();
-                        System.out.println("Problem URL: ".concat(cards.get(i).imageUrl));
-                        cardImages.put(pos, getResources().getDrawable(R.drawable.icon_2));
-                    } finally {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Because the currently active Viewholder(s) might need to be updated
-                                SearchAdapter.SearchHitHolder v =
-                                        (SearchAdapter.SearchHitHolder)
-                                                recyclerSearchHits.findViewHolderForAdapterPosition(pos);
-                                if (v != null) {
-                                    v.image.setImageDrawable(cardImages.get(pos));
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-        }.start();
-    }
-
-    /**
      * Sets Horizintal Offsets in RecycleView
      */
     private void setRecyclerHorizontalOffsets() {
@@ -250,6 +165,5 @@ public class SearchActivity extends AppCompatActivity implements
                 outRect.set(sidePad, 0, sidePad, 0);
             }
         });
-
     }
 }

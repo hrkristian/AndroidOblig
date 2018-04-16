@@ -78,8 +78,14 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
         pt.setText(card.power.concat("/").concat(card.toughness));
         text.setText(card.text);
         rulings.setText(card.rules);
+
         if (cardDrawable != null)
             image.setImageDrawable(cardDrawable);
+
+        if (User.authenticatedUser == null) {
+            pinCardButton.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     private void findElements(View v) {

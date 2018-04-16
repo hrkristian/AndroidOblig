@@ -35,9 +35,6 @@ public class SearchHistoryFragment extends Fragment {
     ArrayList<RecentSearchItem> recentSearchItems;
     private RecyclerView recyclerRecent;
     private HistoryAdapter cardAdapter;
-    int dragDirections = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-    int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
-    private ItemTouchHelper itemTouchHelper;
     OnFragmentInteractionListener mListener;
 
     public SearchHistoryFragment() {
@@ -61,7 +58,6 @@ public class SearchHistoryFragment extends Fragment {
 //        for (int i = 0; i < 20; i++) {
 //            Log.d(TAG, dbHelper.dbAddRecentSearch("Nikolai strings " + i , HistoryActivity.authUser.getUsername()) + "");
 //        }
-        itemTouchHelper = getItemTouchHelper();
 
         // Fragment is retained across Activity re-creation
         setRetainInstance(true);
@@ -80,7 +76,6 @@ public class SearchHistoryFragment extends Fragment {
         recyclerRecent = view.findViewById(R.id.recycler_recent_cards);
         recyclerRecent.setAdapter(cardAdapter);
         recyclerRecent.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        itemTouchHelper.attachToRecyclerView(recyclerRecent);
 
         // Ensures that the CardViews in the recycler view is centered when the layout is horizontal
         if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -114,38 +109,6 @@ public class SearchHistoryFragment extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
-    /**
-     * Returns a Item
-     *
-     * @return ItemTouchHelper for use on a RecyclerView
-     */
-    public ItemTouchHelper getItemTouchHelper() {
-
-        itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(dragDirections, swipeDirections) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                int from = viewHolder.getAdapterPosition();
-                int to = target.getAdapterPosition();
-                Collections.swap(recentSearchItems, from, to);
-                cardAdapter.notifyItemMoved(from, to);
-
-                // TODO: Query database, change card indexes
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                int pos = viewHolder.getAdapterPosition();
-                recentSearchItems.remove(pos);
-                cardAdapter.notifyItemRemoved(pos);
-            }
-        });
-
-        return itemTouchHelper;
-    }
-
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
