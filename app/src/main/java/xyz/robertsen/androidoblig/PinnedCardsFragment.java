@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
     private PinnedCardAdapter cardAdapter;
     private ItemTouchHelper itemTouchHelper;
     private MtgApiRequestHandler requestHandler;
-    int dragDirections = ItemTouchHelper.DOWN;
+    int dragDirections = 0;
     int swipeDirections = ItemTouchHelper.END;
     private OnFragmentInteractionListener mListener;
 
@@ -144,15 +145,13 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
         itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(dragDirections, swipeDirections) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                int from = viewHolder.getAdapterPosition();
-                int to = target.getAdapterPosition();
-                cardAdapter.notifyItemMoved(from, to);
-                // TODO: Query database, change card indexes
+                // Does nothing
                 return false;
             }
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                // Right Swipe deletes the card
                 int pos = viewHolder.getAdapterPosition();
                 LibAPI.request(PinnedCardsFragment.this, getContext(), pinnedCards.remove(pos), LibAPI.REQUEST.CARD_DELETE);
                 cardAdapter.notifyItemRemoved(pos);
