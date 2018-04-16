@@ -60,10 +60,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.RecentSe
 
         @Override
         public void onClick(View view) {
-            RecentSearchItem recentSearchItem = recentSearchItems.get(getAdapterPosition());
-            Intent intent = new Intent(context, SearchActivity.class);
-            intent.putExtra("search_string", recentSearchItem.getSearchString());
-            context.startActivity(intent);
+            // TODO SPAWN PINNED CARD DIALOG FRAGMENT
         }
     }
 
