@@ -79,10 +79,10 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
     /* * * * Init methods * * * */
     private void populateElements() {
         title.setText(card.name);
-        mana.setText(card.mana);
+        mana.setText(card.getSpanManaCost());
         type.setText(card.type);
         pt.setText(card.power.concat("/").concat(card.toughness));
-        text.setText(card.text);
+        text.setText(card.getSpanText());
         rulings.setText(card.rules);
 
 
@@ -101,6 +101,7 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
         text = v.findViewById(R.id.text_search_frag_text);
         rulings = v.findViewById(R.id.text_search_frag_rulings);
         notes = v.findViewById(R.id.text_notes);
+        notes.setText(card.notes);
         saveButton = v.findViewById(R.id.btn_save_card);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override

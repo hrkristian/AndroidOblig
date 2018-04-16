@@ -13,7 +13,7 @@
         <ImageView
             android:id="@+id/pinned_card_image"
             android:layout_width="@dimen/card_width"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/card_height"
             android:adjustViewBounds="true"
             android:background="@drawable/shape_card_background"
             android:src="@drawable/jace_mind_sculptor"

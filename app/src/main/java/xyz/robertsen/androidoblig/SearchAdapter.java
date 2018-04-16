@@ -75,7 +75,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         ((SearchHitHolder) holder).image.setImageDrawable(cardImages.get(position));
         ((SearchHitHolder) holder).title.setText(cards.get(position).name);
-        ((SearchHitHolder) holder).text.setText(cards.get(position).text);
+        ((SearchHitHolder) holder).text.setText(cards.get(position).getSpanText());
 
         /*
         Card cards = cardArrayList.get(position);
