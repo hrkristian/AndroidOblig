@@ -69,10 +69,8 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_search_card, container, false);
-
         findElements(v);
         populateElements();
-
         return v;
     }
 
@@ -90,6 +88,7 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
             image.setImageDrawable(cardDrawable);
         if (User.authenticatedUser == null) {
             saveButton.setVisibility(View.INVISIBLE);
+            notes.setVisibility(View.INVISIBLE);
         }
     }
     private void findElements(View v) {
