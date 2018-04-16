@@ -86,6 +86,7 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
 
         if (cardDrawable != null)
             image.setImageDrawable(cardDrawable);
+        // Only authenticated user will be able to save a card and add notes to it.
         if (User.authenticatedUser == null) {
             saveButton.setVisibility(View.INVISIBLE);
             notes.setVisibility(View.INVISIBLE);

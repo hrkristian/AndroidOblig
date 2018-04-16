@@ -5,15 +5,16 @@ import android.database.Cursor;
 
 import java.util.ArrayList;
 
-import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
+import xyz.robertsen.androidoblig.database.SearchDatabaseOpenHelper;
 
 /**
- * Created by gitsieg on 04.04.18.
+ * Model class for a recent search item
+ *
  */
 
 public class RecentSearchItem {
     private String searchString, user;
-    private static CardDatabaseOpenHelper dbHelper;
+    private static SearchDatabaseOpenHelper dbHelper;
 
     public RecentSearchItem(String searchString, String user) {
         this.searchString = searchString;
@@ -35,7 +36,7 @@ public class RecentSearchItem {
      */
     public static ArrayList<RecentSearchItem> getRecentSearches(Context context) {
         if (dbHelper == null) {
-            dbHelper = new CardDatabaseOpenHelper(context);
+            dbHelper = new SearchDatabaseOpenHelper(context);
         }
         Cursor cursor = dbHelper.getRecentSearchesCursor(User.authenticatedUser.getUsr());
         ArrayList<RecentSearchItem> recentSearchItems = new ArrayList<>();
@@ -43,10 +44,10 @@ public class RecentSearchItem {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             String searchString = cursor.getString(
-                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.SEARCH_STRING)
+                    cursor.getColumnIndex(SearchDatabaseOpenHelper.DBSchema.RecentSearchesTable.SEARCH_STRING)
             );
             String user = cursor.getString(
-                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.USER)
+                    cursor.getColumnIndex(SearchDatabaseOpenHelper.DBSchema.RecentSearchesTable.USER)
             );
             recentSearchItems.add(new RecentSearchItem(searchString, user));
             cursor.moveToNext();
@@ -64,7 +65,7 @@ public class RecentSearchItem {
      */
     public static long addRecentSearchItem(Context context, String searchString) {
         if (dbHelper == null) {
-            dbHelper = new CardDatabaseOpenHelper(context);
+            dbHelper = new SearchDatabaseOpenHelper(context);
         }
         return dbHelper.dbAddRecentSearch(searchString, User.authenticatedUser.getUsr());
     }

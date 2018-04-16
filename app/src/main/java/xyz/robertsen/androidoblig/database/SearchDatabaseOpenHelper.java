@@ -8,20 +8,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import xyz.robertsen.androidoblig.HistoryActivity;
-import xyz.robertsen.androidoblig.User;
-
-
-public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
+/**
+ */
+public class SearchDatabaseOpenHelper extends SQLiteOpenHelper {
     // Log tag
-    private static final String TAG = CardDatabaseOpenHelper.class.getSimpleName();
+    private static final String TAG = SearchDatabaseOpenHelper.class.getSimpleName();
     // Database information
     private static final String DATABASE_NAME = "card_organizer";
     private static final int DATABASE_VERSION = 3; // INCREMENT WHEN STRUCTURAL CHANGES
 
     SQLiteDatabase mWritableDatabase = null, mReadableDatabase = null;
 
-    public CardDatabaseOpenHelper(Context context) {
+    public SearchDatabaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -41,7 +39,7 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
 
     /**
      * Database schema for the card_organizer database
-     * TABLES: UserTable, RecentSearchesTable, RecentSearchesTable
+     * TABLES: UserTable, RecentSearchesTable
      */
     public static final class DBSchema {
         // USER_TABLE
@@ -99,6 +97,8 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
     }
 
     /**
+     * Prints metadata for the database
+     * <p>
      * Iterates through the database tables and table-colums, and returns a string of the found values
      *
      * @return String containing the "metadata" for the database.
@@ -126,6 +126,15 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
         db.close();
         return data.toString();
     }
+
+    /**
+     * Checks if given username exists in the database
+     * <p>
+     * Performs a simple SELECT query on the database. If the returned cursor contains non-zero item's,
+     * the user exists.
+     * @param userName
+     * @return true if the user exists, false otherwise
+     */
     public boolean sqliteUserExists(String userName) {
         mReadableDatabase = getReadableDatabase();
         Cursor cursor = mReadableDatabase.query(
@@ -139,6 +148,11 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
         return cursor.getCount()>0;
     }
 
+    /**
+     * Creates a user in the database
+     * @param userName
+     * @return true if a user got created, false otherwise
+     */
     public boolean sqliteCreateUser(String userName) {
         Log.d(TAG, "sqliteCreateUser(String userName) wants to create user " + userName);
         mWritableDatabase = getWritableDatabase();
@@ -155,34 +169,8 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
         return true;
     }
 
-//    /**
-//     * Seeds the user table with user data.
-//     *
-//     * @param users - Array of users to be created
-//     */
-//    public void seedUsers(User[] users) {
-//        // Lazy initialization, OK for single-threaded usage
-//        mWritableDatabase = getWritableDatabase();
-//
-//        ContentValues values;
-//        for (User user : users) {
-//            values = new ContentValues();
-//            values.put(
-//                    CardDatabaseOpenHelper.DBSchema.UserTable.USER,
-//                    user.getUsr());
-//            values.put(
-//                    CardDatabaseOpenHelper.DBSchema.UserTable.PASSWORD,
-//                    user.getPwd());
-//            try {
-//                user.setId(mWritableDatabase.insert(DBSchema.UserTable.TABLE_NAME, null, values));
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        mWritableDatabase.close();
-//    }
     /**
-     * Adds a card to the Recentcards table.
+     * Adds a recent search to the RecentSearchesTable table.
      *
      * @param searchString
      * @param userName
@@ -199,7 +187,7 @@ public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Fetches recent search data for a given user
+     * Fetches recent search data for a given user, by the most recent item to the least recent item
      *
      * @param userName - The username that the query will be filtered by
      * @return Cursor that points at the first row of the resultset

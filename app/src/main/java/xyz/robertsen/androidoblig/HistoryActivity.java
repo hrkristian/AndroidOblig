@@ -8,14 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
-import org.json.JSONException;
-
-import java.util.ArrayList;
-
-import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
+import xyz.robertsen.androidoblig.database.SearchDatabaseOpenHelper;
 
 public class HistoryActivity extends AppCompatActivity implements
         PinnedCardsFragment.OnFragmentInteractionListener,
@@ -24,7 +19,7 @@ public class HistoryActivity extends AppCompatActivity implements
     public static User authUser;
     private static final String TAG = HistoryActivity.class.getSimpleName();
     private static final String TAB_POSITION = "xyz.robertsen.androidoblig.HistoryActivity";
-    private CardDatabaseOpenHelper dbHelper;
+    private SearchDatabaseOpenHelper dbHelper;
     private TabLayout tabLayout;
     private TabLayout.Tab recentTab, pinnedTab;
     private Fragment recentFragment;
@@ -38,7 +33,7 @@ public class HistoryActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        dbHelper = new CardDatabaseOpenHelper(this);
+        dbHelper = new SearchDatabaseOpenHelper(this);
         // Sets up the basic views and fragments for this activity
         //-- Checks if state saved, sets selected tab pos to the saved instance tab pos //
         init_tabs();
