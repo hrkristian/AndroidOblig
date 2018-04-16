@@ -96,6 +96,7 @@ public class LibAPI {
                     json.put("text", card.text);
                     json.put("imgUrl", card.imageUrl);
                     json.put("rulings", card.rules);
+                    json.put("notes", card.notes);
                     break;
                 case CARD_UPDATE:
                     json.put("sql", "update");
