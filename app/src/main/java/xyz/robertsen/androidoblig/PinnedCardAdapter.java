@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * This adapter is used in PinnedCardsFragment. It shows a list of pinned cards
@@ -25,6 +27,7 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
     private ArrayList<Card> cardArrayList;
     private LayoutInflater inflater;
     private Context context;
+    private Map<Integer, Drawable> cardImages;
 
     /**
      * Instantiates the PinnedCardAdapter
@@ -32,9 +35,10 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
      * @param context  - The activity/context this adapter is created within
      * @param cardList - ArrayList of Cards to use with this adapter
      */
-    public PinnedCardAdapter(Context context, ArrayList<Card> cardList) {
-        cardArrayList = cardList;
+    public PinnedCardAdapter(Context context, ArrayList<Card> cardList, Map<Integer, Drawable> cardImages) {
         this.context = context;
+        this.cardArrayList = cardList;
+        this.cardImages = cardImages;
         inflater = LayoutInflater.from(context);
     }
 
@@ -63,7 +67,7 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
         holder.title.setText(card.name);
         holder.manaCost.setText(card.mana);
         holder.cmc.setText(String.valueOf(card.cmc));
-        holder.cardCropImage.setImageDrawable(context.getResources().getDrawable(R.drawable.jace_mind_sculptor));
+        holder.cardCropImage.setImageDrawable(cardImages.get(position));
         holder.text.setText(card.text);
     }
 
@@ -72,7 +76,9 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
         return cardArrayList == null ? 0: cardArrayList.size();
     }
 
-    public class CardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class CardViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener,
+            MtgApiRequestHandler.OnImageReceivedListener {
 
         private final String TAG = CardViewHolder.class.getSimpleName();
 
@@ -114,6 +120,11 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
             Intent intent = new Intent(context, SearchActivity.class);
             intent.putExtra("search_string", thisCard.name);
             context.startActivity(intent);
+        }
+
+        @Override
+        public void updateViewHolder(Drawable drawable) {
+            cardCropImage.setImageDrawable(drawable);
         }
     }
 }
