@@ -46,7 +46,7 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
     private ItemTouchHelper itemTouchHelper;
     private MtgApiRequestHandler requestHandler;
     int dragDirections = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-    int swipeDirections = ItemTouchHelper.START | ItemTouchHelper.END;
+    int swipeDirections = ItemTouchHelper.END;
     private OnFragmentInteractionListener mListener;
 
     public PinnedCardsFragment() {

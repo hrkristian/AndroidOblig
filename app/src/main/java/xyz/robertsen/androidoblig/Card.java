@@ -43,12 +43,10 @@ public class Card implements Serializable {
 
     public Card(Context context,
                 String name, String mana, String cmc, String type, String power, String toughness,
-                String text, String imageUrl, String rulings) {
+                String text, String imageUrl, String rulings, int pos) {
         this.context = context;
-
-
         this.name = context.getResources().getString(R.string.cardTitlePlaceholder, name);
-        this.mana =mana; // getter SpannableStringBuilder
+        this.mana = mana; // getter SpannableStringBuilder
         this.cmc = cmc;
         this.type = type;
         this.text = text; // getter SpannableStringBuiler
@@ -57,16 +55,12 @@ public class Card implements Serializable {
         this.stats = context.getResources().getString(R.string.cardStatsPlaceholder, power, toughness);
         this.rules = rulings;
         this.imageUrl = imageUrl;
-    }
-    public Card(Context context,
-                String name, String mana, String cmc, String type, String power, String toughness,
-                String text, String imageUrl, String rulings, int pos) {
-        this(context, name, mana, cmc, type, power, toughness, text, imageUrl, rulings);
         this.pos = pos;
     }
 
     /**
      * Returns the card text, spanned
+     *
      * @return text
      */
     SpannableStringBuilder getSpanText() {
@@ -75,12 +69,12 @@ public class Card implements Serializable {
 
     /**
      * Returns the card's mana cost, spanned
+     *
      * @return
      */
     SpannableStringBuilder getSpanManaCost() {
         return symbolParser(text);
     }
-
 
 
     /**
@@ -124,8 +118,12 @@ public class Card implements Serializable {
                 (jsonCard.has("toughness")) ? jsonCard.getString("toughness") : "",
                 (jsonCard.has("text")) ? jsonCard.getString("text") : "",
                 (jsonCard.has("imageUrl")) ? jsonCard.getString("imageUrl") : "",
-                (arrRulings == null) ? strRulings : deArrayalize(context, arrRulings)
-//                (jsonCard.has("rulings")) ? deArrayalize(context, jsonCard.getJSONArray("rulings")) : null
+                (arrRulings == null) ? strRulings : deArrayalize(context, arrRulings),
+                /*
+                    If the response comes from the MagicOblig db, it has the "pos" attribute
+                    IF the response comes from MtgApi, it doesn't, and defaults to -1
+                 */
+                (jsonCard.has("pos")) ? jsonCard.getInt("pos") : -1
         );
     }
 
@@ -147,7 +145,6 @@ public class Card implements Serializable {
         }
         return bulider;
     }
-
 
 
     private class Ruling {
@@ -174,7 +171,7 @@ public class Card implements Serializable {
             put("{G}", R.drawable.ic_mana_forest);
             put("{U}", R.drawable.ic_mana_island);
             put("{B}", R.drawable.ic_mana_swamp);
-            put("{RecentSearchesTable}", R.drawable.ic_mana_mountain);
+            put("{R}", R.drawable.ic_mana_mountain);
             put("{W}", R.drawable.ic_mana_plains);
             put("{X}", R.drawable.ic_mana_x);
             put("{T}", R.drawable.ic_mana_tap);
