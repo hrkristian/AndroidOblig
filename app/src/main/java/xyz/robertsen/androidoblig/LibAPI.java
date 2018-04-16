@@ -96,11 +96,10 @@ public class LibAPI {
                     json.put("text", card.text);
                     json.put("imgUrl", card.imageUrl);
                     json.put("rulings", card.rules);
-                    json.put("pos", card.pos);
                     break;
                 case CARD_UPDATE:
                     json.put("sql", "update");
-                    json.put("position", card.pos);
+                    json.put("notes", card.notes);
                     break;
                 case CARD_DELETE:
                     json.put("sql", "delete");
@@ -112,7 +111,6 @@ public class LibAPI {
 
     interface RequestListener {
         void handlePinnedCardsResponse(JSONObject response);
-
         void handlePinnedCardsError(VolleyError error);
     }
 

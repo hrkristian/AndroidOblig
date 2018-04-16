@@ -35,15 +35,14 @@ public class Card implements Serializable {
     String text;
     String rules;
     String imageUrl;
-    int pos;
-
+    String notes;
     public Card() {
 
     }
 
     public Card(Context context,
                 String name, String mana, String cmc, String type, String power, String toughness,
-                String text, String imageUrl, String rulings, int pos) {
+                String text, String imageUrl, String rulings, String notes) {
         this.context = context;
         this.name = context.getResources().getString(R.string.cardTitlePlaceholder, name);
         this.mana = mana; // getter SpannableStringBuilder
@@ -55,7 +54,7 @@ public class Card implements Serializable {
         this.stats = context.getResources().getString(R.string.cardStatsPlaceholder, power, toughness);
         this.rules = rulings;
         this.imageUrl = imageUrl;
-        this.pos = pos;
+        this.notes = notes;
     }
 
     /**
@@ -123,7 +122,7 @@ public class Card implements Serializable {
                     If the response comes from the MagicOblig db, it has the "pos" attribute
                     IF the response comes from MtgApi, it doesn't, and defaults to -1
                  */
-                (jsonCard.has("pos")) ? jsonCard.getInt("pos") : -1
+                (jsonCard.has("notes")) ? jsonCard.getString("notes") : ""
         );
     }
 
