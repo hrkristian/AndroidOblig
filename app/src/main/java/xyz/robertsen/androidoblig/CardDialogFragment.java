@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +30,8 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
     private Card card;
     private ImageView image;
     private TextView title, type, mana, pt, text, rulings;
-    private ImageButton pinCardButton;
+    private EditText notes;
+    private Button saveButton;
     private CardDialogFragment fragment = this;
 
     public CardDialogFragment() {
@@ -43,9 +46,12 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
             card = (Card)getArguments().getSerializable(ARG_CARD);
     }
 
+
+    /**
+     * Overridden to give the dialog a more appropriate size.
+     */
     @Override
     public void onResume() {
-        // We want to constrain the size of the dialog away from the edges.
         if (getDialog().getWindow() != null) {
             int width, height;
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -71,6 +77,7 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
         return v;
     }
 
+    /* * * * Init methods * * * */
     private void populateElements() {
         title.setText(card.name);
         mana.setText(card.mana);
@@ -79,15 +86,13 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
         text.setText(card.text);
         rulings.setText(card.rules);
 
+
         if (cardDrawable != null)
             image.setImageDrawable(cardDrawable);
-
         if (User.authenticatedUser == null) {
-            pinCardButton.setVisibility(View.INVISIBLE);
+            saveButton.setVisibility(View.INVISIBLE);
         }
-
     }
-
     private void findElements(View v) {
         image = v.findViewById(R.id.imageView_search_frag_image);
         title = v.findViewById(R.id.text_search_frag_title);
@@ -96,15 +101,19 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
         pt = v.findViewById(R.id.text_search_frag_pt);
         text = v.findViewById(R.id.text_search_frag_text);
         rulings = v.findViewById(R.id.text_search_frag_rulings);
-        pinCardButton = v.findViewById(R.id.btn_pin_card);
-        pinCardButton.setOnClickListener(new View.OnClickListener() {
+        notes = v.findViewById(R.id.text_notes);
+        saveButton = v.findViewById(R.id.btn_save_card);
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 LibAPI.request(fragment, fragment.getActivity(), card, LibAPI.REQUEST.CARD_CREATE);
             }
         });
     }
+    /* * * * Init methods * * * */
 
+    /* * * * Fabricators * * * */
     static CardDialogFragment newInstance(Card card) {
         CardDialogFragment fragment = new CardDialogFragment();
 
@@ -114,20 +123,21 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
 
         return fragment;
     }
-
     static CardDialogFragment newInstance(Card card, Drawable cardImage) {
         CardDialogFragment fragment = CardDialogFragment.newInstance(card);
         fragment.cardDrawable = cardImage;
         return fragment;
     }
+    /* * * * Fabricators * * * */
 
+    /* * * * Callbacks * * * */
     @Override
     public void handlePinnedCardsResponse(JSONObject response) {
         Log.d(TAG, "handlePinnedCardsResponse: " +  response.toString());
     }
-
     @Override
     public void handlePinnedCardsError(VolleyError error) {
         error.printStackTrace();
     }
+    /* * * * Callbacks * * * */
 }

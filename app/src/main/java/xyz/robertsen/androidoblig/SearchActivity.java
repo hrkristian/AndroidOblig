@@ -69,12 +69,17 @@ public class SearchActivity extends AppCompatActivity implements
 
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         handleIntent(intent);
     }
+
 
     private void handleIntent(Intent intent) {
         String searchString;
@@ -92,6 +97,7 @@ public class SearchActivity extends AppCompatActivity implements
         requestHandler.sendRequest(
                 searchString, this
         );
+
         Log.d(TAG, "handleIntent");
     }
 
