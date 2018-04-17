@@ -8,16 +8,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
+import xyz.robertsen.androidoblig.database.SearchDatabaseOpenHelper;
 
 
 /**
@@ -31,7 +29,6 @@ import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 public class SearchHistoryFragment extends Fragment {
 
     private static final String TAG = SearchHistoryFragment.class.getSimpleName();
-    CardDatabaseOpenHelper dbHelper;
     ArrayList<RecentSearchItem> recentSearchItems;
     private RecyclerView recyclerRecent;
     private HistoryAdapter cardAdapter;
@@ -53,12 +50,6 @@ public class SearchHistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO Testing
-        dbHelper = new CardDatabaseOpenHelper(this.getContext());
-//        for (int i = 0; i < 20; i++) {
-//            Log.d(TAG, dbHelper.dbAddRecentSearch("Nikolai strings " + i , HistoryActivity.authUser.getUsername()) + "");
-//        }
-
         // Fragment is retained across Activity re-creation
         setRetainInstance(true);
     }
@@ -122,7 +113,5 @@ public class SearchHistoryFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-
-        void onCardsPinned(String title);
     }
 }

@@ -13,20 +13,12 @@ import android.view.View;
 import android.widget.SearchView;
 
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +43,8 @@ public class SearchActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_card);
+        setContentView(R.layout.activity_search);
+        Log.d(TAG, "onCreate: ");
 
         requestHandler = new MtgApiRequestHandler(this);
         /**
@@ -65,8 +58,6 @@ public class SearchActivity extends AppCompatActivity implements
          * Checks device orentation, if "landscape" -> Runs SetHorizontalOffsets-method
          **/
         setRecyclerHorizontalOffsets();
-        handleIntent(getIntent());
-
     }
 
     @Override
@@ -76,18 +67,24 @@ public class SearchActivity extends AppCompatActivity implements
 
     @Override
     protected void onNewIntent(Intent intent) {
+        Log.d(TAG, "onNewIntent: ");
         super.onNewIntent(intent);
-        handleIntent(intent);
+        setIntent(intent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handleIntent(getIntent());
+    }
 
     private void handleIntent(Intent intent) {
-        String searchString;
-        if (!Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            searchString = intent.getStringExtra("search_string");
-        } else {
-            searchString = intent.getStringExtra(SearchManager.QUERY).replace(' ', '+');
-        }
+        Log.d(TAG, "handleIntent: ");
+//        if (!Intent.ACTION_SEARCH.equals(intent.getAction())) {
+//            searchString = intent.getStringExtra(HistoryAdapter.SEARCH_STRING);
+//        } else {
+        String searchString = intent.getStringExtra(SearchManager.QUERY);
+        searchString = searchString.replace(' ', '+');
 
         Log.d(TAG, searchString);
 
@@ -97,8 +94,6 @@ public class SearchActivity extends AppCompatActivity implements
         requestHandler.sendRequest(
                 searchString, this
         );
-
-        Log.d(TAG, "handleIntent");
     }
 
     private void generateCardView(String JSONString) {

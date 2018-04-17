@@ -36,6 +36,7 @@ public class Card implements Serializable {
     String rules;
     String imageUrl;
     String notes;
+
     public Card() {
 
     }
@@ -72,7 +73,7 @@ public class Card implements Serializable {
      * @return
      */
     SpannableStringBuilder getSpanManaCost() {
-        return symbolParser(text);
+        return symbolParser(mana);
     }
 
 
@@ -84,7 +85,7 @@ public class Card implements Serializable {
      * @return
      * @throws JSONException
      */
-    public static String deArrayalize(Context context, JSONArray rulings) throws JSONException {
+    private static String deArrayalize(Context context, JSONArray rulings) throws JSONException {
         StringBuilder builder = new StringBuilder();
         if (rulings != null)
             for (int i = 0; i < rulings.length(); i++)
@@ -155,6 +156,7 @@ public class Card implements Serializable {
         }
     }
 
+
     static final Map<String, Integer> manaSymbolMap = Collections.unmodifiableMap(new HashMap<String, Integer>() {
         {
             put("{0}", R.drawable.ic_mana_0);
@@ -191,50 +193,4 @@ public class Card implements Serializable {
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
-
-
-    /*
-        public Card(Context context,
-                    String name, String mana, String cmc, String type, String power, String toughness,
-                    String text, String imageUrl, JSONArray rules) {
-            this.context = context;
-    */
-//    public static ArrayList<Card> getSampleCards(Context c) throws JSONException {
-//        ArrayList<Card> cards = new ArrayList<>();
-//        String cardName = "";
-//        for (int i = 0; i < cardNames.length; i++) {
-//            cards.add(new Card(
-//                    c,
-//                    cardNames[i],
-//                    "{2}{U}{U}",
-//                    "4",
-//                    "Jace",
-//                    "3",
-//                    "3",
-//                    "+2: Look at the top card of target player's library. You may put that card on the bottom of that player's library\n+0: Draw three cards, then put two cards from your hand on top of your library in any order.\n−1: Return target creature to its owner's hand.\n−12: Exile all cards from target player's library, then that player shuffles his or her hand into his or her library.",
-//                    "http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413599&type=card",
-//                    "def")
-//            );
-//        }
-//        return cards;
-//    }
-//
-//    private static String[] cardNames = {
-//            "Jace Beleren",
-//            "Goblin Guide",
-//            "Nissa",
-//            "Goblin Grenade",
-//            "Inkmoth",
-//            "Gurmag Angler",
-//            "Setessan",
-//            "Hero's Downfall",
-//            "Mordi",
-//            "Monastery Swiftspear",
-//            "Tormod",
-//            "Island",
-//            "Mountain",
-//            "Plains",
-//            "Forest",
-//            "Swamp"
-//    };
 }

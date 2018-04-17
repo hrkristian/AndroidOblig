@@ -85,9 +85,9 @@ public class LibAPI {
                 case CARD_GET:
                     json.put("sql", "select");
                     break;
-                case CARD_CREATE:
+                case CARD_PUSH:
 //                    json.put("request", "sql");
-                    json.put("sql", "create");
+                    json.put("sql", "push");
                     json.put("manaCost", card.mana);
                     json.put("cmc", card.cmc);
                     json.put("type", card.type);
@@ -96,9 +96,6 @@ public class LibAPI {
                     json.put("text", card.text);
                     json.put("imgUrl", card.imageUrl);
                     json.put("rulings", card.rules);
-                    break;
-                case CARD_UPDATE:
-                    json.put("sql", "update");
                     json.put("notes", card.notes);
                     break;
                 case CARD_DELETE:
@@ -117,8 +114,8 @@ public class LibAPI {
     enum REQUEST {
         IMG_GET,
         CARD_GET,
-        CARD_CREATE,
+        CARD_PUSH,
         CARD_UPDATE,
-        CARD_DELETE
+        CARD_DELETE,
     }
 }

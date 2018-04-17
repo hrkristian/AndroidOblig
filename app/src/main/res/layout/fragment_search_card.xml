@@ -18,25 +18,21 @@
 
     <TextView
         android:id="@+id/text_search_frag_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="name"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView_search_frag_image"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/text_search_frag_type"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="type"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView_search_frag_image"
         app:layout_constraintTop_toBottomOf="@+id/text_search_frag_title" />
 
@@ -44,11 +40,9 @@
         android:id="@+id/text_search_frag_mana"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="mana"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView_search_frag_image"
         app:layout_constraintTop_toBottomOf="@+id/text_search_frag_type" />
 
@@ -56,11 +50,9 @@
         android:id="@+id/text_search_frag_pt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="pow/tough"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView_search_frag_image"
         app:layout_constraintTop_toBottomOf="@+id/text_search_frag_mana" />
 

@@ -33,7 +33,6 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private Map<Integer, Drawable> cardImages;
     private LayoutInflater mInflater;
 
-
     /**
      * Constructor
      *
@@ -46,8 +45,6 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         this.cardImages = cardImages;
         this.mInflater = LayoutInflater.from(context);
     }
-
-
 
     /**
      * Creating view, returning viewholder
@@ -62,8 +59,6 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return new SearchHitHolder(view, this);
     }
 
-
-
     /**
      * Binds the view
      *
@@ -72,18 +67,9 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         ((SearchHitHolder) holder).image.setImageDrawable(cardImages.get(position));
         ((SearchHitHolder) holder).title.setText(cards.get(position).name);
-        ((SearchHitHolder) holder).text.setText(cards.get(position).text);
-
-        /*
-        Card cards = cardArrayList.get(position);
-        holder.image.setImageDrawable(card.image);
-        holder.title.setText(card.title);
-        holder.text.setText(card.text);
-        */
-
+        ((SearchHitHolder) holder).text.setText(cards.get(position).getSpanText());
     }
 
     @Override
@@ -115,6 +101,8 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         }
 
+        ///////////////////////
+        /* * * CallBacks * * */
         @Override
         public void onClick(View view) {
             // TODO Spawn CardDialogFragment
@@ -125,7 +113,6 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             FragmentTransaction ft = ((AppCompatActivity)context).getFragmentManager().beginTransaction();
             cardDialogFragment.show(ft, "cardDialog");
         }
-
         @Override
         public void updateViewHolder(Drawable drawable) {
             image.setImageDrawable(drawable);
