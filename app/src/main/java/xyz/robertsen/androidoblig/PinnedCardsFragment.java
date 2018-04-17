@@ -150,6 +150,7 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
         cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards, cardImages);
         recyclerPinned.setAdapter(cardAdapter);
         recyclerPinned.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        // Fetches images and binds them to viewholder async
         requestHandler.getImagesFromUrl(recyclerPinned, pinnedCards, cardImages);
     }
 

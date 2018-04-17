@@ -22,8 +22,8 @@ public class HistoryActivity extends AppCompatActivity implements
     private SearchDatabaseOpenHelper dbHelper;
     private TabLayout tabLayout;
     private TabLayout.Tab recentTab, pinnedTab;
-    private Fragment recentFragment;
-    private Fragment pinnedFragment;
+    private Fragment searchHistoryFragment;
+    private Fragment pinnedCardFragment;
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
     private TextView tabLegend;
@@ -78,15 +78,10 @@ public class HistoryActivity extends AppCompatActivity implements
 
     }
 
-    @Override
-    public void onCardsPinned(String title) {
-
-    }
-
     /**
      * Adapter for paging between fragments.
      */
-    public class PagerAdapter extends FragmentPagerAdapter {
+    class PagerAdapter extends FragmentPagerAdapter {
         int mNumOfTabs;
         Fragment pinnedFragment, recentFragment;
 
@@ -134,9 +129,9 @@ public class HistoryActivity extends AppCompatActivity implements
 
 
         // Request instances of fragments, and adapts them to conform with ViewPager interface
-        recentFragment = SearchHistoryFragment.newInstance();
-        pinnedFragment = PinnedCardsFragment.newInstance();
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), pinnedFragment, recentFragment);
+        searchHistoryFragment = SearchHistoryFragment.newInstance();
+        pinnedCardFragment = PinnedCardsFragment.newInstance();
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), pinnedCardFragment, searchHistoryFragment);
         viewPager.setAdapter(pagerAdapter);
 
         // Changes currently displayed item in the viewpagers, ∕∕ swaps between the displayed frags.

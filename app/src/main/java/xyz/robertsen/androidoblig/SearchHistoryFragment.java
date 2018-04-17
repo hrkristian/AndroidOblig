@@ -29,7 +29,6 @@ import xyz.robertsen.androidoblig.database.SearchDatabaseOpenHelper;
 public class SearchHistoryFragment extends Fragment {
 
     private static final String TAG = SearchHistoryFragment.class.getSimpleName();
-    SearchDatabaseOpenHelper dbHelper;
     ArrayList<RecentSearchItem> recentSearchItems;
     private RecyclerView recyclerRecent;
     private HistoryAdapter cardAdapter;
@@ -51,12 +50,6 @@ public class SearchHistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO Testing
-        dbHelper = new SearchDatabaseOpenHelper(this.getContext());
-//        for (int i = 0; i < 20; i++) {
-//            Log.d(TAG, dbHelper.dbAddRecentSearch("Nikolai strings " + i , HistoryActivity.authUser.getUsername()) + "");
-//        }
-
         // Fragment is retained across Activity re-creation
         setRetainInstance(true);
     }
@@ -120,7 +113,5 @@ public class SearchHistoryFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-
-        void onCardsPinned(String title);
     }
 }
