@@ -32,7 +32,7 @@ Denne delen av Applikasjonen gjør følgende:
 ### Søkshistorikk og lagrede søk
 Vises kun dersom bruker er innlogget
 Denne delen av Applikasjonen gjør følgende:
-* Henter søkshistorikk og viser en liste av alle tidligere søk
+* Henter søkshistorikk og viser en liste av alle tidligere søk. Søk blir lagret og hentet fra lokal database på telefon.
 * Ved trykk på tidligere søk, utføres nytt søket på ny i Søk-aktiviteten
 * Henter lagrede kort og notater man har lagt inn om kortet, og mulighet for å oppdatere notatet
 * Ved trykk på kort, vises detaljert informasjon om kortet
@@ -58,16 +58,15 @@ Består i hovedsak av:
 * SearchView
 * RecyclerView med tilknyttet kort-adapter
 
-Treff på kort i magicthegathering.io API'et skal populere et Array. RecyclerView'et
-viser søkeresultatene i CardViews. Trykk på bildet av kortet skal ekspandere bildet.
-Andre trykk som registreres i CardViewet, åpner et fragment der all relevant informasjon
-om kortet vises. (Ikke implementert)
+Treff på kort i magicthegathering.io API'et populerer et Array. RecyclerView'et
+viser søkeresultatene i CardViews. Trykk på bildet på kortet skal åpner et fragment der all relevant informasjon
+om kortet vises.
 
 ### Søkshistorikk og lagrede søk
 Denne delen av applikasjonen består i hovedsak av:
 * TabLayout med to Tabs
 * ViewPager
-* 2 fragmenter: **PinnedCardsFragment** og **RecentCardsFragment**
+* 2 fragmenter: **PinnedCardsFragment** og **RecentSearchesFragment**
 
 #### TabLayout
 * **Tab 1**
@@ -79,8 +78,7 @@ Brukes for å bytte mellom fragmentene. Det fungerer også å swipe mellom fragm
 
 #### Fragmentene
 Felles for begge fragmentene er at de har et RecyclerView. Hvert kort består av
-et CardView. De har en ItemTouchHelper der swipe LEFT/RIGHT sletter. Drag UP/DOWN
-endre posisjon i adapter (skal også oppdatere position i databasen).
+et CardView.
 Ved klikk på kortene skal det gjøres et søk på korttittel og vises i Søk på kort.
 
 * **PinnedCardsFragment**
