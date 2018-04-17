@@ -52,6 +52,17 @@
         app:layout_constraintTop_toBottomOf="@id/spinner_userauth_playerNumber" />
 
     <Button
+        android:id="@+id/button_user_logout"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/userauth_logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/button_user_cancel" />
+
+    <Button
         android:id="@+id/button_user_cancel"
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"

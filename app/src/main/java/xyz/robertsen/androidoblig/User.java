@@ -50,6 +50,9 @@ public class User {
         else
             throw new IllegalStateException("A user is already authenticated");
     }
+    static void removeAuthentication() {
+        authenticatedUser = null;
+    }
     static boolean isAuthenticated() {
         return authenticatedUser != null;
     }

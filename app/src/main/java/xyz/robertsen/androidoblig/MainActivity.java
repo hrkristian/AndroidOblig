@@ -225,6 +225,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onUserFragmentLogoutButtonPressed(DialogFragment fragment) {
+        User.removeAuthentication();
+        fragmentManager.popBackStack();
+        Toast.makeText(this, "Sucessfully logged out", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void handleValidationResponse(JSONObject response) {
         String message;
         try {
