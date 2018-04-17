@@ -2,6 +2,7 @@ package xyz.robertsen.androidoblig;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -13,6 +14,7 @@ import xyz.robertsen.androidoblig.database.SearchDatabaseOpenHelper;
  */
 
 public class RecentSearchItem {
+    public static final String TAG = RecentSearchItem.class.getSimpleName();
     private String searchString, user;
     private static SearchDatabaseOpenHelper dbHelper;
 
@@ -64,6 +66,7 @@ public class RecentSearchItem {
      * @return
      */
     public static long addRecentSearchItem(Context context, String searchString) {
+        Log.d(TAG, "addRecentSearchItem: " + searchString);
         if (dbHelper == null) {
             dbHelper = new SearchDatabaseOpenHelper(context);
         }

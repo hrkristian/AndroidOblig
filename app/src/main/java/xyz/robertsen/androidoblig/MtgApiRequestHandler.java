@@ -123,8 +123,8 @@ class MtgApiRequestHandler {
                         } catch (IOException e) {
                             // Catching IOException handles both URL, InputStream,
                             // and createFromStream exceptions
-                            e.printStackTrace();
-                            System.out.println("Problem URL: ".concat(cards.get(i).imageUrl));
+//                            e.printStackTrace();
+//                            System.out.println("Problem URL: ".concat(cards.get(i).imageUrl));
                             cardImages.put(pos, c.getResources().getDrawable(R.drawable.icon_2));
                         } finally {
                             ((Activity) c).runOnUiThread(new Runnable() {

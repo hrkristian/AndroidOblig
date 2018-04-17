@@ -16,6 +16,7 @@
         android:layout_marginBottom="5dp"
         android:padding="8dp"
         android:queryHint="Search text goes here"
+        android:background="@drawable/shape_card_background"
 
         />
 

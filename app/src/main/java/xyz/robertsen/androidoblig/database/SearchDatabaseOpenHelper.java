@@ -15,7 +15,7 @@ public class SearchDatabaseOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = SearchDatabaseOpenHelper.class.getSimpleName();
     // Database information
     private static final String DATABASE_NAME = "card_organizer";
-    private static final int DATABASE_VERSION = 3; // INCREMENT WHEN STRUCTURAL CHANGES
+    private static final int DATABASE_VERSION = 4; // INCREMENT WHEN STRUCTURAL CHANGES
 
     SQLiteDatabase mWritableDatabase = null, mReadableDatabase = null;
 
@@ -177,6 +177,7 @@ public class SearchDatabaseOpenHelper extends SQLiteOpenHelper {
      * */
 
     public long dbAddRecentSearch(String searchString, String userName) {
+        Log.d(TAG, "dbAddRecentSearch: " + searchString);
         mWritableDatabase = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DBSchema.RecentSearchesTable.SEARCH_STRING, searchString);
