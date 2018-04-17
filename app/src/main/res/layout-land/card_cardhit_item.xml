@@ -5,19 +5,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/land_card_width"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/base_margin"
-    >
+    android:layout_margin="@dimen/base_margin">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_cardview_background">
+        android:background="@drawable/shape_cardview_background"
+        android:padding="4dp">
 
         <ImageView
             android:id="@+id/card_cardhits_image"
             android:layout_width="@dimen/card_width"
             android:layout_height="@dimen/card_height"
+            android:background="@drawable/shape_card_background"
             android:layout_marginEnd="@dimen/base_margin"
             android:src="@drawable/jace_mind_sculptor" />
 
