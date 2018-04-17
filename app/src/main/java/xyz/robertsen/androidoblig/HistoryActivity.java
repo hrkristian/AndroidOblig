@@ -26,7 +26,6 @@ public class HistoryActivity extends AppCompatActivity implements
     private Fragment pinnedCardFragment;
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
-    private TextView tabLegend;
     int tabPosSelected = 0;
 
     @Override
@@ -37,10 +36,8 @@ public class HistoryActivity extends AppCompatActivity implements
         // Sets up the basic views and fragments for this activity
         //-- Checks if state saved, sets selected tab pos to the saved instance tab pos //
         init_tabs();
-        tabLegend = findViewById(R.id.history_fragments_heading);
         // Checks for authenticated user
 
-        tabLegend.setText(R.string.click_item_to_search);
         String username = User.authenticatedUser.getUsr();
         // Check if local version of user exist, if not, create one mathcing authenticated user
         if (!dbHelper.sqliteUserExists(username)) {
