@@ -11,13 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 
 import org.json.JSONObject;
+
+import xyz.robertsen.androidoblig.Models.Card;
+import xyz.robertsen.androidoblig.Models.User;
 
 /**
  * Created by kris on 29/03/18.
@@ -107,6 +109,7 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
             @Override
             public void onClick(View view) {
                 card.notes = notes.getText().toString();
+                Log.i("UHHHH",card.notes);
                 LibAPI.request(fragment, fragment.getActivity(), card, LibAPI.REQUEST.CARD_CREATE);
                 fragment.dismiss();
             }

@@ -3,13 +3,11 @@ package xyz.robertsen.androidoblig;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
@@ -27,7 +25,7 @@ import com.android.volley.VolleyError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
+import xyz.robertsen.androidoblig.Models.User;
 
 /**
  * Hovedklassen til AndroidOblig
@@ -35,7 +33,7 @@ import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 public class MainActivity extends AppCompatActivity
         implements UserFragment.userFragmentListener,
         SearchView.OnQueryTextListener,
-        User.ValidationListener,
+        LibAPI.ValidationListener,
         LibAPI.RequestListener {
 
     // Log tag
@@ -188,7 +186,7 @@ public class MainActivity extends AppCompatActivity
 
     /* ------------ Activities and fragments ----------- */
     public void spawnHistoryActivity(View view) {
-        if (!User.isAuthenticated()) {
+        if (!AppState.isAuthenticated) {
             eventActions.spawnUserFragment(R.layout.fragment_user);
             return;
         }
@@ -199,7 +197,7 @@ public class MainActivity extends AppCompatActivity
     final private static String FRAGMENT_USER = "userFragment";
 
     public void spawnUserFragment(View view) {
-        if (User.isAuthenticated())
+        if (AppState.isAuthenticated)
             eventActions.spawnUserFragment(R.layout.fragment_user_authenticated);
         else
             eventActions.spawnUserFragment(R.layout.fragment_user);
@@ -209,7 +207,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onUserFragmentLoginButtonPressed(String usr, String pwd) {
         try {
-            User.authenticateUser(usr, pwd, this, this);
+            LibAPI.authenticateUser(usr, pwd, this, this);
         } catch (IllegalStateException e) {
             Toast.makeText(
                     this,
@@ -239,7 +237,7 @@ public class MainActivity extends AppCompatActivity
                 message = "Login Failed: Wrong password";
             else {
                 message = "Login Succeeded";
-                User.setAuthenticatedUser(new User(
+                AppState.setAuthenticatedUser(new User(
                         response.getString("usr"),
                         response.getString("fornavn"),
                         response.getString("etternavn")

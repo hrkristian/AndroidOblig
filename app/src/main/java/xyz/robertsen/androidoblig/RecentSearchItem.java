@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import java.util.ArrayList;
 
+import xyz.robertsen.androidoblig.Models.User;
 import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 
 /**

@@ -7,27 +7,32 @@ import xyz.robertsen.androidoblig.Models.User;
  * be accessible everywhere.
  * Groundwork for future Facade-pattern.
  */
-public class AppStates {
+class AppState {
 
 
-    /* User States */
-    static boolean isAuthenticated = false;
+/* -- User States -- */
     static User authenticatedUser = null;
-    /* User States */
+/* -- User States -- */
 
-    /* MainActivity States */
+/* -- MainActivity States -- */
     static boolean actionViewVisible = false;
-    /* MainActivity States */
+/* -- MainActivity States -- */
 
-    /* UserDialog States */
+/* -- UserDialog States -- */
     static boolean userLoginDialogVisible = false;
     static boolean userSettingsDialogVisible = false;
-    /* UserDialog States */
+/* -- UserDialog States -- */
 
+
+/* -- User Logic -- */
+    static boolean isAuthenticated() {
+        return authenticatedUser != null;
+    }
     static void setAuthenticatedUser(User user) {
         if (authenticatedUser == null)
             authenticatedUser = user;
         else
             throw new IllegalStateException("A user is already authenticated");
     }
+/* -- User Logic -- */
 }

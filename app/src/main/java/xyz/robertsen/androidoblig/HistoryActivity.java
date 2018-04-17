@@ -8,13 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
-import org.json.JSONException;
-
-import java.util.ArrayList;
-
+import xyz.robertsen.androidoblig.Models.User;
 import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
 
 public class HistoryActivity extends AppCompatActivity implements

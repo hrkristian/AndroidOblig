@@ -13,24 +13,19 @@ import android.view.View;
 import android.widget.SearchView;
 
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import xyz.robertsen.androidoblig.Models.Card;
+import xyz.robertsen.androidoblig.Models.User;
 
 public class SearchActivity extends AppCompatActivity implements
         SearchView.OnQueryTextListener,

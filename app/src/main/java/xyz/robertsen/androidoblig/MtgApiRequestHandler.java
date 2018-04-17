@@ -19,6 +19,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
+import xyz.robertsen.androidoblig.Models.Card;
+
 /**
  * Created by gitsieg on 15.04.18.
  */

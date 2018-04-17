@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:elevation="5dp"
     android:background="@drawable/shape_main_settingsbackground"
+    android:onClick="spawnActionView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
 
 
     <android.support.constraint.Guideline

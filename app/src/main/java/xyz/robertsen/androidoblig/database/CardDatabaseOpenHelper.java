@@ -8,9 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import xyz.robertsen.androidoblig.HistoryActivity;
-import xyz.robertsen.androidoblig.User;
-
 
 public class CardDatabaseOpenHelper extends SQLiteOpenHelper {
     // Log tag

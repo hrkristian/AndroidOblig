@@ -17,6 +17,8 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Map;
 
+import xyz.robertsen.androidoblig.Models.Card;
+
 /**
  * Created by gitsieg on 26.02.18.
  */

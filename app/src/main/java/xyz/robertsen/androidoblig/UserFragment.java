@@ -3,13 +3,14 @@ package xyz.robertsen.androidoblig;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import xyz.robertsen.androidoblig.Models.User;
 
 
 /**
@@ -89,7 +90,7 @@ public class UserFragment extends DialogFragment {
             });
         } else {
             ((TextView)v.findViewById(R.id.text_userauth_title))
-                    .setText("Velkommen\n".concat(User.authenticatedUser.getName()));
+                    .setText("Velkommen\n".concat(AppState.authenticatedUser.getName()));
         }
 
         v.findViewById(R.id.button_user_cancel).setOnClickListener(new View.OnClickListener() {

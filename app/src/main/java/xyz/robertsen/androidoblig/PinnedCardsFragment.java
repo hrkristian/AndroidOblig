@@ -22,12 +22,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
+import xyz.robertsen.androidoblig.Models.Card;
 
 
 /**

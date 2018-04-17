@@ -3,6 +3,7 @@ package xyz.robertsen.androidoblig;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,7 +16,48 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import xyz.robertsen.androidoblig.Models.Card;
+
 public class LibAPI {
+
+
+/* * * * User API Logic * * * */
+
+    static void authenticateUser(@NonNull String usr, @NonNull String pwd,
+                                 @NonNull final Context c,
+                                 @NonNull final ValidationListener v)
+            throws IllegalStateException {
+        if (AppState.isAuthenticated())
+            throw new IllegalStateException("A user is already authenticated");
+
+        RequestQueue volley = Volley.newRequestQueue(c);
+        volley.add( new JsonObjectRequest(
+                Request.Method.GET,
+                loginUrlBuilder(usr, pwd),
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        v.handleValidationResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(c, "Oh no, Volley-error :(", Toast.LENGTH_SHORT);
+                    }
+                })
+        );
+    }
+    @NonNull
+    private static String loginUrlBuilder(String usr, String pwd) {
+        return "https://robertsen.xyz/mtg/login.php?usr="
+                .concat(usr)
+                .concat("&pwd=")
+                .concat(pwd);
+    }
+
+
     /**
      * Sends a request to the User API, requesting a predefined action or response.
      *
@@ -31,7 +73,7 @@ public class LibAPI {
                         REQUEST requestType)
             throws IllegalStateException {
 
-        if (!User.isAuthenticated())
+        if (!AppState.isAuthenticated())
             throw new IllegalStateException("User not authenticated");
 
         String url = "https://robertsen.xyz/mtg/mtg.php";
@@ -64,7 +106,14 @@ public class LibAPI {
         Log.d("request-tostring", request.toString());
         volley.add(request);
     }
+    interface ValidationListener {
+        void handleValidationResponse(JSONObject response);
+    }
+/* * * * User API Logic * * * */
 
+
+
+/* * * * Card API Logic * * * */
     /**
      * Builds the request string sent to the User API.
      * @param card        The card model
@@ -80,7 +129,7 @@ public class LibAPI {
             }
             json.put("name", card.name);
             json.put("request", "sql");
-            json.put("usr", User.authenticatedUser.getUsr());
+            json.put("usr", AppState.authenticatedUser.getUsr());
             switch (requestType) {
                 case CARD_GET:
                     json.put("sql", "select");
@@ -114,6 +163,7 @@ public class LibAPI {
         void handlePinnedCardsError(VolleyError error);
     }
 
+
     enum REQUEST {
         IMG_GET,
         CARD_GET,
@@ -121,4 +171,6 @@ public class LibAPI {
         CARD_UPDATE,
         CARD_DELETE
     }
+
+/* * * * Card API Logic * * * */
 }

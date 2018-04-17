@@ -1,9 +1,6 @@
 package xyz.robertsen.androidoblig;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +11,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import xyz.robertsen.androidoblig.Models.Card;
 
 /**
  * This adapter is used in PinnedCardsFragment. It shows a list of pinned cards
