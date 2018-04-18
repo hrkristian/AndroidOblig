@@ -3,7 +3,10 @@
     <dimen name="base_margin">8dp</dimen>
     <dimen name="card_width">113dp</dimen>
     <dimen name="card_height">160dp</dimen>
-    <dimen name="card_text_size">15dp</dimen>
-    <dimen name="card_title_size">22dp</dimen>
+    <dimen name="card_text_size">15sp</dimen>
+    <dimen name="card_title_size">17sp</dimen>
     <dimen name="card_line_max">7</dimen>
+    <dimen name="card_detail_padding">4dp</dimen>
+    <dimen name="card_cmc_text_size">14sp</dimen>
+    <dimen name="card_rules_text_size">12sp</dimen>
 </resources>
