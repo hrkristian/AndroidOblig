@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+<!--    <TextView
         android:id="@+id/text_userauth_playerNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,29 +27,29 @@
         android:text="@string/userauth_antSpillere"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_userauth_title" />
+        app:layout_constraintTop_toBottomOf="@+id/text_userauth_title" />-->
 
-    <Spinner
-        android:id="@+id/spinner_userauth_playerNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_userauth_playerNumber" />
+    <!--<Spinner-->
+        <!--android:id="@+id/spinner_userauth_playerNumber"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/text_userauth_playerNumber" />-->
 
-    <ListView
-        android:id="@+id/listView_userauth_players"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinner_userauth_playerNumber" />
+    <!--<ListView-->
+        <!--android:id="@+id/listView_userauth_players"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:layout_marginEnd="32dp"-->
+        <!--android:layout_marginStart="32dp"-->
+        <!--android:layout_marginTop="32dp"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/spinner_userauth_playerNumber" />-->
 
     <Button
         android:id="@+id/button_user_logout"

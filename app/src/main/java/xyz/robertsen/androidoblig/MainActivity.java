@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity
         ((TextView) findViewById(R.id.text_lifeCounter1)).setText(Integer.toString(life_player1));
         ((TextView) findViewById(R.id.text_lifeCounter2)).setText(Integer.toString(life_player2));
 
-
         initSearchView();
         init_FABDrawable();
     }
@@ -88,6 +87,14 @@ public class MainActivity extends AppCompatActivity
         outState.putInt(ARG_LIFE_PLAYER2, life_player2);
 
         outState.putBoolean(ARG_ACTIONVIEW_VISIBLE, actionView.getVisibility() == View.VISIBLE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (actionView.getVisibility() == View.VISIBLE)
+            spawnActionView(actionFAB);
+        else
+            super.onBackPressed();
     }
 
     /**
@@ -172,6 +179,9 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         intent.setAction(Intent.ACTION_SEARCH);
         intent.putExtra(SearchManager.QUERY, s);
+
+        for (int i = 0; i < 2; i++) // lol.
+            ((SearchView)findViewById(R.id.search_main_cardSearch)).setIconified(true);
 
         eventActions.spawnActivity(intent);
         return false;
@@ -284,15 +294,8 @@ public class MainActivity extends AppCompatActivity
 
     private void initSearchView() {
         SearchView searchView = findViewById(R.id.search_main_cardSearch);
-//        TextView textView = findViewById(R.id.search_main_no_authenticated);
-//        if (User.authenticatedUser == null) {
-//            textView.setVisibility(View.VISIBLE);
-//            searchView.setVisibility(View.GONE);
-//        } else {
-//            textView.setVisibility(View.GONE);
-//            searchView.setVisibility(View.VISIBLE);
-            searchView.setOnQueryTextListener(this);
-//        }
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnQueryTextListener(this);
     }
 
     private class EventActions {

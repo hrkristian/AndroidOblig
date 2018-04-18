@@ -132,6 +132,9 @@ public class SearchActivity extends AppCompatActivity implements
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
         intent.setAction(Intent.ACTION_SEARCH);
         intent.putExtra(SearchManager.QUERY, s);
+
+        ((SearchView)findViewById(R.id.cardHitSearchView)).setIconified(true);
+
         startActivity(intent);
         return false;
     }
