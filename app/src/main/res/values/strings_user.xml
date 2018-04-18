@@ -9,4 +9,5 @@
     <string name="userauth_title">Velkommen, %1s</string>
     <string name="userauth_antSpillere">Velg antall spillere</string>
     <string name="userauth_close">Lukk</string>
+    <string name="userauth_logout">Logout</string>
 </resources>

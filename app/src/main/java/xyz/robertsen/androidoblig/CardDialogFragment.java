@@ -72,27 +72,27 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.CardReq
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         final View v = inflater.inflate(R.layout.fragment_search_card, container, false);
-
         findElements(v);
         populateElements();
-
         return v;
     }
 
     /* * * * Init methods * * * */
     private void populateElements() {
         title.setText(card.name);
-        mana.setText(card.mana);
+        mana.setText(card.getSpanManaCost());
         type.setText(card.type);
         pt.setText(card.power.concat("/").concat(card.toughness));
-        text.setText(card.text);
+        text.setText(card.getSpanText());
         rulings.setText(card.rules);
 
 
         if (cardDrawable != null)
             image.setImageDrawable(cardDrawable);
-        if (User.authenticatedUser == null) {
+        // Only authenticated user will be able to save a card and add notes to it.
+        if (!AppState.isAuthenticated()) {
             saveButton.setVisibility(View.INVISIBLE);
+            notes.setVisibility(View.INVISIBLE);
         }
     }
     private void findElements(View v) {
@@ -104,14 +104,16 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.CardReq
         text = v.findViewById(R.id.text_search_frag_text);
         rulings = v.findViewById(R.id.text_search_frag_rulings);
         notes = v.findViewById(R.id.text_notes);
+        notes.setText(card.notes);
         saveButton = v.findViewById(R.id.btn_save_card);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                card.notes = notes.getText().toString();
-                Log.i("UHHHH",card.notes);
-                LibAPI.request(fragment, fragment.getActivity(), card, LibAPI.REQUEST.CARD_CREATE);
-                fragment.dismiss();
+        card.notes = notes.getText().toString();
+
+        LibAPI.request(fragment, fragment.getActivity(), card, LibAPI.REQUEST.CARD_PUSH);
+
+        fragment.dismiss();
             }
         });
     }

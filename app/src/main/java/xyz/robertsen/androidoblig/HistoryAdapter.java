@@ -1,9 +1,11 @@
 package xyz.robertsen.androidoblig;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,8 @@ import java.util.ArrayList;
  */
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.RecentSearchHolder>{
+
+    public static String SEARCH_STRING = HistoryAdapter.class.getCanonicalName() + "SEARCH_STRING";
 
     private static String TAG = HistoryAdapter.class.getSimpleName();
     private ArrayList<RecentSearchItem> recentSearchItems;
@@ -38,7 +42,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.RecentSe
     @Override
     public void onBindViewHolder(HistoryAdapter.RecentSearchHolder holder, int position) {
         RecentSearchItem item = recentSearchItems.get(position);
-        holder.twSearchString.setText(item.getSearchString());
+        holder.twSearchString.setText(item.getSearchString().replace('+', ' '));
     }
 
     @Override
@@ -60,9 +64,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.RecentSe
 
         @Override
         public void onClick(View view) {
-            // TODO SPAWN PINNED CARD DIALOG FRAGMENT
+            Intent intent = new Intent(context, SearchActivity.class);
+            intent.setAction(Intent.ACTION_SEARCH);
+            intent.putExtra(SearchManager.QUERY, twSearchString.getText().toString());
+            Log.d(TAG, "onClick: " + twSearchString.getText().toString());
+            context.startActivity(intent);
         }
     }
-
-
 }

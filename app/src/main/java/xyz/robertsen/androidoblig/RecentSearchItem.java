@@ -2,19 +2,22 @@ package xyz.robertsen.androidoblig;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import java.util.ArrayList;
 
 import xyz.robertsen.androidoblig.Models.User;
-import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
+import xyz.robertsen.androidoblig.database.SearchDatabaseOpenHelper;
 
 /**
- * Created by gitsieg on 04.04.18.
+ * Model class for a recent search item
+ *
  */
 
 public class RecentSearchItem {
+    public static final String TAG = RecentSearchItem.class.getSimpleName();
     private String searchString, user;
-    private static CardDatabaseOpenHelper dbHelper;
+    private static SearchDatabaseOpenHelper dbHelper;
 
     public RecentSearchItem(String searchString, String user) {
         this.searchString = searchString;
@@ -36,7 +39,7 @@ public class RecentSearchItem {
      */
     public static ArrayList<RecentSearchItem> getRecentSearches(Context context) {
         if (dbHelper == null) {
-            dbHelper = new CardDatabaseOpenHelper(context);
+            dbHelper = new SearchDatabaseOpenHelper(context);
         }
         Cursor cursor = dbHelper.getRecentSearchesCursor(AppState.getAuthenticatedUser().getUsr());
         ArrayList<RecentSearchItem> recentSearchItems = new ArrayList<>();
@@ -44,10 +47,10 @@ public class RecentSearchItem {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             String searchString = cursor.getString(
-                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.SEARCH_STRING)
+                    cursor.getColumnIndex(SearchDatabaseOpenHelper.DBSchema.RecentSearchesTable.SEARCH_STRING)
             );
             String user = cursor.getString(
-                    cursor.getColumnIndex(CardDatabaseOpenHelper.DBSchema.RecentSearchesTable.USER)
+                    cursor.getColumnIndex(SearchDatabaseOpenHelper.DBSchema.RecentSearchesTable.USER)
             );
             recentSearchItems.add(new RecentSearchItem(searchString, user));
             cursor.moveToNext();
@@ -64,10 +67,18 @@ public class RecentSearchItem {
      * @return
      */
     public static long addRecentSearchItem(Context context, String searchString) {
+        Log.d(TAG, "addRecentSearchItem: " + searchString);
         if (dbHelper == null) {
-            dbHelper = new CardDatabaseOpenHelper(context);
+            dbHelper = new SearchDatabaseOpenHelper(context);
         }
         return dbHelper.dbAddRecentSearch(searchString, AppState.getAuthenticatedUser().getUsr());
+    }
+
+    public static long clearRecentSearches(Context context) {
+        if (dbHelper == null) {
+            dbHelper = new SearchDatabaseOpenHelper(context);
+        }
+        return dbHelper.dbClearRecentSearches(AppState.getAuthenticatedUser().getUsr());
     }
 
     @Override

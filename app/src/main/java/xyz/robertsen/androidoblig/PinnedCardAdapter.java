@@ -1,8 +1,13 @@
 package xyz.robertsen.androidoblig;
 
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
+
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,10 +69,10 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
     public void onBindViewHolder(CardViewHolder holder, int position) {
         Card card = cardArrayList.get(position);
         holder.title.setText(card.name);
-        holder.manaCost.setText(card.mana);
+        holder.manaCost.setText(card.getSpanManaCost());
         holder.cmc.setText(String.valueOf(card.cmc));
         holder.cardCropImage.setImageDrawable(cardImages.get(position));
-        holder.text.setText(card.text);
+        holder.text.setText(card.getSpanText());
     }
 
     @Override
@@ -104,6 +109,12 @@ class PinnedCardAdapter extends RecyclerView.Adapter<PinnedCardAdapter.CardViewH
          */
         @Override
         public void onClick(final View view) {
+            int adapterPos = getAdapterPosition();
+            Card thisCard = cardArrayList.get(adapterPos);
+            DialogFragment cardDialogFragment = CardDialogFragment.newInstance(thisCard, cardCropImage.getDrawable());
+            Log.d(TAG, "onClick: ");
+            FragmentTransaction ft = ((AppCompatActivity)context).getFragmentManager().beginTransaction();
+            cardDialogFragment.show(ft, "cardDialog");
         }
 
         @Override

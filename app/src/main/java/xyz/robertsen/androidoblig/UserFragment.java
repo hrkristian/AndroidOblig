@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -91,6 +92,12 @@ public class UserFragment extends DialogFragment {
         } else {
             ((TextView)v.findViewById(R.id.text_userauth_title))
                     .setText("Velkommen\n".concat(AppState.getAuthenticatedUser().getName()));
+            v.findViewById(R.id.button_user_logout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onLogoutButtonPressed();
+                }
+            });
         }
 
         v.findViewById(R.id.button_user_cancel).setOnClickListener(new View.OnClickListener() {
@@ -110,6 +117,11 @@ public class UserFragment extends DialogFragment {
     public void onCancelButtonPressed() {
         if (mListener != null) {
             mListener.onUserFragmentCancelButtonPressed(this);
+        }
+    }
+    public void onLogoutButtonPressed() {
+        if (mListener != null) {
+            mListener.onUserFragmentLogoutButtonPressed(this);
         }
     }
 
@@ -132,5 +144,6 @@ public class UserFragment extends DialogFragment {
     public interface userFragmentListener {
         void onUserFragmentLoginButtonPressed(String usr, String pwd);
         void onUserFragmentCancelButtonPressed(DialogFragment fragment);
+        void onUserFragmentLogoutButtonPressed(DialogFragment fragment);
     }
 }

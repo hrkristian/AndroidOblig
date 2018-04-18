@@ -28,13 +28,13 @@ import xyz.robertsen.androidoblig.Models.Card;
 /**
  * This class handles requesting Card-data and images from external api's
  */
-public class MtgApiRequestHandler {
+class MtgApiRequestHandler {
     private final static String TAG = MtgApiRequestHandler.class.getSimpleName();
-    final Context context;
-    final String BASE_URL;
-    final RequestQueue REQUEST_QUEUE;
+    private final Context context;
+    private final String BASE_URL;
+    private final RequestQueue REQUEST_QUEUE;
 
-    public MtgApiRequestHandler(Context context) {
+    MtgApiRequestHandler(Context context) {
         this.context = context;
         REQUEST_QUEUE = Volley.newRequestQueue(context);
         BASE_URL = "https://api.magicthegathering.io/v1/cards?name=";
@@ -43,10 +43,11 @@ public class MtgApiRequestHandler {
     /**
      * Requests cards from Mtg-api. Takes a cardname and a MtgApiResponseListener as an argument.
      * Objects using this method must supply a listener
-     * @param request requested card
+     *
+     * @param request  requested card
      * @param listener object that handles the response
      */
-    public void sendRequest(String request, final MtgApiResponseListener listener) {
+    void sendRequest(String request, final MtgApiResponseListener listener) {
         Log.d(TAG, "sendRequest");
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET,
@@ -75,6 +76,7 @@ public class MtgApiRequestHandler {
     public interface MtgApiResponseListener {
         void onMtgApiResponse(String response);
         void onMtgApiError(VolleyError error);
+
     }
 
     /**
@@ -86,11 +88,12 @@ public class MtgApiRequestHandler {
 
     /**
      * Takes a RecyclerView, list of Card-objects and a Map<Integer, Drawable>
+     *
      * @param recyclerView
      * @param cards
      * @param cardImages
      */
-    public synchronized void getImagesFromUrl(RecyclerView recyclerView, List<Card> cards, Map<Integer, Drawable> cardImages) {
+    void getImagesFromUrl(RecyclerView recyclerView, List<Card> cards, Map<Integer, Drawable> cardImages) {
         ImageFromUrlFetcher imgFetcher = new ImageFromUrlFetcher(context, recyclerView, cards, cardImages);
         imgFetcher.getImagesFromUrl();
     }
@@ -122,8 +125,8 @@ public class MtgApiRequestHandler {
                         } catch (IOException e) {
                             // Catching IOException handles both URL, InputStream,
                             // and createFromStream exceptions
-                            e.printStackTrace();
-                            System.out.println("Problem URL: ".concat(cards.get(i).imageUrl));
+//                            e.printStackTrace();
+//                            System.out.println("Problem URL: ".concat(cards.get(i).imageUrl));
                             cardImages.put(pos, c.getResources().getDrawable(R.drawable.icon_2));
                         } finally {
                             ((Activity) c).runOnUiThread(new Runnable() {

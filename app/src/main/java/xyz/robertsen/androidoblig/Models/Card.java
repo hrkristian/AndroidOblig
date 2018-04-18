@@ -38,6 +38,7 @@ public class Card implements Serializable {
     public String rules;
     public String imageUrl;
     public String notes;
+
     public Card() {
 
     }
@@ -74,7 +75,7 @@ public class Card implements Serializable {
      * @return
      */
     public SpannableStringBuilder getSpanManaCost() {
-        return symbolParser(text);
+        return symbolParser(mana);
     }
 
 
@@ -86,7 +87,7 @@ public class Card implements Serializable {
      * @return
      * @throws JSONException
      */
-    public static String deArrayalize(Context context, JSONArray rulings) throws JSONException {
+    private static String deArrayalize(Context context, JSONArray rulings) throws JSONException {
         StringBuilder builder = new StringBuilder();
         if (rulings != null)
             for (int i = 0; i < rulings.length(); i++)
@@ -146,6 +147,7 @@ public class Card implements Serializable {
         }
         return bulider;
     }
+
 
     private static final Map<String, Integer> manaSymbolMap = Collections.unmodifiableMap(new HashMap<String, Integer>() {
         {

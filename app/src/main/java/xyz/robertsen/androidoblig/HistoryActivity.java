@@ -8,10 +8,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
 
 import xyz.robertsen.androidoblig.Models.User;
-import xyz.robertsen.androidoblig.database.CardDatabaseOpenHelper;
+import xyz.robertsen.androidoblig.database.SearchDatabaseOpenHelper;
+
+import android.util.Log;
+
 
 public class HistoryActivity extends AppCompatActivity implements
         PinnedCardsFragment.OnFragmentInteractionListener,
@@ -20,29 +22,26 @@ public class HistoryActivity extends AppCompatActivity implements
     public static User authUser;
     private static final String TAG = HistoryActivity.class.getSimpleName();
     private static final String TAB_POSITION = "xyz.robertsen.androidoblig.HistoryActivity";
-    private CardDatabaseOpenHelper dbHelper;
+    private SearchDatabaseOpenHelper dbHelper;
     private TabLayout tabLayout;
     private TabLayout.Tab recentTab, pinnedTab;
-    private Fragment recentFragment;
-    private Fragment pinnedFragment;
+    private Fragment searchHistoryFragment;
+    private Fragment pinnedCardFragment;
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
-    private TextView tabLegend;
     int tabPosSelected = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        dbHelper = new CardDatabaseOpenHelper(this);
+        dbHelper = new SearchDatabaseOpenHelper(this);
         // Sets up the basic views and fragments for this activity
         //-- Checks if state saved, sets selected tab pos to the saved instance tab pos //
         init_tabs();
-        tabLegend = findViewById(R.id.history_fragments_heading);
         // Checks for authenticated user
 
-        tabLegend.setText(R.string.click_item_to_search);
-        String username = User.authenticatedUser.getUsr();
+        String username = AppState.getAuthenticatedUser().getUsr();
         // Check if local version of user exist, if not, create one mathcing authenticated user
         if (!dbHelper.sqliteUserExists(username)) {
             System.out.println("CREATING USER " + username);
@@ -79,15 +78,10 @@ public class HistoryActivity extends AppCompatActivity implements
 
     }
 
-    @Override
-    public void onCardsPinned(String title) {
-
-    }
-
     /**
      * Adapter for paging between fragments.
      */
-    public class PagerAdapter extends FragmentPagerAdapter {
+    class PagerAdapter extends FragmentPagerAdapter  {
         int mNumOfTabs;
         Fragment pinnedFragment, recentFragment;
 
@@ -135,10 +129,31 @@ public class HistoryActivity extends AppCompatActivity implements
 
 
         // Request instances of fragments, and adapts them to conform with ViewPager interface
-        recentFragment = SearchHistoryFragment.newInstance();
-        pinnedFragment = PinnedCardsFragment.newInstance();
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), pinnedFragment, recentFragment);
+        searchHistoryFragment = SearchHistoryFragment.newInstance();
+        pinnedCardFragment = PinnedCardsFragment.newInstance();
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(), pinnedCardFragment, searchHistoryFragment);
         viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.d(TAG, "onPageSelected: new pos " + position);
+                TabLayout.Tab tab = tabLayout.getTabAt(position);
+                if (tab != null) {
+                    tab.select();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
 
         // Changes currently displayed item in the viewpagers, ∕∕ swaps between the displayed frags.
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

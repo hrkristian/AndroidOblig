@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
 import xyz.robertsen.androidoblig.Models.Card;
 
 
@@ -73,11 +74,8 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.CardRequestL
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pinned_cards, container, false);
         recyclerPinned = view.findViewById(R.id.recycler_pinned_cards);
@@ -89,6 +87,8 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.CardRequestL
         if (getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setRecyclerHorizontalOffsets();
         }
+
+        // Request PinnedCardsFragment from server. Response handled in handlePinnedCardsResponse
         LibAPI.request(
                 this,
                 getContext(),
@@ -98,6 +98,9 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.CardRequestL
         return view;
     }
 
+    /**
+     * Sets horizontal offsets for the RecyclerView displaying the pinned cards
+     */
     private void setRecyclerHorizontalOffsets() {
         recyclerPinned.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -139,6 +142,23 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.CardRequestL
         mListener = null;
     }
 
+    private void processPinnedCards(JSONObject response) throws JSONException {
+        pinnedCards = new ArrayList<>();
+        Map<Integer, Drawable> cardImages = new HashMap<>();
+        JSONArray data;
+        data = response.getJSONArray("cards");
+        for (int i = 0; i < data.length(); i++) {
+            pinnedCards.add(Card.newCard(getContext(), data.getJSONObject(i)));
+        }
+        cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards, cardImages);
+        recyclerPinned.setAdapter(cardAdapter);
+        recyclerPinned.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        // Fetches images and binds them to viewholder async
+        requestHandler.getImagesFromUrl(recyclerPinned, pinnedCards, cardImages);
+    }
+
+    /////////////////////////////
+    /* * * * TouchHelper * * * */
     public ItemTouchHelper getItemTouchHelper() {
         itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(dragDirections, swipeDirections) {
             @Override
@@ -158,6 +178,8 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.CardRequestL
         return itemTouchHelper;
     }
 
+    ///////////////////////////
+    /* * * * Callbacks * * * */
     @Override
     public void onCardResponse(JSONObject response) {
         try {
@@ -169,22 +191,6 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.CardRequestL
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
-    }
-
-    private void processPinnedCards(JSONObject response) throws JSONException {
-        pinnedCards = new ArrayList<>();
-        Map<Integer, Drawable> cardImages = new HashMap<>();
-        JSONArray data;
-        data = response.getJSONArray("cards");
-        for (int i = 0; i < data.length(); i++) {
-            pinnedCards.add(Card.newCard(getContext(), data.getJSONObject(i)));
-        }
-        cardAdapter = new PinnedCardAdapter(this.getContext(), pinnedCards, cardImages);
-        recyclerPinned.setAdapter(cardAdapter);
-        recyclerPinned.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        requestHandler.getImagesFromUrl(recyclerPinned, pinnedCards, cardImages);
     }
 
     @Override
@@ -192,45 +198,8 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.CardRequestL
         error.printStackTrace();
     }
 
-    ////////////////////////////////////////////////
-    //  START: Implements User.IsAuthenticatedTasks
-    ////////////////////////////////////////////////
-//    /**
-//     * Interface defined in User.IsAuthenticatedTasks
-//     */
-//    @Override
-//    public void notAuthenticated() {
-//
-//    }
-//    /**
-//     * Interface defined in User.IsAuthenticatedTasks
-//     */
-//    @Override
-//    public void isAuthenticated() {
-//
-//    }
-    ////////////////////////////////////////////////
-    //  END: Implements User.IsAuthenticatedTasks
-    ////////////////////////////////////////////////
-
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    public void addCard(Card card) {
-        pinnedCards.add(card);
-        cardAdapter.notifyItemInserted(pinnedCards.size());
     }
 }

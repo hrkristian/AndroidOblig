@@ -20,20 +20,12 @@
 
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
-    <TextView
-        android:id="@+id/history_fragments_heading"
-        android:layout_below="@id/tabBarLayout"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        android:padding="4dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+
     <android.support.v4.view.ViewPager
         android:id="@+id/fragment_container"
-        android:labelFor="@id/history_fragments_heading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/history_fragments_heading">
+        android:layout_below="@id/tabBarLayout">
 
     </android.support.v4.view.ViewPager>
 </RelativeLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="search_heading_cmc">Converted Mana Cost:</string>
-    <string name="search_desc_card_image">Cropped image of MTG card</string>
+    <string name="search_heading_cmc">CMC:</string>
+    <string name="search_desc_card_image">Image of a Magic the Gathering card.</string>
 </resources>

@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity
         ((TextView) findViewById(R.id.text_lifeCounter1)).setText(Integer.toString(life_player1));
         ((TextView) findViewById(R.id.text_lifeCounter2)).setText(Integer.toString(life_player2));
 
-
         initSearchView();
         init_FABDrawable();
     }
@@ -90,6 +89,14 @@ public class MainActivity extends AppCompatActivity
         outState.putInt(ARG_LIFE_PLAYER2, life_player2);
 
         outState.putBoolean(ARG_ACTIONVIEW_VISIBLE, actionView.getVisibility() == View.VISIBLE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (actionView.getVisibility() == View.VISIBLE)
+            spawnActionView(actionFAB);
+        else
+            super.onBackPressed();
     }
 
     /**
@@ -175,6 +182,9 @@ public class MainActivity extends AppCompatActivity
         intent.setAction(Intent.ACTION_SEARCH);
         intent.putExtra(SearchManager.QUERY, s);
 
+        for (int i = 0; i < 2; i++) // lol.
+            ((SearchView)findViewById(R.id.search_main_cardSearch)).setIconified(true);
+
         eventActions.spawnActivity(intent);
         return false;
     }
@@ -220,6 +230,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onUserFragmentCancelButtonPressed(DialogFragment fragment) {
         fragmentManager.popBackStack();
+    }
+
+    @Override
+    public void onUserFragmentLogoutButtonPressed(DialogFragment fragment) {
+        AppState.removeAuthentication();
+        fragmentManager.popBackStack();
+        Toast.makeText(this, "Sucessfully logged out", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -279,6 +296,7 @@ public class MainActivity extends AppCompatActivity
 
     private void initSearchView() {
         SearchView searchView = findViewById(R.id.search_main_cardSearch);
+        searchView.setIconifiedByDefault(true);
         searchView.setOnQueryTextListener(this);
     }
 

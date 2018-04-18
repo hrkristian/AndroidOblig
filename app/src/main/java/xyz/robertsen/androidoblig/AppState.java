@@ -34,6 +34,9 @@ class AppState {
         else
             throw new IllegalStateException("A user is already authenticated");
     }
+    static void removeAuthentication() {
+        authenticatedUser = null;
+    }
     static User getAuthenticatedUser() {
         return authenticatedUser;
     }
