@@ -83,17 +83,3 @@ Ved klikk på kortene skal det gjøres et søk på korttittel og vises i Søk p�
 Har et RecyclerView som viser lagrede kort.
 * **RecentCardsFragment**
 Har et RecyclerView som viser en søkshistorikk.
-
-### Til den som evaluerer
-Login-info:
-* Brukernavn: kvisli
-* Passord: heihei
-
-Kortnavn du kan søke på, dersom du ikke er kjent med spillet:
-* monastery swiftspear
-* birds of paradise
-* mountain
-* counterspell
-* negate
-* ponyback brigade
-* goblin guide
