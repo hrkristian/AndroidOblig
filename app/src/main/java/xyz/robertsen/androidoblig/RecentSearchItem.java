@@ -38,7 +38,7 @@ public class RecentSearchItem {
         if (dbHelper == null) {
             dbHelper = new CardDatabaseOpenHelper(context);
         }
-        Cursor cursor = dbHelper.getRecentSearchesCursor(User.authenticatedUser.getUsr());
+        Cursor cursor = dbHelper.getRecentSearchesCursor(AppState.getAuthenticatedUser().getUsr());
         ArrayList<RecentSearchItem> recentSearchItems = new ArrayList<>();
 
         cursor.moveToFirst();
@@ -67,7 +67,7 @@ public class RecentSearchItem {
         if (dbHelper == null) {
             dbHelper = new CardDatabaseOpenHelper(context);
         }
-        return dbHelper.dbAddRecentSearch(searchString, User.authenticatedUser.getUsr());
+        return dbHelper.dbAddRecentSearch(searchString, AppState.getAuthenticatedUser().getUsr());
     }
 
     @Override

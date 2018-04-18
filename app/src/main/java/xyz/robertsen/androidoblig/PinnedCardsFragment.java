@@ -36,7 +36,7 @@ import xyz.robertsen.androidoblig.Models.Card;
  * Use the {@link PinnedCardsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListener {
+public class PinnedCardsFragment extends Fragment implements LibAPI.CardRequestListener {
 
     private static final String TAG = PinnedCardsFragment.class.getSimpleName();
     ArrayList<Card> pinnedCards;
@@ -159,13 +159,13 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
     }
 
     @Override
-    public void handlePinnedCardsResponse(JSONObject response) {
+    public void onCardResponse(JSONObject response) {
         try {
             if (response.has("cards")) {
-                Log.d(TAG, "handlePinnedCardsResponse: got cards");
+                Log.d(TAG, "onCardResponse: got cards");
                 processPinnedCards(response);
             }
-            Log.d(TAG, "handlePinnedCardsResponse: " + response.toString(2));
+            Log.d(TAG, "onCardResponse: " + response.toString(2));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -188,7 +188,7 @@ public class PinnedCardsFragment extends Fragment implements LibAPI.RequestListe
     }
 
     @Override
-    public void handlePinnedCardsError(VolleyError error) {
+    public void onCardError(VolleyError error) {
         error.printStackTrace();
     }
 

@@ -55,14 +55,14 @@ public class MtgApiRequestHandler {
                     @Override
                     public void onResponse(String response) {
                         Log.d(TAG, "onResponse + ");
-                        listener.handleMtgApiResponse(response);
+                        listener.onMtgApiResponse(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO
-                        listener.handleMtgApiError(error);
+                        listener.onMtgApiError(error);
                     }
                 }
         );
@@ -73,8 +73,8 @@ public class MtgApiRequestHandler {
      * Interface for handling responses from the MtgApi
      */
     public interface MtgApiResponseListener {
-        void handleMtgApiResponse(String response);
-        void handleMtgApiError(VolleyError error);
+        void onMtgApiResponse(String response);
+        void onMtgApiError(VolleyError error);
     }
 
     /**

@@ -23,9 +23,9 @@ public class LibAPI {
 
 /* * * * User API Logic * * * */
 
-    static void authenticateUser(@NonNull String usr, @NonNull String pwd,
-                                 @NonNull final Context c,
-                                 @NonNull final ValidationListener v)
+    static void sendUserAuthenticationRequest(@NonNull String usr, @NonNull String pwd,
+                                              @NonNull final Context c,
+                                              @NonNull final AuthenticationResponseListener v)
             throws IllegalStateException {
         if (AppState.isAuthenticated())
             throw new IllegalStateException("A user is already authenticated");
@@ -57,6 +57,14 @@ public class LibAPI {
                 .concat(pwd);
     }
 
+    interface AuthenticationResponseListener {
+        void handleValidationResponse(JSONObject response);
+    }
+/* – – – User API Logic – – – */
+
+
+
+/* * * * Card API Logic * * * */
 
     /**
      * Sends a request to the User API, requesting a predefined action or response.
@@ -67,7 +75,7 @@ public class LibAPI {
      * @param requestType The type of request being sent.
      * @throws IllegalStateException Thrown when a user has not yet been authenticated.
      */
-    static void request(final RequestListener listener,
+    static void request(final CardRequestListener listener,
                         @NonNull Context c,
                         @NonNull Card card,
                         REQUEST requestType)
@@ -93,27 +101,21 @@ public class LibAPI {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        listener.handlePinnedCardsResponse(response);
+                        listener.onCardResponse(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        listener.handlePinnedCardsError(error);
+                        listener.onCardError(error);
                     }
                 }
         );
         Log.d("request-tostring", request.toString());
         volley.add(request);
     }
-    interface ValidationListener {
-        void handleValidationResponse(JSONObject response);
-    }
-/* * * * User API Logic * * * */
 
 
-
-/* * * * Card API Logic * * * */
     /**
      * Builds the request string sent to the User API.
      * @param card        The card model
@@ -129,7 +131,7 @@ public class LibAPI {
             }
             json.put("name", card.name);
             json.put("request", "sql");
-            json.put("usr", AppState.authenticatedUser.getUsr());
+            json.put("usr", AppState.getAuthenticatedUser().getUsr());
             switch (requestType) {
                 case CARD_GET:
                     json.put("sql", "select");
@@ -158,9 +160,9 @@ public class LibAPI {
         return json;
     }
 
-    interface RequestListener {
-        void handlePinnedCardsResponse(JSONObject response);
-        void handlePinnedCardsError(VolleyError error);
+    interface CardRequestListener {
+        void onCardResponse(JSONObject response);
+        void onCardError(VolleyError error);
     }
 
 
@@ -172,5 +174,5 @@ public class LibAPI {
         CARD_DELETE
     }
 
-/* * * * Card API Logic * * * */
+/* – – – Card API Logic – – – */
 }

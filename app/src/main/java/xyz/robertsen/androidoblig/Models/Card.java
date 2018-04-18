@@ -17,9 +17,14 @@ import java.util.Map;
 import xyz.robertsen.androidoblig.R;
 
 /**
- * Created by kris on 23/02/18.
+ * <p>Model class for a Magic the Gathering card.</p>
+ * Roles:
+ * <ul>
+ *     <li>Modelling the data.</li>
+ *     <li>Handling the generation of inline mana symbols.</li>
+ * </ul>
+ * <p>The class implements Serializable so it can be stored on state change.</p>
  */
-
 public class Card implements Serializable {
     private Context context;
 
@@ -142,7 +147,7 @@ public class Card implements Serializable {
         return bulider;
     }
 
-    public static final Map<String, Integer> manaSymbolMap = Collections.unmodifiableMap(new HashMap<String, Integer>() {
+    private static final Map<String, Integer> manaSymbolMap = Collections.unmodifiableMap(new HashMap<String, Integer>() {
         {
             put("{0}", R.drawable.ic_mana_0);
             put("{1}", R.drawable.ic_mana_1);

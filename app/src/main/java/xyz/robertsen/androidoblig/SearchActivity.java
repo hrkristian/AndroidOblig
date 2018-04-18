@@ -86,7 +86,7 @@ public class SearchActivity extends AppCompatActivity implements
 
         Log.d(TAG, searchString);
 
-        if (User.authenticatedUser != null)
+        if (AppState.isAuthenticated())
             RecentSearchItem.addRecentSearchItem(this, searchString);
 
         requestHandler.sendRequest(
@@ -142,12 +142,12 @@ public class SearchActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void handleMtgApiResponse(String response) {
+    public void onMtgApiResponse(String response) {
         generateCardView(response);
     }
 
     @Override
-    public void handleMtgApiError(VolleyError error) {
+    public void onMtgApiError(VolleyError error) {
         error.printStackTrace();
     }
 

@@ -25,7 +25,7 @@ import xyz.robertsen.androidoblig.Models.User;
  * Created by kris on 29/03/18.
  */
 
-public class CardDialogFragment extends DialogFragment implements LibAPI.RequestListener {
+public class CardDialogFragment extends DialogFragment implements LibAPI.CardRequestListener {
     private static final String TAG = CardDialogFragment.class.getSimpleName();
     private static String ARG_CARD = "fragment_card";
     private Drawable cardDrawable = null;
@@ -136,11 +136,11 @@ public class CardDialogFragment extends DialogFragment implements LibAPI.Request
 
     /* * * * Callbacks * * * */
     @Override
-    public void handlePinnedCardsResponse(JSONObject response) {
-        Log.d(TAG, "handlePinnedCardsResponse: " +  response.toString());
+    public void onCardResponse(JSONObject response) {
+        Log.d(TAG, "onCardResponse: " +  response.toString());
     }
     @Override
-    public void handlePinnedCardsError(VolleyError error) {
+    public void onCardError(VolleyError error) {
         error.printStackTrace();
     }
     /* * * * Callbacks * * * */

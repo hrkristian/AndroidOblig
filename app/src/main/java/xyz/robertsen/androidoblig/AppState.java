@@ -11,7 +11,7 @@ class AppState {
 
 
 /* -- User States -- */
-    static User authenticatedUser = null;
+    private static User authenticatedUser = null;
 /* -- User States -- */
 
 /* -- MainActivity States -- */
@@ -33,6 +33,9 @@ class AppState {
             authenticatedUser = user;
         else
             throw new IllegalStateException("A user is already authenticated");
+    }
+    static User getAuthenticatedUser() {
+        return authenticatedUser;
     }
 /* -- User Logic -- */
 }

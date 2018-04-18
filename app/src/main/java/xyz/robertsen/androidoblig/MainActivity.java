@@ -33,8 +33,8 @@ import xyz.robertsen.androidoblig.Models.User;
 public class MainActivity extends AppCompatActivity
         implements UserFragment.userFragmentListener,
         SearchView.OnQueryTextListener,
-        LibAPI.ValidationListener,
-        LibAPI.RequestListener {
+        LibAPI.AuthenticationResponseListener,
+        LibAPI.CardRequestListener {
 
     // Log tag
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity
 
     /* ------------ Activities and fragments ----------- */
     public void spawnHistoryActivity(View view) {
-        if (!AppState.isAuthenticated) {
+        if (!AppState.isAuthenticated()) {
             eventActions.spawnUserFragment(R.layout.fragment_user);
             return;
         }
@@ -194,10 +194,10 @@ public class MainActivity extends AppCompatActivity
         eventActions.spawnActivity(intent);
     }
 
-    final private static String FRAGMENT_USER = "userFragment";
+
 
     public void spawnUserFragment(View view) {
-        if (AppState.isAuthenticated)
+        if (AppState.isAuthenticated())
             eventActions.spawnUserFragment(R.layout.fragment_user_authenticated);
         else
             eventActions.spawnUserFragment(R.layout.fragment_user);
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onUserFragmentLoginButtonPressed(String usr, String pwd) {
         try {
-            LibAPI.authenticateUser(usr, pwd, this, this);
+            LibAPI.sendUserAuthenticationRequest(usr, pwd, this, this);
         } catch (IllegalStateException e) {
             Toast.makeText(
                     this,
@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void handlePinnedCardsResponse(JSONObject response) {
+    public void onCardResponse(JSONObject response) {
         try {
             Log.i("Pin Response", "Pin response received");
             Log.i("Pin Response", response.toString(2));
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void handlePinnedCardsError(VolleyError error) {
+    public void onCardError(VolleyError error) {
         Log.i("Pinned Error", error.toString());
     }
 
@@ -279,19 +279,12 @@ public class MainActivity extends AppCompatActivity
 
     private void initSearchView() {
         SearchView searchView = findViewById(R.id.search_main_cardSearch);
-//        TextView textView = findViewById(R.id.search_main_no_authenticated);
-//        if (User.authenticatedUser == null) {
-//            textView.setVisibility(View.VISIBLE);
-//            searchView.setVisibility(View.GONE);
-//        } else {
-//            textView.setVisibility(View.GONE);
-//            searchView.setVisibility(View.VISIBLE);
-            searchView.setOnQueryTextListener(this);
-//        }
+        searchView.setOnQueryTextListener(this);
     }
 
     private class EventActions {
         Context c;
+        final private static String FRAGMENT_USER = "userFragment";
 
         private EventActions(Context c) {
             this.c = c;

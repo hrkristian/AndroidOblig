@@ -90,7 +90,7 @@ public class UserFragment extends DialogFragment {
             });
         } else {
             ((TextView)v.findViewById(R.id.text_userauth_title))
-                    .setText("Velkommen\n".concat(AppState.authenticatedUser.getName()));
+                    .setText("Velkommen\n".concat(AppState.getAuthenticatedUser().getName()));
         }
 
         v.findViewById(R.id.button_user_cancel).setOnClickListener(new View.OnClickListener() {
