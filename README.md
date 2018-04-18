@@ -5,10 +5,8 @@
 Applikasjonen er laget ifm en obligatorisk innlevering i Applikasjonsutvikling for mobile enheter.
 
 Applikasjonen skal fasilitere søk på kort mot API'et [magicthegathering.io](https://docs.magicthegathering.io/),
-der kort man har søkt på blir lagret i en søkshistorikk.
-I denne søkshistorikken skal det være mulig å 'pinne' kort av interesse,
-slik at disse blir lagret. **Magic Stuff** har også 2 tellere som representerer
-spillernes hitpoints gjennom en duell.
+der kort man har søkt på blir lagret i en søkshistorikk. Fra søkeresultatene kan man lagre kort og notat om kortet.
+**Magic Stuff** har også 2 tellere som representerer hitpoints gjennom en duell.
 
 
 Applikasjonens komponenter kan grovt deles inn i 3 deler:
@@ -25,11 +23,11 @@ Denne delen av Applikasjonen gjør følgende:
 
 ### Søk på kort
 Denne delen av Applikasjonen gjør følgende:
-* Utfører søk på kort. Ved flere treff, skal flere resultater vises.
+* Utfører søk på kortnavn. Ved flere treff, skal flere resultater vises.
 * Ved trykk på kort, vises detaljert informasjon om kortet. Herfra kan man lagre kort og notat om kortet dersom man er innlogget
-* Inneholder søkerbar for søk innad i aktiviteten
+* Inneholder søkebar for søk, gjør nytt søk og oppdaterer aktiviteten.
 
-### Søkshistorikk og lagrede søk
+### Søkshistorikk og lagrede kort
 Vises kun dersom bruker er innlogget
 Denne delen av Applikasjonen gjør følgende:
 * Henter søkshistorikk og viser en liste av alle tidligere søk. Søk blir lagret og hentet fra lokal database på telefon.
@@ -39,20 +37,20 @@ Denne delen av Applikasjonen gjør følgende:
 
 ## Forklaring - GUI
 ### Magic Life Counter
-Startskjerm: Inneholder to teller med mulighet for inkrementering og dekrementering.
+Startskjerm: Inneholder to tellere med mulighet for inkrementering og dekrementering.
 I midten av skjermen er en Floating Action Button. Ved trykk på denne, vises en ekspanderende meny.
 Denne menyen inneholder 4 elementer.
 * Søk
 * Navigasjon til korthistorikk
 * Knapp for terninkast (1-6)
-* Åpne et fragment som fasiliterer innlogging av en spesifikk bruker.
+* Åpne et fragment som fasiliterer innlogging/utlogging av en spesifikk bruker.
 
 Man kan ikke navigere til søkshistorikk uten å være innlogget
 
 ### Søk på kort
 Denne delen av applikasjonen kan nås på 2 forskjellige måter:
 * Fra søkebar i menyen til Startskjerm.
-* Ved trykk på kort i Søkshistorikk og lagrede søk
+* Ved trykk på element i søkshistorikk
 
 Består i hovedsak av:
 * SearchView
@@ -85,7 +83,3 @@ Ved klikk på kortene skal det gjøres et søk på korttittel og vises i Søk p�
 Har et RecyclerView som viser lagrede kort.
 * **RecentCardsFragment**
 Har et RecyclerView som viser en søkshistorikk.
-
-## TODO
-### Generelt
-* Implementere Up-nagivation. [Up-navigation](https://developer.android.com/design/patterns/navigation.html)
