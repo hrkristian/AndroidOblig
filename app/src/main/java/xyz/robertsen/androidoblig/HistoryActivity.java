@@ -8,6 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.DragEvent;
+import android.view.View;
 import android.widget.TextView;
 
 import xyz.robertsen.androidoblig.database.SearchDatabaseOpenHelper;
@@ -78,7 +81,7 @@ public class HistoryActivity extends AppCompatActivity implements
     /**
      * Adapter for paging between fragments.
      */
-    class PagerAdapter extends FragmentPagerAdapter {
+    class PagerAdapter extends FragmentPagerAdapter  {
         int mNumOfTabs;
         Fragment pinnedFragment, recentFragment;
 
@@ -130,6 +133,27 @@ public class HistoryActivity extends AppCompatActivity implements
         pinnedCardFragment = PinnedCardsFragment.newInstance();
         pagerAdapter = new PagerAdapter(getSupportFragmentManager(), pinnedCardFragment, searchHistoryFragment);
         viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.d(TAG, "onPageSelected: new pos " + position);
+                TabLayout.Tab tab = tabLayout.getTabAt(position);
+                if (tab != null) {
+                    tab.select();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
 
         // Changes currently displayed item in the viewpagers, ∕∕ swaps between the displayed frags.
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

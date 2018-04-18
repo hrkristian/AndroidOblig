@@ -73,6 +73,13 @@ public class RecentSearchItem {
         return dbHelper.dbAddRecentSearch(searchString, User.authenticatedUser.getUsr());
     }
 
+    public static long clearRecentSearches(Context context) {
+        if (dbHelper == null) {
+            dbHelper = new SearchDatabaseOpenHelper(context);
+        }
+        return dbHelper.dbClearRecentSearches(User.authenticatedUser.getUsr());
+    }
+
     @Override
     public String toString() {
         return "RecentSearchItem{" +

@@ -187,6 +187,16 @@ public class SearchDatabaseOpenHelper extends SQLiteOpenHelper {
         return id;
     }
 
+    public long dbClearRecentSearches(String userName) {
+        mWritableDatabase = getWritableDatabase();
+        long rowsAffected = mWritableDatabase.delete(
+                DBSchema.RecentSearchesTable.TABLE_NAME,
+                DBSchema.RecentSearchesTable.USER + "='" + userName + "'",
+                null
+        );
+        return rowsAffected;
+    }
+
     /**
      * Fetches recent search data for a given user, by the most recent item to the least recent item
      *
